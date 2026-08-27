@@ -27,9 +27,23 @@ def test_arc_ids_are_unique(arcs):
     assert arcs["arc_id"].is_unique
 
 
-def test_every_arc_has_min_passes_of_at_least_one(arcs):
+def test_every_required_arc_has_min_passes_of_at_least_one(arcs):
+    """Required arcs owe at least one pass; arcs outside the required area owe none.
+
+    Until Zone B, required was the whole clip and `min_passes >= 1` everywhere was
+    the same statement. With a required area narrower than the clip they are
+    different statements, and only this one is true: an arc in the buffer is legal
+    to drive and never needs filming, which is expressed as `min_passes = 0` so that
+    `lstar` pins its capture edge shut. Asserting both halves is stronger than the
+    original, not weaker — it also catches a required arc silently zeroed.
+    """
     assert arcs["min_passes"].notna().all()
-    assert (arcs["min_passes"] >= 1).all()
+    if "in_required_area" in arcs.columns:
+        required = arcs["in_required_area"].astype(bool)
+        assert (arcs.loc[required, "min_passes"] >= 1).all()
+        assert (arcs.loc[~required, "min_passes"] == 0).all()
+    else:
+        assert (arcs["min_passes"] >= 1).all()
 
 
 def test_every_excluded_arc_has_a_reason(arcs):
@@ -150,10 +164,20 @@ def test_service_scope_variant_a_reconciles_to_the_headline():
     variant_a = next(v for v in payload["variants"] if v["variant"] == "A")
     variant_c = next(v for v in payload["variants"] if v["variant"] == "C")
 
-    assert variant_a["required_traversal_km"] == pytest.approx(5725.3, abs=0.05)
+    # The headline lives in the Stage 0 stats. Comparing against it is what the
+    # docstring above actually claims; the literal 5725.3 was Tbilisi's value and
+    # made this a test of one campaign rather than of the subtag join.
+    stats = json.loads(C.STATS_JSON.read_text())
+    headline = stats["headline"]["required_traversal_km"]
+    assert variant_a["required_traversal_km"] == pytest.approx(headline, abs=0.05)
     assert variant_a["delta_required_km"] == pytest.approx(0.0, abs=1e-9)
-    # dropping every service arc must remove exactly the measured service total
-    assert -variant_c["delta_required_km"] == pytest.approx(2196.0, abs=0.05)
+    # Dropping every service arc must remove exactly the measured service total —
+    # which is measured, and sitting in the same stats file. The literal 2196.0 was
+    # Tbilisi's figure, so this asserted a fact about one city rather than that the
+    # variant arithmetic and the subtag measurement agree.
+    assert -variant_c["delta_required_km"] == pytest.approx(
+        stats["service"]["required_km"], abs=0.05
+    )
 
 
 def test_service_scope_variants_are_nested_and_monotone():

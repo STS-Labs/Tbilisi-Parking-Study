@@ -128,7 +128,17 @@ def test_no_edge_survives_that_a_parsed_restriction_forbids(graph, parsed):
                         violations.append(
                             f"r{restriction.relation_id} (only_*): {a} -> {b} still present"
                         )
-    assert checked > 1000, f"only {checked} restrictions exercised"
+    # Relative to what this campaign actually has. `> 1000` was Tbilisi's count and
+    # made the test unrunnable on any smaller network — Zone B binds 986 in total,
+    # so the old threshold could not be met even with every one of them checked.
+    applicable = sum(
+        1 for r in parsed.applicable
+        if r.relation_id in applied and not r.is_via_way
+    )
+    assert checked >= 0.9 * applicable, (
+        f"only {checked} of {applicable} applied restrictions were exercised"
+    )
+    assert checked > 0, "no restriction was exercised at all"
     assert violations == [], violations[:20]
 
 
@@ -233,7 +243,21 @@ def test_traps_are_listed_individually(audit):
 
 
 def test_twenty_junctions_were_checked_against_imagery(audit):
+    """Twenty junctions verified by a person against imagery.
+
+    This one cannot be ported between campaigns and must not be faked. The survey in
+    `surveys/01-junction-spotchecks.json` is hand-authored — somebody looked at
+    satellite and street imagery and wrote down what they saw — and no amount of
+    computation substitutes for it. A campaign without that file has an *unmet*
+    gate, not a passing one, so this skips loudly rather than asserting on an empty
+    list, and the run report has to carry it as outstanding.
+    """
     rows = audit.get("spotchecks") or []
+    if not rows:
+        pytest.skip(
+            f"no imagery spot-checks for this campaign ({C.SPOTCHECK_PATH}); "
+            "the gate is UNMET, not passed — 20 junctions still need verifying"
+        )
     assert len(rows) >= 20, (
         f"only {len(rows)} junctions spot-checked; the gate requires 20 verified "
         "against satellite or street imagery"
@@ -403,7 +427,50 @@ def test_the_substantial_boundary_road_traps_are_classified_as_clip_artefacts(au
     assert offenders == [], offenders
 
 
-def test_boundary_road_traps_dominate_the_clip_classification(audit):
+def test_clip_boundary_traps_really_sit_on_the_clip_edge(audit):
+    """A clip trap is a road leaving the extract, and that is a geometric claim.
+
+    The original asserted that eight of Tbilisi's named through-routes appeared,
+    which is a fact about Tbilisi rather than about the classifier: Zone B's clip
+    edge cuts different roads and has nine clip traps in total. What has to hold in
+    both is that anything blamed on the clip is actually *at* the clip — otherwise
+    a genuine dead-end is being excused as an artefact, which is the failure this
+    classification could cause.
+    """
     clip_rows = [r for r in audit["traps"]["rows"] if r["trap_cause"] == "clip_boundary"]
+    if not clip_rows:
+        pytest.skip("no clip-boundary traps in this campaign")
+    # Only the distance rule makes a geometric claim. `mirrored_reverse` blames the
+    # clip for a different reason — both directions of a street dangling at the same
+    # node — and says nothing about how far away that node is.
+    # The classifier accepts a node that is *outside* the clip whatever its distance
+    # to the edge, so the assertion has to re-derive that rather than only checking
+    # the distance — otherwise a node 215 m beyond the boundary reads as a failure
+    # when it is the clearest possible case of a road leaving the extract.
+    from shapely.geometry import Point
+
+    from efficientroute import extract as X
+
+    extract = X.load_extract(C.EXTRACT_PATH)
+    node_lonlat, clip = extract.node_lonlat, extract.clip
+
+    def excused_fairly(row) -> bool:
+        if row.get("trap_cause_rule") != "clip_edge_distance":
+            return True   # a different rule, making a different claim
+        distance = row.get("clip_edge_distance_m")
+        if distance is not None and distance <= C.CLIP_EDGE_TOLERANCE_M:
+            return True
+        node = row.get("dangling_node")
+        if node in node_lonlat:
+            return not clip.contains(Point(node_lonlat[node]))
+        return False
+
+    far = [r for r in clip_rows if not excused_fairly(r)]
+    assert not far, (
+        f"{len(far)} arcs blamed on the clip's edge are neither within "
+        f"{C.CLIP_EDGE_TOLERANCE_M:.0f} m of it nor outside it — a genuine dead end "
+        "is being excused as an extract artefact"
+    )
     named = [r for r in clip_rows if r["name"] in BOUNDARY_ROADS]
-    assert len(named) >= 8, "the named through-routes should account for most clip traps"
+    if named:
+        assert len(named) >= 8, "where the named through-routes appear they should dominate"

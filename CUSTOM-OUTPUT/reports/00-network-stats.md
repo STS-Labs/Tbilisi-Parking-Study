@@ -276,9 +276,22 @@ the parent tag, so here is the subtag split.
 > sample of what those untagged service ways physically *are*, not more tag analysis.
 
 
-### 8.2 Scope scenarios
+### 8.2 Scope scenarios — measurement only
 
-**Not yet measured.** Run `make stage0b`.
+Each variant is rebuilt properly rather than subtracted: dropping service roads changes
+which arcs remain strongly connected, so the component analysis and L(G) are recomputed on
+the filtered network. **Variant A is what the pipeline builds and remains the default** —
+no switch is exposed and no classification changed.
+
+| Variant | What it includes | Required km | Δ vs A | Included arcs | Δ vs A | L(G) nodes | Δ vs A |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **A** | as built — all `highway=service` | 674.4 | +0.0 | 66,171 | +0 | 63,467 | +0 |
+| **B** | streets only — service where `service_type` is alley or untagged | 647.4 | -26.9 | 62,280 | -3,891 | 59,670 | -3,797 |
+| **C** | none — no `highway=service` | 390.9 | -283.4 | 30,346 | -35,825 | 29,830 | -33,637 |
+
+**Variant B saves almost nothing** — 26.9 km, 4.0% of the campaign — because
+the untagged bucket dominates and B keeps it. The real choice is between A and C, and
+C is a 283.4 km cut made without knowing what is being cut.
 
 
 
