@@ -1,0 +1,32 @@
+{
+  "arcs_sha256": "5ed72fccb7a6c150bd96e8c9a158101756766c80ece9a189c47e5de6e8b320ef",
+  "boundary_area_km2": 504.26,
+  "boundary_relation_id": 1996871,
+  "boundary_tags": {
+    "ISO3166-2": "GE-TB",
+    "admin_level": "4",
+    "boundary": "administrative",
+    "int_name": "Tbilisi",
+    "name": "თბილისი",
+    "name:en": "Tbilisi",
+    "wikidata": "Q994"
+  },
+  "clip_area_km2": 756.24,
+  "clip_bounds": [
+    44.572191,
+    41.599788,
+    45.041325,
+    41.861887
+  ],
+  "clip_buffer_m": 2000.0,
+  "dem_note": "Copernicus GLO-30 has no tiles over N41/E044 and N41/E045; SRTM 1-arcsec is the stage brief's alternative at the same 30 m resolution.",
+  "dem_source": "SRTM 1-arcsec (elevation-tiles-prod skadi)",
+  "dem_tiles": [
+    "N41E044",
+    "N41E045"
+  ],
+  "pbf_bytes": 101424826,
+  "pbf_sha256": "13268d77164b1aed5377d19bc751dd1aed9c5edf354dcc48daf0761bf23b5483",
+  "pbf_url": "https://download.geofabrik.de/europe/georgia-latest.osm.pbf",
+  "runtime_s": 8.3
+}

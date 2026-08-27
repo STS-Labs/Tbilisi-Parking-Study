@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="handmade fixture for EfficientRoute Stage 0">
+  <node id="1" lat="41.720" lon="44.800" version="1"/>
+  <node id="2" lat="41.720" lon="44.802" version="1"/>
+  <node id="3" lat="41.720" lon="44.804" version="1"/>
+  <node id="4" lat="41.718" lon="44.802" version="1"/>
+  <node id="5" lat="41.722" lon="44.802" version="1"/>
+  <node id="6" lat="41.720" lon="44.806" version="1"/>
+  <node id="9" lat="41.722" lon="44.804" version="1">
+    <tag k="barrier" v="bollard"/>
+  </node>
+  <node id="10" lat="41.722" lon="44.806" version="1">
+    <tag k="barrier" v="gate"/>
+  </node>
+  <node id="20" lat="41.720" lon="50.000" version="1"/>
+  <node id="21" lat="41.720" lon="50.002" version="1"/>
+
+  <!-- two-way residential, shares node 2 with way 101 so it must split there -->
+  <way id="100" version="1">
+    <nd ref="1"/><nd ref="2"/><nd ref="3"/>
+    <tag k="highway" v="residential"/>
+    <tag k="name" v="Test Residential"/>
+  </way>
+  <!-- one-way, four lanes -> min_passes 2 -->
+  <way id="101" version="1">
+    <nd ref="4"/><nd ref="2"/><nd ref="5"/>
+    <tag k="highway" v="primary"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="lanes" v="4"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <!-- interior bollard on node 9 -> barrier_blocking -->
+  <way id="102" version="1">
+    <nd ref="3"/><nd ref="9"/><nd ref="6"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <!-- not drivable -->
+  <way id="103" version="1">
+    <nd ref="1"/><nd ref="4"/>
+    <tag k="highway" v="footway"/>
+  </way>
+  <!-- outside the clip polygon entirely -->
+  <way id="104" version="1">
+    <nd ref="20"/><nd ref="21"/>
+    <tag k="highway" v="residential"/>
+  </way>
+  <!-- access restricted -->
+  <way id="105" version="1">
+    <nd ref="1"/><nd ref="5"/>
+    <tag k="highway" v="residential"/>
+    <tag k="access" v="private"/>
+  </way>
+  <!-- unlocked gate on node 10 is not a blocker -->
+  <way id="106" version="1">
+    <nd ref="6"/><nd ref="10"/>
+    <tag k="highway" v="residential"/>
+    <tag k="bridge" v="yes"/>
+  </way>
+
+  <!-- tagged incline: must flip sign on the backward arc -->
+  <way id="107" version="1">
+    <nd ref="5"/><nd ref="3"/>
+    <tag k="highway" v="residential"/>
+    <tag k="incline" v="8%"/>
+    <tag k="width" v="5.5"/>
+  </way>
+
+  <relation id="200" version="1">
+    <member type="way" ref="101" role="from"/>
+    <member type="node" ref="2" role="via"/>
+    <member type="way" ref="100" role="to"/>
+    <tag k="type" v="restriction"/>
+    <tag k="restriction" v="no_left_turn"/>
+  </relation>
+  <relation id="201" version="1">
+    <member type="way" ref="100" role="outer"/>
+    <tag k="type" v="multipolygon"/>
+  </relation>
+</osm>

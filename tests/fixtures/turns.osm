@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="handmade fixture for EfficientRoute Stage 1">
+  <!-- a crossroads at node 100, plus a second junction at node 3 for the via-way case -->
+  <node id="1"   lat="41.720" lon="44.798" version="1"/>
+  <node id="100" lat="41.720" lon="44.800" version="1"/>
+  <node id="2"   lat="41.722" lon="44.800" version="1"/>
+  <node id="3"   lat="41.720" lon="44.802" version="1"/>
+  <node id="4"   lat="41.718" lon="44.800" version="1"/>
+  <node id="5"   lat="41.722" lon="44.802" version="1"/>
+
+  <way id="1000" version="1"><nd ref="1"/><nd ref="100"/>
+    <tag k="highway" v="residential"/><tag k="name" v="West Arm"/></way>
+  <way id="1001" version="1"><nd ref="100"/><nd ref="2"/>
+    <tag k="highway" v="residential"/><tag k="name" v="North Arm"/></way>
+  <way id="1002" version="1"><nd ref="100"/><nd ref="3"/>
+    <tag k="highway" v="residential"/><tag k="name" v="East Arm"/></way>
+  <way id="1003" version="1"><nd ref="100"/><nd ref="4"/>
+    <tag k="highway" v="residential"/><tag k="name" v="South Arm"/></way>
+  <way id="1004" version="1"><nd ref="3"/><nd ref="5"/>
+    <tag k="highway" v="residential"/><tag k="name" v="Far Arm"/></way>
+
+  <relation id="2000" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="1001" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction" v="no_left_turn"/></relation>
+
+  <relation id="2001" version="1">
+    <member type="way" ref="1002" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="1000" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction" v="only_straight_on"/></relation>
+
+  <relation id="2002" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="1000" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction" v="no_u_turn"/></relation>
+
+  <!-- via is a WAY, not a node -->
+  <relation id="2003" version="1">
+    <member type="way" ref="1000" role="from"/><member type="way" ref="1002" role="via"/>
+    <member type="way" ref="1004" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction" v="no_left_turn"/></relation>
+
+  <relation id="2004" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="999999" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction" v="no_left_turn"/></relation>
+
+  <relation id="2005" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="1003" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction:hgv" v="no_right_turn"/></relation>
+
+  <relation id="2006" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="1003" role="to"/>
+    <tag k="type" v="restriction"/>
+    <tag k="restriction:conditional" v="no_right_turn @ (Mo-Fr 07:00-09:00)"/></relation>
+
+  <relation id="2007" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="1003" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction" v="no_right_turn"/>
+    <tag k="except" v="motorcar"/></relation>
+
+  <relation id="2008" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="1003" role="to"/>
+    <tag k="type" v="restriction"/></relation>
+
+  <relation id="2009" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="100" role="via"/>
+    <member type="way" ref="1003" role="to"/>
+    <tag k="type" v="restriction"/>
+    <tag k="restriction:conditional" v="no_right_turn @ (Mo-Su 00:00-24:00)"/></relation>
+  <!-- from way never reaches the via node: contradicts its own topology -->
+  <relation id="2010" version="1">
+    <member type="way" ref="1000" role="from"/><member type="node" ref="3" role="via"/>
+    <member type="way" ref="1004" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction" v="no_left_turn"/></relation>
+
+  <!-- to way does not leave the via node -->
+  <relation id="2011" version="1">
+    <member type="way" ref="1002" role="from"/><member type="node" ref="3" role="via"/>
+    <member type="way" ref="1001" role="to"/>
+    <tag k="type" v="restriction"/><tag k="restriction" v="no_left_turn"/></relation>
+</osm>

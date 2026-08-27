@@ -1,0 +1,34 @@
+{
+  "adopted": "p75",
+  "basis": "intra-zone overhead quantile fed to Stage 4, then solved by Stage 5",
+  "candidates": {
+    "p50": {
+      "days": 55,
+      "finish": "2026-10-18",
+      "note": "observed from the run; artifacts not retained, superseded before snapshotting",
+      "overhead": 2.1024,
+      "retained": false,
+      "route_h": 328.2,
+      "splits": 16,
+      "zones": 39
+    },
+    "p75": {
+      "days": 47,
+      "finish": "2026-10-10",
+      "overhead": 2.2598119655864606,
+      "retained": true,
+      "route_h": 321.90646106096654,
+      "splits": 4,
+      "zones": 43
+    },
+    "p90": {
+      "days": 49,
+      "finish": "2026-10-12",
+      "overhead": 2.394210683686308,
+      "retained": true,
+      "route_h": 323.8501284419923,
+      "splits": 2,
+      "zones": 47
+    }
+  }
+}
