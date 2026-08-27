@@ -257,3 +257,65 @@ def arc_frame(rows: list[dict]):
         # Distinct geometry per arc so terminal bearings are well defined.
         geometries.append(LineString([(44.80 + i * 1e-3, 41.70), (44.80 + i * 1e-3, 41.701)]))
     return gpd.GeoDataFrame(built, geometry=geometries, crs="EPSG:4326")
+
+
+def street(specs: list[dict], lat: float = 41.70, lon0: float = 44.80, seg_m: float = 120.0):
+    """A straight west-east street whose geometry actually joins up.
+
+    `arc_frame` gives every arc a parallel stub at a different longitude, which is
+    fine for bearings and useless for map matching — a trace cannot be walked along
+    a network that is not connected in space. Each spec becomes one arc from node
+    `i` to node `i + 1`; a spec with `pair=True` also gets its reverse arc, sharing
+    a `pair_id` so either direction satisfies the requirement.
+
+    Returns `(frame, coords)` where `coords` is the west-east centreline, ready to
+    hand to `trace.synthesise`.
+    """
+    import math
+
+    import geopandas as gpd
+    from shapely.geometry import LineString
+
+    dlon = seg_m / (111_320.0 * math.cos(math.radians(lat)))
+    nodes = [(lon0 + i * dlon, lat) for i in range(len(specs) + 1)]
+
+    rows, geoms = [], []
+
+    def add(arc_id, frm, to, geom, spec, representative):
+        rows.append(
+            {
+                "arc_id": arc_id,
+                "way_id": int(arc_id.split(":")[0]),
+                "seg_index": int(arc_id.split(":")[1]),
+                "direction": arc_id.split(":")[2],
+                "from_node": frm,
+                "to_node": to,
+                "highway_class": spec.get("highway_class", "residential"),
+                "name": spec.get("name", "Test Street"),
+                "length_m": seg_m,
+                "lanes": float("nan"),
+                "width": float("nan"),
+                "maxspeed": float("nan"),
+                "gradient_pct": 0.0,
+                "min_passes": spec.get("min_passes", 1),
+                "pair_id": spec.get("pair_id", "") if spec.get("pair") else "",
+                "pair_requirement": 1 if spec.get("pair") else 0,
+                "is_pair_representative": representative,
+                "capture_quality": spec.get("capture_quality", "full"),
+                "capture_speed_kmh": spec.get("capture_speed_kmh", 30.0),
+                "excluded": False,
+                "in_largest_scc": True,
+            }
+        )
+        geoms.append(geom)
+
+    for i, spec in enumerate(specs):
+        spec = dict(spec)
+        spec.setdefault("pair_id", f"P{i}")
+        forward = LineString([nodes[i], nodes[i + 1]])
+        add(f"{100 + i}:0:F", i, i + 1, forward, spec, True)
+        if spec.get("pair"):
+            add(f"{100 + i}:0:B", i + 1, i, LineString([nodes[i + 1], nodes[i]]), spec, False)
+
+    frame = gpd.GeoDataFrame(rows, geometry=geoms, crs="EPSG:4326")
+    return frame, nodes

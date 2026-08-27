@@ -13,7 +13,7 @@ before the next stage starts.
 | 4 | Zoning | 2, 3 | after Stage 3 |
 | 4c | Re-zone on measured overhead | 5 | **done** |
 | 5 | Route solve + GPX | 4 | after Stage 4 |
-| 6 | Coverage tracker & re-planner | 5 | after Stage 5 |
+| 6 | Coverage tracker & re-planner | 5 | **done** |
 | 7 | Dashboard | 6 | after Stage 6 |
 
 Stages 2–7 are deliberately unwritten. Their prompts depend on real measured

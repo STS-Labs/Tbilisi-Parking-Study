@@ -26,6 +26,15 @@ def main(argv: list[str] | None = None) -> int:
         help="re-render reports/05-routes.md from the existing artifact",
     )
     sub.add_parser("stage4b", help="re-test variant D, dispose of the trapped mainlines")
+    stage6 = sub.add_parser("stage6", help="ingest a day's trace and re-plan the rest")
+    stage6.add_argument("--day", type=int, required=True, help="campaign day number")
+    stage6.add_argument("--trace", required=True, help="the day's GPS trace")
+    stage6.add_argument("--date", default=None, help="ISO date the trace was driven")
+    stage6.add_argument("--replay", action="store_true",
+                        help="this trace is a replay of a planned route, not real "
+                             "driving — marks the calibration as not evidence")
+    stage6.add_argument("--replan", action="store_true",
+                        help="re-run Stages 4-5 over the remainder and report the finish")
     sub.add_parser(
         "stage4c",
         help="compare the re-zoned plan against the committed one",
@@ -88,6 +97,16 @@ def main(argv: list[str] | None = None) -> int:
         )
         if t["days_over_window"]:
             print(f"  {t['days_over_window']} days exceed their window")
+        return 0
+    if args.command == "stage6":
+        payload = pipeline.run_stage6(args.day, args.trace, args.date, args.replan,
+                                     replay=args.replay)
+        print(f"  day {payload['day']:02d}: covered {payload['gained']:,} elements; "
+              f"{payload['coverage_fraction'] * 100:.2f}% complete, "
+              f"{payload['outstanding']:,} still owed")
+        if payload["revised_finish"]:
+            r = payload["revised_finish"]
+            print(f"  re-planned: {r['days']} days -> {r['finish']}  {r['route_h']:,.1f} h")
         return 0
     if args.command == "stage4c":
         payload = pipeline.run_stage4c()

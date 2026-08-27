@@ -1059,6 +1059,8 @@ def run_stage4(
     deadhead_s = model.deadhead_time_s(rows)
     length_m = rows["length_m"].to_numpy(dtype="float64")
     traversals = zoning.required_traversals(graph.arc_index)
+    traversals, scope_note = _outstanding_passes(graph.arc_index, traversals)
+    _log(f"  {scope_note}")
     required = (traversals > 0) & keep
 
     overhead, overhead_source = _zone_overhead(variant)
@@ -1166,6 +1168,134 @@ def run_stage4c() -> dict:
     report04c.write(payload)
     _log(f"wrote {C.REZONE_REPORT_MD}")
     return payload
+
+
+def run_stage6(day: int, trace_path, date: str | None = None,
+               replan: bool = False, replay: bool = False) -> dict:
+    """Stage 6 — ingest a day's trace, recompute what is left, re-plan the rest.
+
+    SPEC §10 in one function. The coverage state carries across days on disk, so
+    running this on day 1 with no prior state is the same code path as day 30 — the
+    re-planner does not have a special case for starting.
+    """
+    from . import calibrate as _calibrate
+    from . import coverage as _coverage
+    from . import exceptions as _exceptions
+    from . import report06, trace as _trace
+
+    started = time.time()
+    if not C.NETWORK_GPKG.exists():
+        raise FileNotFoundError(f"{C.NETWORK_GPKG} missing — Stage 6 needs the network")
+
+    arcs = gpd.read_file(C.NETWORK_GPKG, layer=C.NETWORK_LAYER)
+    frame = scenarios.apply_variant(arcs, C.SCOPE_VARIANT)
+    routable = frame[(~frame["excluded"]) & (frame["in_largest_scc"])].reset_index(drop=True)
+    _log(f"scope variant {C.SCOPE_VARIANT} — {len(routable):,} routable arcs")
+
+    state = (_coverage.CoverageState.load() if C.COVERAGE_STATE_JSON.exists()
+             else _coverage.CoverageState.initial(routable))
+    _log(f"carried forward: {sum(state.covered.values()):,} of "
+         f"{sum(state.required.values()):,} elements already covered")
+
+    register = _exceptions.apply(state, _exceptions.read(), today=date)
+    if register["retired_keys"] or register["restored_keys"]:
+        _log(f"exceptions: {len(register['retired_keys'])} retired, "
+             f"{len(register['restored_keys'])} returned, "
+             f"{register['retired_km']:.2f} km retired in total")
+
+    trace = _trace.read(trace_path)
+    rate = len(trace) / trace.duration_s if trace.duration_s else 0.0
+    _log(f"trace: {len(trace):,} fixes over {trace.duration_s / 3600:.2f} h "
+         f"({rate:.1f} Hz)")
+    if rate and rate < C.MIN_TRACE_RATE_HZ:
+        _log(f"  WARNING: below {C.MIN_TRACE_RATE_HZ:g} Hz — short arcs can fall "
+             "between fixes and be reported as never driven")
+
+    outcome = _coverage.ingest(trace, routable, state=state, date=date)
+    _log(f"covered {outcome.gained:,} required elements this day")
+
+    calibration = _calibrate.calibrate(trace, outcome.match, routable)
+
+    # --- persist ------------------------------------------------------------
+    state.save()
+    _exceptions.write(state.exceptions)
+    outstanding = {}
+    for key, owed in state.remaining.items():
+        if owed <= 0:
+            continue
+        for arc_id in state.members.get(key, []):
+            outstanding[arc_id] = owed
+    C.OUTSTANDING_JSON.write_text(json.dumps(outstanding, indent=2, sort_keys=True))
+    _log(f"wrote {C.OUTSTANDING_JSON} ({len(outstanding):,} arcs still owed)")
+
+    covered_ids = {a for k, v in state.covered.items() if v > 0
+                   for a in state.members.get(k, [])}
+    retired_ids = {a for k, v in state.retired_passes.items() if v > 0
+                   for a in state.members.get(k, [])}
+    ids = routable["arc_id"].astype(str)
+    layer = routable.copy()
+    layer["covered"] = ids.isin(covered_ids)
+    layer["retired"] = ids.isin(retired_ids)
+    layer["still_required"] = ids.isin(set(outstanding))
+    network.write_gpkg(layer, C.COVERAGE_GPKG, layer=C.COVERAGE_LAYER)
+    _log(f"wrote {C.COVERAGE_GPKG}")
+
+    revised = None
+    if replan:
+        _log("re-planning the remainder")
+        run_stage4()
+        routes = run_stage5()
+        revised = {"days": routes["totals"]["days"],
+                   "finish": routes["totals"]["finish_date"],
+                   "route_h": routes["totals"]["route_h"]}
+
+    payload = {
+        "day": day,
+        "date": date or "",
+        "gained": outcome.gained,
+        "reasons": [v.reason for v in outcome.verdicts],
+        "wrong_way": [v.arc_id for v in outcome.verdicts if v.reason == "heading"],
+        "recording_evidence": outcome.recording_evidence,
+        "required_total": sum(state.required.values()),
+        "covered_total": sum(state.covered.values()),
+        "retired_total": sum(state.retired_passes.values()),
+        "outstanding": sum(state.remaining.values()),
+        "coverage_fraction": state.coverage_fraction(),
+        "exceptions": register,
+        "calibration": {"turns": calibration.turns,
+                        "congestion": calibration.congestion,
+                        "observations": calibration.observations,
+                        "is_evidence": not replay},
+        "revised_finish": revised,
+        "trace": {"fixes": len(trace), "hz": rate, "source": trace.source},
+        "meta": {"runtime_s": round(time.time() - started, 1)},
+    }
+    report06.write(payload, C.REPORTS / f"06-day-{day:02d}.md")
+    _log(f"wrote {C.REPORTS / f'06-day-{day:02d}.md'}")
+    _log(f"done in {time.time() - started:.0f}s")
+    return payload
+
+
+def _outstanding_passes(arc_index, passes):
+    """Reduce a per-L-node requirement to what Stage 6 says is still owed.
+
+    A no-op when `06-outstanding.json` is absent, so every stage behaves exactly as
+    it did before Stage 6 existed. When it is present, an arc missing from it is
+    fully covered and contributes nothing.
+    """
+    import numpy as np
+
+    if not C.OUTSTANDING_JSON.exists():
+        return passes, "full scope — nothing covered yet"
+    owed = json.loads(C.OUTSTANDING_JSON.read_text())
+    ids = arc_index["arc_id"].astype(str).to_numpy()
+    capped = np.array([owed.get(str(a), 0) for a in ids], dtype=passes.dtype)
+    # Never *raise* a requirement: the outstanding set can only discharge work.
+    reduced = np.minimum(passes, capped)
+    return reduced, (
+        f"remainder from {C.OUTSTANDING_JSON.name} — "
+        f"{int((reduced > 0).sum()):,} of {int((passes > 0).sum()):,} elements still owed"
+    )
 
 
 def _zone_overhead(variant: str) -> tuple[float, str]:
@@ -1863,6 +1993,10 @@ def _write_stage5_outputs(
     speeds = dict(zip(frame["arc_id"].astype(str), frame["capture_speed_kmh"].astype(float)))
     exit_s = lowerbound.min_exit_s(graph)
     required_passes = oriented.lower[: star.n_arc_nodes]
+    required_passes, scope_note = _outstanding_passes(
+        graph.arc_index.iloc[: star.n_arc_nodes], required_passes
+    )
+    _log(f"  {scope_note}")
 
     # The same depot legs Stage 4 sizes with — cheapest in and out, minimised over
     # the zone's segments — so that the overhead measured below is on exactly the

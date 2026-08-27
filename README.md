@@ -15,6 +15,7 @@ make stage4     # partition -> routed depot legs -> sequence -> calendar -> repo
 make stage4b    # re-test variant D, dispose of the trapped mainlines
 make stage4c    # compare the re-zoned plan against the committed one
 make stage5     # solve one route per driving day -> GPX + turn sheets
+make stage6 DAY=1 TRACE=... # ingest a day's trace, recompute coverage, re-plan
 make test       # unit tests
 make gate       # Stage 0 gate assertions
 make gate1      # Stage 1 gate assertions
@@ -24,6 +25,7 @@ make gate4      # Stage 4 gate assertions
 make gate4b     # Stage 4b gate assertions
 make gate4c     # Stage 4c gate assertions
 make gate5      # Stage 5 gate assertions
+make gate6      # Stage 6 gate assertions
 ```
 
 Outputs:
@@ -67,6 +69,11 @@ Outputs:
 | `reports/05-routes.md` | the Stage 5 report — per-day table, bracket, turn account |
 | `reports/05-routes/day-NN.gpx` | **the file that goes in the car** — one track per day |
 | `reports/05-routes/day-NN.md` | turn-by-turn sheet for that day |
+| `data/derived/06-coverage.gpkg` | per-arc coverage state and evidence |
+| `data/derived/06-coverage-state.json` | what is covered, owed and retired; carries across days |
+| `data/derived/06-outstanding.json` | what the campaign still owes — Stages 4 and 5 read it |
+| `data/derived/06-exceptions.csv` | the exceptions register — hand-edited by the driver |
+| `reports/06-day-NN.md` | the Stage 6 day report |
 
 Re-running is cheap: the PBF read is cached, so only the arc table, report and
 map are rebuilt. `make stage0` after `rm data/derived/00-extract.pkl.gz`, or
@@ -122,3 +129,36 @@ pytest config sets `pythonpath = ["src"]` for the same reason.
 whenever iCloud has just touched the venv. Moving the checkout off iCloud-synced
 storage, or pointing `UV_PROJECT_ENVIRONMENT` at a path outside it, fixes it at
 the source.
+
+## Stage 6 — the re-planner
+
+Stage 6 closes SPEC §10's loop: ingest the day's GPS trace, work out what is
+*actually* covered, and re-plan the remainder. It writes `06-outstanding.json`, and
+Stages 4 and 5 read that file whenever it exists — so re-planning is not a separate
+code path, it is the same two stages given less to do. Day 1 is the case where the
+file is absent and everything is outstanding.
+
+```bash
+make stage6 DAY=1 TRACE=traces/day-01.gpx DATE=2026-08-25
+make stage6 DAY=1 TRACE=traces/day-01.gpx DATE=2026-08-25 REPLAN=1   # and re-solve
+```
+
+Matching is done against **our own arcs**, not Valhalla or `fmm` as SPEC §10.2
+suggests. Both of those match onto a graph they build themselves, which would mean
+joining their edge ids back to `arc_id` — and that join is exactly where a street
+gets marked covered because something near it was driven. See `matcher.py`.
+
+Three things the stage will tell you that are worth acting on:
+
+- **The rig must log at 2 Hz or better** (`config.MIN_TRACE_RATE_HZ`). At 1 Hz the
+  fixes are 6.9 m apart at capture speed, and Tbilisi's 4 m junction stubs can fall
+  between two of them and be reported as never driven.
+- **A trace with no timestamps covers almost nothing**, by design: SPEC §10.3 makes
+  speed a condition of counting, and a trace without a clock cannot satisfy it.
+  Exporting a planned route as GPX produces exactly such a file.
+- **A GPS trace is not proof the camera was on.** Until the rig exposes footage
+  timestamps, `RECORDING_EVIDENCE_AVAILABLE` stays False and every day report says
+  so. It is the largest unverified assumption in the coverage figure.
+
+No real trace has been ingested yet, so `data/derived/06-*` does not exist. The
+stage is built and gated against synthetic replays of solved days.

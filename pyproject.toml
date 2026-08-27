@@ -51,5 +51,6 @@ markers = [
     "gate4b: Stage 4b gate assertions; require 04b-recheck.json",
     "gate4c: Stage 4c gate assertions; require 04-zones.json and 05-routes.json",
     "gate5: Stage 5 gate assertions; require 05-routes.json",
+    "gate6: Stage 6 gate assertions; coverage tracker and map matcher",
     "slow: requires network downloads or full pipeline run",
 ]

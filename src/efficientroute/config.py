@@ -678,6 +678,93 @@ RECHECK_JSON = DERIVED / "04b-recheck.json"
 RECHECK_REPORT_MD = REPORTS / "04b-recheck.md"
 
 
+# ============================================ Stage 6 — coverage tracker
+
+#: SPEC §10.3's ±T. A traversal counts only if the matched heading agrees with the
+#: arc's bearing to within this. The two directions of a street are 180° apart, so
+#: anything below 90° separates them; 45° leaves room for GPS heading noise on a
+#: curve without ever admitting the opposite direction.
+#: **Measured, 27 Aug 2026.** Replaying days 1-3 against the real network at 30/35/
+#: 38/40/45°, forward coverage is 99.94% at 38° and above and falls to 99.80% at 30°,
+#: while one-way arcs wrongly credited on a reversed replay fall monotonically as the
+#: tolerance tightens. 40° is the loosest setting that costs nothing in forward
+#: coverage, so it is the conservative choice rather than 45°.
+MATCH_HEADING_TOLERANCE_DEG = 40.0
+
+#: How far a fix may sit from an arc and still be considered a candidate for it.
+#:
+#: **Provisional — cannot be calibrated until a real trace exists.** A synthetic
+#: replay is generated from the arc geometry itself, so its fixes sit 0.00 m from
+#: the right arc; it can prove the threshold is not too *tight* but says nothing
+#: about how loose it can safely be. What it does show is the cost of looseness:
+#: where two one-way carriageways run 11-21 m apart, a car driving the wrong way
+#: down one is within this radius of the other, which does run in its direction of
+#: travel, and gets credited for it. Measured on day 2, every wrongly-credited
+#: one-way arc matched at a median 11 m while legitimate ones matched at 0 m — so
+#: distance separates them, and a real trace's true error will say where to cut.
+#: Revisit against the first real day, per CLAUDE.md's rule on pinned constants.
+MATCH_MAX_CANDIDATE_DIST_M = 25.0
+
+#: Emission model: assumed standard deviation of a GPS fix, in metres.
+MATCH_GPS_SIGMA_M = 8.0
+
+#: Transition model: how sharply to penalise disagreement between the distance the
+#: network says was travelled and the distance the fixes say was travelled.
+MATCH_TRANSITION_BETA_M = 20.0
+
+#: A matched run shorter than this fraction of the arc is not a traversal — the car
+#: clipped a corner or the matcher wandered. The arc stays required.
+MATCH_MIN_ARC_FRACTION = 0.7
+
+#: Speed above which a *required* traversal does not count, per SPEC §5 and §10.3.
+#: `capture_quality == "reduced"` arcs are exempt: SPEC §3.2 already accepted a
+#: reduced-quality pass on them, so they are captured at whatever speed the road
+#: runs at.
+COVERAGE_SPEED_MAX_KMH = CAPTURE_SPEED_MAX_KMH
+
+#: Which quantile of a traversal's speeds is tested against the limit.
+#:
+#: Not the maximum: a car holding a legitimate 40 km/h produces fixes at 41-42 from
+#: GPS noise alone, and testing the maximum would reject nearly every honest
+#: traversal — a rule that fails everything is not conservative, it is useless. Not
+#: the mean either: a run that crawls half the street and races the other half
+#: averages to something acceptable while half the footage is unusable. A high
+#: quantile ignores noise spikes but still catches sustained over-speed.
+COVERAGE_SPEED_QUANTILE = 0.90
+
+#: Whether the rig exposes footage timestamps that can prove the camera was on.
+#: **A GPS trace is evidence the car was there, not that the camera was recording.**
+#: Until the Stereolabs output is known to carry them this stays False, every day's
+#: recording evidence is reported as `unknown`, and the report says so rather than
+#: quietly assuming the footage exists.
+RECORDING_EVIDENCE_AVAILABLE = False
+
+#: How long a `temporary` exception keeps an arc out of the required set before it
+#: returns to be re-attempted.
+TEMPORARY_EXCEPTION_DAYS = 21
+
+#: Minimum rate the rig must log at, in Hz. **An operational requirement, measured
+#: not guessed.** Replaying a solved day against the real network covers 100% of its
+#: required elements at 2 Hz and above; at 1 Hz the fixes are 6.9 m apart at capture
+#: speed and Tbilisi's 4 m junction stubs can fall between two of them, never
+#: becoming the nearest thing to any fix. A stub missed this way is reported as
+#: never driven and re-planned for ever.
+MIN_TRACE_RATE_HZ = 2.0
+
+COVERAGE_GPKG = DERIVED / "06-coverage.gpkg"
+COVERAGE_LAYER = "arcs"
+EXCEPTIONS_CSV = DERIVED / "06-exceptions.csv"
+COVERAGE_STATE_JSON = DERIVED / "06-coverage-state.json"
+#: What the campaign still owes, as `arc_id -> passes`. Written by Stage 6; read by
+#: Stages 4 and 5 when it exists, which is the whole of SPEC §10.5's re-plan: the
+#: later stages do not know or care whether it is day 1 or day 30, they plan
+#: whatever is still outstanding. Absent, everything is outstanding — which is
+#: exactly day 1, and why this is a re-planner that happens to run once at the start
+#: rather than a planner with re-planning bolted on.
+OUTSTANDING_JSON = DERIVED / "06-outstanding.json"
+DAY_REPORT_DIR = REPORTS
+
+
 # ================================================== Stage 5 — route solve
 
 #: A day that will not fit its window is split in two and re-solved.  Each split
