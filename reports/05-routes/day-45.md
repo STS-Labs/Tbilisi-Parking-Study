@@ -10,20 +10,20 @@ Start and finish at the depot. **Capture** rows are required footage: keep to 40
 
 | # | Street | Instruction | km | Mode | Lane |
 | ---: | --- | --- | ---: | --- | --- |
-| 1 | რამაზ ჩხიკვაძის ქუჩა | turn right | 0.30 | deadhead | — |
-| 2 | რამაზ ჩხიკვაძის ქუჩა | continue | 0.77 | capture | — |
-| 3 | რამაზ ჩხიკვაძის ქუჩა | turn left | 0.03 | deadhead | — |
-| 4 | რამაზ ჩხიკვაძის ქუჩა | continue | 0.19 | capture | — |
-| 5 | ელგუჯა ამაშუკელის ქუჩა | continue | 1.05 | capture | — |
-| 6 | (unnamed) | turn right | 0.06 | capture | — |
-| 7 | ლისის წრე | continue | 0.02 | capture | — |
-| 8 | (unnamed) | continue | 0.05 | capture | — |
-| 9 | მუხრან მაჭავარიანის ქუჩა | turn left | 0.40 | capture | — |
-| 10 | (unnamed) | U-turn | 0.10 | deadhead | — |
-| 11 | (unnamed) | turn left | 0.10 | capture | — |
-| 12 | მუხრან მაჭავარიანის ქუჩა | continue | 1.22 | capture | — |
-| 13 | (unnamed) | turn right | 0.21 | capture | — |
-| 14 | მუხრან მაჭავარიანი-მარშალ გელოვანი | turn left | 2.58 | capture | — |
+| 1 | რამაზ ჩხიკვაძის ქუჩა | continue | 1.29 | deadhead | — |
+| 2 | ელგუჯა ამაშუკელის ქუჩა | continue | 0.33 | deadhead | — |
+| 3 | ელგუჯა ამაშუკელის ქუჩა | continue | 0.72 | capture | — |
+| 4 | (unnamed) | turn right | 0.06 | capture | — |
+| 5 | ლისის წრე | continue | 0.02 | capture | — |
+| 6 | (unnamed) | continue | 0.05 | capture | — |
+| 7 | მუხრან მაჭავარიანის ქუჩა | turn left | 0.40 | capture | — |
+| 8 | (unnamed) | U-turn | 0.10 | deadhead | — |
+| 9 | (unnamed) | turn left | 0.10 | capture | — |
+| 10 | მუხრან მაჭავარიანის ქუჩა | continue | 1.22 | capture | — |
+| 11 | (unnamed) | turn right | 0.21 | capture | — |
+| 12 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 1.07 | capture | — |
+| 13 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 0.21 | deadhead | — |
+| 14 | მუხრან მაჭავარიანი-მარშალ გელოვანი | turn left | 1.31 | capture | — |
 | 15 | მუხრან მაჭავარიანის ქუჩა | continue | 0.20 | capture | — |
 | 16 | მუხრან მაჭავარიანის ქუჩა | turn right | 1.01 | deadhead | — |
 | 17 | ლისის ქუჩა | U-turn | 0.07 | capture | — |
@@ -119,843 +119,867 @@ Start and finish at the depot. **Capture** rows are required footage: keep to 40
 | 107 | ვალენტინ თოფურიძის ქუჩა | turn right | 0.11 | capture | — |
 | 108 | ვალენტინ თოფურიძის II გასასვლელი | turn right | 0.28 | capture | — |
 | 109 | ციალა გაბაშვილის ქუჩა | U-turn | 0.13 | deadhead | — |
-| 110 | ციალა გაბაშვილის ქუჩა | turn left | 0.35 | capture | — |
-| 111 | ვალენტინ თოფურიძის ქუჩა | turn right | 0.25 | deadhead | — |
-| 112 | ვალენტინი  თოფურიძის მე-2 შესასვლელი | continue | 0.17 | capture | — |
-| 113 | (unnamed) | turn right | 0.23 | capture | — |
-| 114 | არზაყან (დიმიტრი) ემუხვარის I შესახვევი | turn left | 0.14 | capture | — |
-| 115 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | continue | 0.09 | deadhead | — |
-| 116 | არზაყან (დიმიტრი) ემუხვარის II შესახვევი | U-turn | 0.09 | capture | — |
-| 117 | არზაყან (დიმიტრი) ემუხვარის II შესახვევი | turn right | 0.09 | deadhead | — |
-| 118 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | U-turn | 0.05 | deadhead | — |
-| 119 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | turn right | 0.10 | capture | — |
-| 120 | (unnamed) | U-turn | 0.08 | deadhead | — |
-| 121 | (unnamed) | turn right | 0.08 | capture | — |
-| 122 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | turn right | 0.13 | capture | — |
-| 123 | მუხრან მაჭავარიანის ქუჩა | continue | 0.33 | capture | — |
-| 124 | მუხრან მაჭავარიანის ქუჩა | U-turn | 0.98 | deadhead | — |
-| 125 | მუხრან მაჭავარიანის ქუჩა | continue | 0.03 | deadhead | — |
-| 126 | მუხრან მაჭავარიანის ქუჩა | continue | 0.12 | capture | — |
-| 127 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 0.04 | capture | — |
-| 128 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 0.00 | deadhead | — |
-| 129 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 0.06 | capture | — |
-| 130 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 1.22 | deadhead | — |
-| 131 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 0.32 | capture | — |
-| 132 | მარშალ გელოვანის გამზირი | turn left | 0.45 | capture | — |
-| 133 | (unnamed) | turn left | 0.01 | capture | — |
-| 134 | მარშალ გელოვანის გამზირი | turn right | 1.35 | capture | — |
-| 135 | (unnamed) | turn left | 0.09 | deadhead | — |
-| 136 | (unnamed) | turn left | 1.00 | capture | — |
-| 137 | (unnamed) | continue | 0.15 | deadhead | — |
-| 138 | (unnamed) | turn right | 0.19 | capture | — |
-| 139 | მარშალ გელოვანის გამზირი | continue | 2.79 | capture | — |
-| 140 | მარშალ გელოვანის გამზირი | continue | 0.45 | deadhead | — |
-| 141 | მარშალ გელოვანის გამზირი | continue | 0.12 | capture | — |
-| 142 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.57 | capture | — |
-| 143 | ლევან გოთუას ქუჩა | turn right | 0.17 | capture | — |
-| 144 | (unnamed) | continue | 0.01 | capture | — |
-| 145 | ლევან გოთუას ქუჩა | turn right | 0.05 | capture | — |
-| 146 | (unnamed) | U-turn | 0.06 | deadhead | — |
-| 147 | (unnamed) | turn right | 0.06 | capture | — |
-| 148 | ლევან გოთუას ქუჩა | continue | 0.92 | capture | — |
-| 149 | (unnamed) | turn right | 0.05 | capture | — |
-| 150 | გიორგი სააკაძის დაღმართი | continue | 0.03 | capture | pass 1 of 2 — right lanes |
-| 151 | გიორგი სააკაძის მოედანი | turn right | 0.07 | capture | pass 1 of 2 — right lanes |
-| 152 | ჟიული შარტავას ქუჩა | continue | 0.04 | capture | pass 1 of 2 — right lanes |
-| 153 | ჟიული შარტავას ქუჩა | continue | 0.10 | capture | — |
-| 154 | ჟიული შარტავას ქუჩა | continue | 0.09 | capture | pass 1 of 2 — right lanes |
-| 155 | ანა კალანდაძის ქუჩა | turn left | 0.46 | capture | — |
-| 156 | პეკინის გამზირი | continue | 1.01 | capture | pass 1 of 2 — right lanes |
-| 157 | 26 მაისის მოედანი | continue | 0.05 | capture | pass 1 of 2 — right lanes |
-| 158 | (unnamed) | continue | 0.16 | capture | — |
-| 159 | 26 მაისის მოედანი | continue | 0.02 | capture | pass 1 of 2 — right lanes |
-| 160 | კონსტანტინე გამსახურდიას გამზირი | turn left | 0.12 | capture | pass 1 of 2 — right lanes |
-| 161 | (unnamed) | turn left | 0.14 | capture | — |
-| 162 | პეკინის გამზირი | continue | 0.14 | capture | pass 2 of 2 — left lanes |
-| 163 | 26 მაისის მოედანი | continue | 0.05 | capture | pass 2 of 2 — left lanes |
-| 164 | (unnamed) | continue | 0.16 | deadhead | — |
-| 165 | 26 მაისის მოედანი | continue | 0.02 | capture | pass 2 of 2 — left lanes |
-| 166 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.12 | capture | pass 2 of 2 — left lanes |
-| 167 | კონსტანტინე გამსახურდიას გამზირი | turn right | 0.01 | capture | pass 1 of 2 — right lanes |
-| 168 | გიორგი მიროტაძის ქუჩა | turn right | 0.14 | deadhead | — |
-| 169 | ანდრია აფაქიძის ქუჩა | U-turn | 0.04 | capture | — |
-| 170 | ანდრია აფაქიძის ქუჩა | turn right | 0.04 | deadhead | — |
-| 171 | გიორგი მიროტაძის ქუჩა | turn right | 0.05 | deadhead | — |
-| 172 | (unnamed) | U-turn | 0.09 | deadhead | — |
-| 173 | (unnamed) | turn right | 0.09 | capture | — |
-| 174 | გიორგი მიროტაძის ქუჩა | continue | 0.06 | deadhead | — |
-| 175 | გიორგი მიროტაძის ქუჩა | turn right | 0.05 | capture | — |
-| 176 | ვახტანგ ბოჭორიშვილის ქუჩა | U-turn | 0.14 | deadhead | — |
-| 177 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.16 | capture | — |
-| 178 | ვახტანგ ბოჭორიშვილის IV შესახვევი | U-turn | 0.04 | deadhead | — |
-| 179 | ვახტანგ ბოჭორიშვილის IV შესახვევი | turn right | 0.04 | capture | — |
-| 180 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.21 | capture | — |
-| 181 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.18 | deadhead | — |
-| 182 | გიორგი სააკაძის I გასასვლელი | U-turn | 0.10 | capture | — |
-| 183 | გიორგი სააკაძის I გასასვლელი | continue | 0.16 | capture | — |
-| 184 | ვახუშტი ბაგრატიონის ხიდი | continue | 0.27 | capture | — |
-| 185 | ვახუშტი ბაგრატიონის ქუჩა | turn right | 0.44 | capture | — |
-| 186 | აკაკი წერეთლის გამზირი | continue | 0.17 | capture | — |
-| 187 | აკაკი წერეთლის გამზირი | turn left | 0.07 | capture | pass 1 of 2 — right lanes |
-| 188 | გორის ქუჩა | turn right | 0.09 | capture | — |
-| 189 | გორის შესახვევი | turn right | 0.14 | capture | — |
-| 190 | ეგნატე და ვახტანგ ფიფიების ქუჩა | turn right | 0.07 | capture | — |
-| 191 | აკაკი წერეთლის გამზირი | turn right | 0.70 | capture | — |
-| 192 | თემურ ფიფიას ქუჩა | turn right | 0.20 | deadhead | — |
-| 193 | ზუგდიდის ქუჩა | turn right | 0.15 | capture | — |
-| 194 | იროდიონ ევდოშვილის ქუჩა | continue | 0.22 | capture | — |
-| 195 | იროდიონ ევდოშვილის ქუჩა | turn left | 0.13 | deadhead | — |
-| 196 | დავით ყიფიანის ქუჩა | continue | 0.08 | deadhead | — |
-| 197 | დავით ყიფიანის ქუჩა | turn right | 0.20 | capture | — |
-| 198 | (unnamed) | U-turn | 0.07 | capture | — |
-| 199 | (unnamed) | turn left | 0.07 | deadhead | — |
-| 200 | დავით ყიფიანის ქუჩა | turn right | 0.28 | capture | — |
-| 201 | იროდიონ ევდოშვილის ქუჩა | turn right | 0.13 | capture | — |
-| 202 | აკაკი წერეთლის გამზირი | turn right | 0.08 | capture | — |
-| 203 | ქუთაისის ქუჩა | turn left | 0.38 | capture | — |
-| 204 | ვახუშტი ბაგრატიონის ხიდი | continue | 0.33 | capture | — |
-| 205 | გიორგი სააკაძის დაღმართი | continue | 0.07 | capture | — |
-| 206 | გიორგი სააკაძის დაღმართი | continue | 0.20 | capture | pass 1 of 2 — right lanes |
-| 207 | გიორგი სააკაძის დაღმართი | continue | 0.05 | capture | — |
-| 208 | გიორგი სააკაძის დაღმართი | continue | 0.03 | capture | pass 2 of 2 — left lanes |
-| 209 | გიორგი სააკაძის მოედანი | turn right | 0.07 | capture | pass 2 of 2 — left lanes |
-| 210 | ჟიული შარტავას ქუჩა | continue | 0.04 | capture | pass 2 of 2 — left lanes |
-| 211 | ჟიული შარტავას ქუჩა | turn left | 0.06 | deadhead | — |
-| 212 | ალექსანდრე ქუთათელის ქუჩა | turn left | 0.17 | capture | — |
-| 213 | თინა იოსებიძის ქუჩა | turn left | 0.17 | capture | — |
-| 214 | იპოლიტე ხვიჩიას ქუჩა | turn left | 0.10 | capture | — |
-| 215 | ალექსანდრე ქუთათელის ქუჩა | turn right | 0.07 | deadhead | — |
-| 216 | თინა იოსებიძის ქუჩა | turn right | 0.53 | capture | — |
-| 217 | დები იშხნელების ქუჩა | turn left | 0.15 | capture | — |
-| 218 | ჟიული შარტავას ქუჩა | turn left | 0.25 | capture | pass 1 of 2 — right lanes |
-| 219 | სიმონ კანდელაკის ქუჩა | continue | 0.11 | capture | pass 1 of 2 — right lanes |
-| 220 | სიმონ კანდელაკის ქუჩა | turn right | 0.21 | capture | — |
-| 221 | მირზა გელოვანის ქუჩა | turn left | 0.45 | capture | — |
-| 222 | ილია ოდიშელიძის ქუჩა | turn left | 0.18 | capture | — |
-| 223 | ტაშკენტის ქუჩა | turn left | 0.11 | deadhead | — |
-| 224 | ოდესას ქუჩა | turn right | 0.17 | capture | — |
-| 225 | მირზა გელოვანის ქუჩა | turn right | 0.31 | deadhead | — |
-| 226 | სიმონ კანდელაკის ქუჩა | continue | 0.47 | capture | — |
-| 227 | (unnamed) | turn left | 0.06 | capture | — |
-| 228 | ბუდაპეშტის ქუჩა | continue | 0.24 | capture | — |
-| 229 | გურამ ფანჯიკიძის ქუჩა | turn left | 0.11 | capture | — |
-| 230 | ტაშკენტის ქუჩა | turn left | 0.15 | capture | — |
-| 231 | სიმონ კანდელაკის ქუჩა | turn right | 0.21 | deadhead | — |
-| 232 | ცხინვალის ქუჩა | turn right | 0.16 | capture | — |
-| 233 | ლვოვის ქუჩა | turn left | 0.06 | capture | — |
-| 234 | ჰაიდარ აბაშიძის ქუჩა | turn right | 0.17 | capture | — |
-| 235 | ვაზისუბნის ქუჩა | continue | 0.15 | capture | — |
-| 236 | გაბრიელ ისაკაძის ქუჩა | turn left | 0.50 | capture | — |
-| 237 | ბაჩანა ბრეგვაძის ქუჩა | turn right | 0.14 | capture | — |
-| 238 | ლავრენტი არდაზიანის ქუჩა | U-turn | 0.18 | capture | — |
-| 239 | ლავრენტი არდაზიანის ქუჩა | turn right | 0.18 | deadhead | — |
-| 240 | ბაჩანა ბრეგვაძის ქუჩა | turn right | 0.02 | capture | — |
-| 241 | თედო სახოკიას ქუჩა | U-turn | 0.12 | capture | — |
-| 242 | თედო სახოკიას ქუჩა | turn right | 0.12 | deadhead | — |
-| 243 | ბაჩანა ბრეგვაძის ქუჩა | continue | 0.06 | capture | — |
-| 244 | ილია ოდიშელიძის II ჩიხი | U-turn | 0.11 | capture | — |
-| 245 | ილია ოდიშელიძის II ჩიხი | turn right | 0.11 | deadhead | — |
-| 246 | ილია ოდიშელიძის ქუჩა | turn right | 0.16 | capture | — |
-| 247 | იოსებ ბაქრაძის ქუჩა | continue | 0.03 | deadhead | — |
-| 248 | იოსებ ბაქრაძის I ჩიხი | U-turn | 0.04 | deadhead | — |
-| 249 | იოსებ ბაქრაძის I ჩიხი | turn right | 0.04 | capture | — |
-| 250 | იოსებ ბაქრაძის ქუჩა | U-turn | 0.12 | deadhead | — |
-| 251 | იოსებ ბაქრაძის ქუჩა | turn right | 0.15 | capture | — |
-| 252 | ილია ოდიშელიძის ქუჩა | continue | 0.14 | capture | — |
-| 253 | ილია ოდიშელიძის ქუჩა | turn right | 0.18 | deadhead | — |
-| 254 | ტაშკენტის ქუჩა | turn right | 0.08 | capture | — |
-| 255 | მერი დავითაშვილის ქუჩა | continue | 0.17 | capture | — |
-| 256 | ვარდან წულუკიძის ქუჩა | turn right | 0.52 | capture | — |
-| 257 | ილია ოდიშელიძის ქუჩა | continue | 0.16 | capture | — |
-| 258 | ილია ოდიშელიძის ქუჩა | turn left | 0.11 | deadhead | — |
-| 259 | სოფრომ მგალობლიშვილის ქუჩა | turn right | 0.04 | capture | — |
-| 260 | ლავრენტი არდაზიანის ქუჩა | U-turn | 0.04 | deadhead | — |
-| 261 | ლავრენტი არდაზიანის ქუჩა | turn right | 0.19 | capture | — |
-| 262 | ბაჩანა ბრეგვაძის ქუჩა | turn left | 0.07 | deadhead | — |
-| 263 | ელისაბედ ჩერქეზიშვილის ქუჩა | U-turn | 0.08 | deadhead | — |
-| 264 | ელისაბედ ჩერქეზიშვილის ქუჩა | turn right | 0.35 | capture | — |
-| 265 | ილია ოდიშელიძის ქუჩა | turn right | 0.13 | deadhead | — |
-| 266 | სოფრომ მგალობლიშვილის ქუჩა | continue | 0.04 | deadhead | — |
-| 267 | სოფრომ მგალობლიშვილის ქუჩა | turn left | 0.11 | capture | — |
-| 268 | გაბრიელ ისაკაძის ქუჩა | continue | 0.14 | deadhead | — |
-| 269 | გაბრიელ ისაკაძის ქუჩა | turn right | 0.10 | capture | — |
-| 270 | იური გაგარინის ქუჩა | U-turn | 0.17 | capture | — |
-| 271 | იური გაგარინის ქუჩა | turn right | 0.02 | capture | — |
-| 272 | ოჩამჩირის ქუჩა | continue | 0.05 | capture | — |
-| 273 | ოჩამჩირის ქუჩა | turn left | 0.06 | deadhead | — |
-| 274 | ჟიული შარტავას ქუჩა | turn left | 0.07 | deadhead | — |
-| 275 | სოკრატ არშბას ქუჩა | turn right | 0.09 | capture | — |
-| 276 | იური გაგარინის ქუჩა | continue | 0.65 | capture | — |
-| 277 | (unnamed) | turn right | 0.08 | capture | — |
-| 278 | მარშალ გელოვანის გამზირი | continue | 0.01 | deadhead | — |
-| 279 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.57 | deadhead | — |
-| 280 | ლევან გოთუას ქუჩა | turn right | 0.17 | deadhead | — |
-| 281 | (unnamed) | turn left | 0.01 | deadhead | — |
-| 282 | (unnamed) | turn right | 0.01 | capture | — |
-| 283 | ლევან გოთუას ქუჩა | continue | 0.02 | capture | — |
-| 284 | ლევან გოთუას ქუჩა | turn right | 0.41 | deadhead | — |
-| 285 | ლევან გოთუას შესახვევი | U-turn | 0.00 | deadhead | — |
-| 286 | ლევან გოთუას შესახვევი | turn right | 0.00 | capture | — |
-| 287 | ლევან გოთუას ქუჩა | continue | 0.57 | deadhead | — |
-| 288 | ლევან გოთუას ქუჩა | turn right | 0.05 | capture | — |
-| 289 | გიორგი სააკაძის დაღმართი | continue | 0.05 | deadhead | — |
-| 290 | გიორგი სააკაძის დაღმართი | continue | 0.03 | deadhead | pass 3 of 2 — centre lanes |
-| 291 | გიორგი სააკაძის მოედანი | continue | 0.03 | deadhead | pass 3 of 2 — centre lanes |
-| 292 | გიორგი სააკაძის მოედანი | continue | 0.05 | capture | — |
-| 293 | გიორგი სააკაძის მოედანი | turn left | 0.02 | capture | pass 1 of 2 — right lanes |
-| 294 | გიორგი სააკაძის მოედანი | continue | 0.10 | capture | — |
-| 295 | ვახტანგ ჭაბუკიანის ქუჩა | turn left | 0.08 | capture | pass 1 of 2 — right lanes |
-| 296 | იპოლიტე ხვიჩიას ქუჩა | continue | 0.18 | deadhead | — |
-| 297 | იპოლიტე ხვიჩიას ქუჩა | turn right | 0.07 | capture | — |
-| 298 | არჩილ სულაკაურის ქუჩა | U-turn | 0.08 | capture | — |
-| 299 | არჩილ სულაკაურის ქუჩა | turn left | 0.14 | deadhead | — |
-| 300 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.17 | capture | pass 1 of 2 — right lanes |
-| 301 | გიორგი სააკაძის მოედანი | continue | 0.14 | capture | — |
-| 302 | ვახტანგ ჭაბუკიანის ქუჩა | continue | 0.08 | capture | pass 2 of 2 — left lanes |
-| 303 | ვახტანგ ჭაბუკიანის ქუჩა | turn left | 0.20 | capture | pass 1 of 2 — right lanes |
-| 304 | პეკინის გამზირი | continue | 0.40 | capture | pass 2 of 2 — left lanes |
-| 305 | პეკინის გამზირი | continue | 0.14 | deadhead | pass 3 of 2 — centre lanes |
-| 306 | 26 მაისის მოედანი | continue | 0.05 | deadhead | pass 3 of 2 — centre lanes |
-| 307 | (unnamed) | continue | 0.16 | deadhead | — |
-| 308 | 26 მაისის მოედანი | continue | 0.02 | deadhead | pass 3 of 2 — centre lanes |
-| 309 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.12 | deadhead | pass 3 of 2 — centre lanes |
-| 310 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.01 | capture | pass 2 of 2 — left lanes |
-| 311 | კონსტანტინე გამსახურდიას გამზირი | turn left | 0.17 | capture | pass 1 of 2 — right lanes |
-| 312 | არჩილ სულაკაურის ქუჩა | turn right | 0.06 | capture | — |
-| 313 | იპოლიტე ხვიჩიას ქუჩა | continue | 0.07 | deadhead | — |
-| 314 | იპოლიტე ხვიჩიას ქუჩა | turn left | 0.29 | capture | — |
-| 315 | თინა იოსებიძის ქუჩა | turn right | 0.71 | deadhead | — |
-| 316 | დები იშხნელების ქუჩა | turn left | 0.15 | deadhead | — |
-| 317 | ჟიული შარტავას ქუჩა | turn left | 0.25 | capture | pass 2 of 2 — left lanes |
-| 318 | სიმონ კანდელაკის ქუჩა | turn right | 0.11 | capture | pass 2 of 2 — left lanes |
-| 319 | ზურაბ ჟვანიას მოედანი | continue | 0.09 | capture | — |
-| 320 | იური გაგარინის ქუჩა | turn right | 0.04 | capture | — |
-| 321 | ვიტალი დარასელიას ქუჩა | turn right | 0.13 | deadhead | — |
-| 322 | ჟიული შარტავას ქუჩა | continue | 0.06 | deadhead | — |
-| 323 | ჟიული შარტავას ქუჩა | continue | 0.03 | capture | — |
-| 324 | სიმონ კანდელაკის ქუჩა | turn right | 0.11 | deadhead | pass 3 of 2 — centre lanes |
-| 325 | ზურაბ ჟვანიას მოედანი | turn left | 0.07 | deadhead | — |
-| 326 | (unnamed) | turn left | 0.02 | capture | — |
-| 327 | ზურაბ ჟვანიას მოედანი | turn right | 0.03 | capture | — |
-| 328 | სოფრომ მგალობლიშვილის ქუჩა | continue | 0.08 | deadhead | — |
-| 329 | სოფრომ მგალობლიშვილის ქუჩა | turn right | 0.22 | capture | — |
-| 330 | გაბრიელ ისაკაძის ქუჩა | turn right | 0.24 | deadhead | — |
-| 331 | იური გაგარინის ქუჩა | continue | 0.17 | deadhead | — |
-| 332 | იური გაგარინის ქუჩა | U-turn | 0.14 | capture | — |
-| 333 | იური გაგარინის ქუჩა | continue | 0.14 | capture | — |
-| 334 | იური გაგარინის ქუჩა | turn right | 0.02 | deadhead | — |
-| 335 | ოჩამჩირის ქუჩა | continue | 0.05 | deadhead | — |
-| 336 | ოჩამჩირის ქუჩა | turn left | 0.11 | capture | — |
-| 337 | ჟიული შარტავას ქუჩა | continue | 0.07 | capture | — |
-| 338 | ოჩამჩირის ქუჩა | continue | 0.06 | capture | — |
-| 339 | ოჩამჩირის ქუჩა | turn right | 0.05 | deadhead | — |
-| 340 | იური გაგარინის ქუჩა | turn right | 0.08 | capture | — |
-| 341 | სოკრატ არშბას ქუჩა | turn left | 0.09 | deadhead | — |
-| 342 | ჟიული შარტავას ქუჩა | U-turn | 0.16 | deadhead | — |
-| 343 | ჟიული შარტავას ქუჩა | turn right | 0.04 | capture | — |
-| 344 | გაბრიელ ისაკაძის ქუჩა | turn right | 0.09 | capture | — |
-| 345 | იური გაგარინის ქუჩა | continue | 0.58 | deadhead | — |
-| 346 | (unnamed) | continue | 0.02 | deadhead | — |
-| 347 | (unnamed) | continue | 0.12 | capture | — |
-| 348 | მარშალ გელოვანის გამზირი | continue | 2.25 | deadhead | — |
-| 349 | გრიგოლ რობაქიძის გამზირი | continue | 0.08 | capture | — |
-| 350 | გრიგოლ რობაქიძის გამზირი | turn left | 0.44 | capture | pass 1 of 2 — right lanes |
-| 351 | ბორის პაიჭაძეს ქუჩა | continue | 0.02 | capture | — |
-| 352 | ბორის პაიჭაძის ქუჩა | turn right | 0.23 | capture | — |
-| 353 | ნოდარ ახალკაცის ქუჩა | turn right | 0.04 | deadhead | — |
-| 354 | ბორის პაიჭაძის ქუჩა | turn right | 0.29 | capture | — |
-| 355 | გრიგოლ რობაქიძის გამზირი | turn left | 0.06 | capture | pass 1 of 2 — right lanes |
-| 356 | ბორის პაიჭაძეს ქუჩა | turn left | 0.02 | capture | — |
-| 357 | გრიგოლ რობაქიძის გამზირი | continue | 0.47 | capture | pass 1 of 2 — right lanes |
-| 358 | ჯემალ ჭკუასელის ქუჩა | continue | 0.27 | capture | — |
-| 359 | ჯემალ ჭკუასელის ქუჩა | continue | 0.04 | capture | pass 1 of 2 — right lanes |
-| 360 | აკაკი ბაქრაძის ქუჩა | turn left | 0.13 | capture | — |
-| 361 | (unnamed) | turn left | 0.01 | capture | — |
-| 362 | აკაკი ბაქრაძის ქუჩა | continue | 0.74 | capture | — |
-| 363 | აკაკი ბელიაშვილის ქუჩა | turn left | 1.10 | capture | — |
-| 364 | დევი აბაშიძის ქუჩა | turn left | 0.47 | capture | — |
-| 365 | რობერტ ბარძიმაშვილის ქუჩა | turn right | 0.37 | capture | — |
-| 366 | ევგენი მიქელაძის ქუჩა | continue | 0.44 | deadhead | — |
-| 367 | ევგენი მიქელაძის ქუჩა | turn right | 0.04 | capture | — |
-| 368 | დავით აღმაშენებლის ხეივანი | continue | 0.16 | capture | — |
-| 369 | დავით აღმაშენებლის ხეივანი | continue | 0.14 | capture | pass 1 of 2 — right lanes |
-| 370 | დევი აბაშიძის ქუჩა | continue | 0.56 | capture | — |
-| 371 | დევი აბაშიძის ქუჩა | continue | 0.32 | deadhead | — |
-| 372 | დევი აბაშიძის ქუჩა | turn right | 0.09 | capture | — |
-| 373 | აკაკი ბელიაშვილის ქუჩა | turn right | 0.37 | capture | — |
-| 374 | ევგენი მიქელაძის ქუჩა | continue | 0.09 | capture | — |
-| 375 | ევგენი მიქელაძის ქუჩა | turn right | 0.32 | deadhead | — |
-| 376 | რობერტ ბარძიმაშვილის ქუჩა | turn left | 0.37 | capture | — |
-| 377 | დევი აბაშიძის ქუჩა | turn left | 0.06 | deadhead | — |
-| 378 | რობერტ ბარძიმაშვილის ქუჩა | continue | 0.37 | deadhead | — |
-| 379 | ბორის პაიჭაძის ქუჩა | turn left | 0.15 | capture | — |
-| 380 | (unnamed) | turn left | 0.01 | capture | — |
-| 381 | ბორის პაიჭაძის ქუჩა | turn left | 0.04 | capture | — |
-| 382 | (unnamed) | turn left | 0.01 | capture | — |
-| 383 | ბორის პაიჭაძის ქუჩა | continue | 0.04 | deadhead | — |
-| 384 | ბორის პაიჭაძის ქუჩა | continue | 0.03 | capture | — |
-| 385 | ბორის პაიჭაძის ქუჩა | turn left | 0.17 | deadhead | — |
-| 386 | ნოდარ ახალკაცის ქუჩა | turn right | 0.04 | deadhead | — |
-| 387 | ბორის პაიჭაძის ქუჩა | U-turn | 0.07 | deadhead | — |
-| 388 | ბორის პაიჭაძის ქუჩა | turn left | 0.08 | capture | — |
-| 389 | ნოდარ ახალკაცის ქუჩა | turn right | 0.07 | capture | — |
-| 390 | ბორის პაიჭაძის ქუჩა | continue | 0.20 | capture | — |
-| 391 | ბორის პაიჭაძის ქუჩა | continue | 0.04 | deadhead | — |
-| 392 | ბორის პაიჭაძის ქუჩა | turn right | 0.11 | capture | — |
-| 393 | ევგენი მიქელაძის ქუჩა | turn right | 0.47 | capture | — |
-| 394 | აკაკი ბელიაშვილის ქუჩა | turn left | 0.73 | capture | — |
-| 395 | აკაკი ბაქრაძის ქუჩა | continue | 0.61 | capture | — |
-| 396 | აკაკი ბაქრაძის ქუჩა | continue | 0.13 | deadhead | — |
-| 397 | აკაკი ბაქრაძის ქუჩა | turn right | 0.10 | capture | — |
-| 398 | (unnamed) | U-turn | 0.05 | capture | — |
-| 399 | (unnamed) | turn right | 0.04 | capture | — |
-| 400 | აკაკი ბაქრაძის ქუჩა | turn left | 0.93 | capture | — |
-| 401 | (unnamed) | turn left | 0.02 | capture | — |
-| 402 | აკაკი ბაქრაძის ქუჩა | continue | 1.05 | capture | — |
-| 403 | აკაკი ბაქრაძის ქუჩა | turn left | 0.14 | deadhead | — |
-| 404 | ჯემალ ჭკუასელის ქუჩა | continue | 0.04 | capture | pass 1 of 2 — right lanes |
-| 405 | ჯემალ ჭკუასელის ქუჩა | continue | 0.21 | deadhead | — |
-| 406 | ჯემალ ჭკუასელის ქუჩა | turn right | 0.06 | capture | — |
-| 407 | გრიგოლ რობაქიძის გამზირი | continue | 0.05 | capture | — |
-| 408 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | capture | — |
-| 409 | აკაკი წერეთლის გამზირი | continue | 0.00 | capture | — |
-| 410 | აკაკი წერეთლის გამზირი | continue | 0.02 | capture | pass 1 of 2 — right lanes |
-| 411 | ანზორ აბულაშვილის ქუჩა | continue | 0.34 | capture | — |
-| 412 | (unnamed) | continue | 0.00 | capture | — |
-| 413 | ანტონ აბულაშვილის ქუჩა | turn left | 0.15 | capture | — |
-| 414 | აკაკი წერეთლის გამზირი | turn left | 0.18 | capture | pass 1 of 2 — right lanes |
-| 415 | თორნიკე ერისთავის ქუჩა | turn left | 0.56 | capture | — |
-| 416 | (unnamed) | turn right | 0.24 | deadhead | — |
-| 417 | (unnamed) | turn right | 0.89 | capture | — |
-| 418 | თორნიკე ერისთავის ქუჩა | continue | 0.41 | capture | — |
-| 419 | თორნიკე ერისთავის ქუჩა | turn right | 0.13 | capture | pass 1 of 2 — right lanes |
-| 420 | აკაკი წერეთლის გამზირი | turn right | 0.19 | capture | — |
-| 421 | ანტონ აბულაშვილის ქუჩა | continue | 0.09 | deadhead | — |
-| 422 | ანტონ აბულაშვილის ქუჩა | continue | 0.04 | capture | — |
-| 423 | (unnamed) | continue | 0.03 | capture | — |
-| 424 | ანზორ აბულაშვილის ქუჩა | turn right | 0.29 | capture | — |
-| 425 | აკაკი წერეთლის გამზირი | continue | 0.08 | capture | — |
-| 426 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | capture | — |
-| 427 | გრიგოლ რობაქიძის გამზირი | continue | 0.11 | capture | — |
-| 428 | გრიგოლ რობაქიძის გამზირი | turn left | 0.36 | capture | pass 1 of 2 — right lanes |
-| 429 | (unnamed) | turn left | 0.02 | capture | — |
-| 430 | გრიგოლ რობაქიძის გამზირი | continue | 0.36 | capture | pass 2 of 2 — left lanes |
-| 431 | გრიგოლ რობაქიძის გამზირი | continue | 0.07 | capture | — |
-| 432 | გრიგოლ რობაქიძის გამზირი | continue | 0.05 | deadhead | — |
-| 433 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
-| 434 | აკაკი წერეთლის გამზირი | continue | 0.00 | deadhead | — |
-| 435 | აკაკი წერეთლის გამზირი | continue | 0.02 | capture | pass 2 of 2 — left lanes |
-| 436 | აკაკი წერეთლის გამზირი | continue | 0.43 | capture | — |
-| 437 | აკაკი წერეთლის გამზირი | turn left | 0.18 | capture | pass 2 of 2 — left lanes |
-| 438 | თორნიკე ერისთავის ქუჩა | U-turn | 0.30 | deadhead | — |
-| 439 | თორნიკე ერისთავის ქუჩა | continue | 0.14 | deadhead | — |
-| 440 | თორნიკე ერისთავის ქუჩა | continue | 0.13 | capture | pass 2 of 2 — left lanes |
-| 441 | თორნიკე ერისთავის ქუჩა | turn left | 0.01 | capture | — |
-| 442 | აკაკი წერეთლის გამზირი | continue | 1.79 | capture | — |
-| 443 | აკაკი წერეთლის გამზირი | continue | 0.06 | capture | pass 1 of 2 — right lanes |
-| 444 | აკაკი წერეთლის გამზირი | continue | 0.36 | capture | — |
-| 445 | აკაკი წერეთლის გამზირი | continue | 0.08 | deadhead | — |
-| 446 | აკაკი წერეთლის გამზირი | continue | 0.08 | capture | — |
-| 447 | აკაკი წერეთლის გამზირი | turn right | 0.12 | deadhead | — |
-| 448 | ბათუმის ქუჩა | continue | 0.08 | capture | — |
-| 449 | ბათუმის ქუჩა | turn right | 0.23 | deadhead | — |
-| 450 | დავით ყიფიანის ქუჩა | continue | 0.06 | capture | — |
-| 451 | დავით ყიფიანის ქუჩა | turn right | 0.05 | deadhead | — |
-| 452 | ფოთის ქუჩა | turn right | 0.29 | capture | — |
-| 453 | ბათუმის ქუჩა | turn left | 0.03 | deadhead | — |
-| 454 | (unnamed) | turn left | 0.00 | capture | — |
-| 455 | ბათუმის ქუჩა | turn right | 0.04 | capture | — |
-| 456 | აკაკი წერეთლის გამზირი | continue | 0.07 | capture | pass 2 of 2 — left lanes |
-| 457 | აკაკი წერეთლის გამზირი | continue | 0.42 | capture | — |
-| 458 | მიხეილ წინამძღვრიშვილის ქუჩა | continue | 0.15 | deadhead | — |
-| 459 | მიხეილ წინამძღვრიშვილის ქუჩა | turn right | 0.21 | capture | — |
-| 460 | თამარ მეფის გამზირი | continue | 0.25 | capture | — |
-| 461 | თამარ მეფის გამზირი | continue | 0.02 | capture | pass 1 of 2 — right lanes |
-| 462 | თამარ მეფის გამზირი | continue | 0.27 | capture | — |
-| 463 | თამარ მეფის ხიდი | continue | 0.13 | capture | — |
-| 464 | თამარ მეფის გამზირი | turn right | 0.02 | capture | — |
-| 465 | (unnamed) | turn right | 0.44 | capture | — |
-| 466 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 1.01 | capture | — |
-| 467 | ზვიად გამსახურდიას სანაპირო | continue | 0.18 | capture | — |
-| 468 | ზვიად გამსახურდიას სანაპირო | continue | 0.05 | capture | pass 1 of 2 — right lanes |
-| 469 | (unnamed) | continue | 0.49 | capture | — |
-| 470 | ზვიად გამსახურდიას სანაპირო | continue | 0.29 | capture | — |
-| 471 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 1.06 | capture | — |
-| 472 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | capture | pass 1 of 2 — right lanes |
-| 473 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 2.34 | capture | — |
-| 474 | აკაკი ბაქრაძის ქუჩა | turn left | 0.34 | capture | — |
-| 475 | (unnamed) | turn left | 0.02 | capture | — |
-| 476 | აკაკი ბაქრაძის ქუჩა | continue | 0.16 | capture | — |
-| 477 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.08 | capture | — |
-| 478 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.57 | deadhead | — |
-| 479 | ლევან გოთუას ქუჩა | turn right | 0.17 | deadhead | — |
-| 480 | (unnamed) | turn left | 0.02 | deadhead | — |
-| 481 | (unnamed) | turn left | 0.01 | capture | — |
-| 482 | (unnamed) | turn right | 0.03 | deadhead | — |
-| 483 | (unnamed) | continue | 0.13 | capture | — |
-| 484 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.80 | capture | — |
-| 485 | გიორგი სააკაძის II გასასვლელი | turn right | 0.38 | capture | — |
-| 486 | გიორგი სააკაძის დაღმართი | continue | 0.19 | capture | pass 2 of 2 — left lanes |
-| 487 | გიორგი სააკაძის დაღმართი | continue | 0.05 | deadhead | — |
-| 488 | გიორგი სააკაძის დაღმართი | turn left | 0.03 | deadhead | pass 4 of 2 — centre lanes |
-| 489 | გიორგი სააკაძის დაღმართი | continue | 0.39 | capture | — |
-| 490 | ვახუშტი ბაგრატიონის ხიდი | turn right | 0.27 | deadhead | — |
-| 491 | (unnamed) | turn right | 0.03 | capture | — |
-| 492 | (unnamed) | continue | 0.05 | deadhead | — |
-| 493 | (unnamed) | turn right | 0.08 | capture | — |
-| 494 | კოსმონავტების სანაპირო | turn right | 0.15 | capture | pass 1 of 2 — right lanes |
-| 495 | (unnamed) | turn right | 0.15 | capture | — |
-| 496 | ვახუშტი ბაგრატიონის ხიდი | continue | 0.33 | deadhead | — |
-| 497 | გიორგი სააკაძის დაღმართი | turn right | 0.05 | deadhead | — |
-| 498 | გიორგი სააკაძის II გასასვლელი | continue | 0.03 | capture | — |
-| 499 | გიორგი სააკაძის II გასასვლელი | continue | 0.26 | deadhead | — |
-| 500 | გიორგი სააკაძის II გასასვლელი | continue | 0.12 | capture | — |
-| 501 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | turn right | 0.48 | capture | — |
-| 502 | (unnamed) | turn right | 0.05 | capture | — |
-| 503 | გიორგი სააკაძის I გასასვლელი | continue | 0.24 | capture | — |
-| 504 | გიორგი სააკაძის I გასასვლელი | continue | 0.11 | deadhead | — |
-| 505 | გიორგი სააკაძის I გასასვლელი | continue | 0.06 | capture | — |
-| 506 | გიორგი სააკაძის დაღმართი | continue | 0.03 | capture | — |
-| 507 | გიორგი სააკაძის დაღმართი | continue | 0.01 | capture | pass 2 of 2 — left lanes |
-| 508 | გიორგი სააკაძის დაღმართი | continue | 0.19 | deadhead | pass 3 of 2 — centre lanes |
-| 509 | გიორგი სააკაძის დაღმართი | continue | 0.05 | deadhead | — |
-| 510 | გიორგი სააკაძის დაღმართი | turn left | 0.03 | deadhead | pass 5 of 2 — centre lanes |
-| 511 | გიორგი სააკაძის დაღმართი | continue | 0.30 | deadhead | — |
-| 512 | გიორგი სააკაძის I გასასვლელი | turn right | 0.09 | capture | — |
-| 513 | ვახტანგ ბოჭორიშვილის ქუჩა | U-turn | 0.18 | capture | — |
-| 514 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.14 | capture | — |
-| 515 | ვახტანგ ბოჭორიშვილის ქუჩა | U-turn | 0.13 | deadhead | — |
-| 516 | ვახტანგ ბოჭორიშვილის ქუჩა | continue | 0.13 | capture | — |
-| 517 | ვახტანგ ბოჭორიშვილის ქუჩა | turn left | 0.05 | deadhead | — |
-| 518 | ვახტანგ ბოჭორიშვილის ქუჩა | turn left | 0.17 | capture | — |
-| 519 | ვახტანგ ბოჭორიშვილის ქუჩა | U-turn | 0.06 | deadhead | — |
-| 520 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.20 | capture | — |
-| 521 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.13 | capture | pass 2 of 2 — left lanes |
-| 522 | გიორგი სააკაძის მოედანი | continue | 0.19 | capture | pass 1 of 2 — right lanes |
-| 523 | გიორგი სააკაძის მოედანი | continue | 0.01 | capture | — |
-| 524 | გიორგი სააკაძის მოედანი | turn left | 0.06 | capture | pass 1 of 2 — right lanes |
-| 525 | გიორგი სააკაძის მოედანი | turn left | 0.02 | capture | pass 2 of 2 — left lanes |
-| 526 | გიორგი სააკაძის მოედანი | continue | 0.02 | deadhead | — |
-| 527 | გიორგი სააკაძის მოედანი | turn left | 0.10 | capture | — |
-| 528 | გიორგი სააკაძის მოედანი | continue | 0.04 | capture | pass 2 of 2 — left lanes |
-| 529 | გიორგი სააკაძის მოედანი | continue | 0.01 | deadhead | — |
-| 530 | გიორგი სააკაძის მოედანი | turn left | 0.06 | capture | pass 2 of 2 — left lanes |
-| 531 | გიორგი სააკაძის მოედანი | turn left | 0.02 | deadhead | pass 3 of 2 — centre lanes |
-| 532 | გიორგი სააკაძის მოედანი | turn left | 0.12 | deadhead | — |
-| 533 | გიორგი სააკაძის მოედანი | continue | 0.04 | deadhead | pass 3 of 2 — centre lanes |
-| 534 | გიორგი სააკაძის მოედანი | turn right | 0.04 | capture | — |
-| 535 | გიორგი სააკაძის დაღმართი | continue | 0.03 | deadhead | — |
-| 536 | (unnamed) | continue | 0.06 | capture | — |
-| 537 | ლევან გოთუას ქუჩა | U-turn | 0.01 | capture | — |
-| 538 | (unnamed) | turn right | 0.05 | deadhead | — |
-| 539 | გიორგი სააკაძის დაღმართი | turn left | 0.03 | deadhead | pass 6 of 2 — centre lanes |
-| 540 | გიორგი სააკაძის დაღმართი | turn right | 0.05 | deadhead | — |
-| 541 | (unnamed) | turn left | 0.23 | capture | — |
-| 542 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.16 | capture | — |
-| 543 | ვახტანგ ბოჭორიშვილის ქუჩა | continue | 0.14 | deadhead | — |
-| 544 | ვახტანგ ბოჭორიშვილის ქუჩა | continue | 0.00 | capture | — |
-| 545 | გიორგი მიროტაძის ქუჩა | turn right | 0.46 | capture | — |
-| 546 | კონსტანტინე გამსახურდიას გამზირი | turn left | 0.11 | capture | pass 2 of 2 — left lanes |
-| 547 | იყალთოს ქუჩა | U-turn | 0.14 | deadhead | — |
-| 548 | იყალთოს ქუჩა | turn left | 0.14 | capture | — |
-| 549 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.10 | capture | pass 2 of 2 — left lanes |
-| 550 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.13 | deadhead | pass 3 of 2 — centre lanes |
-| 551 | გიორგი სააკაძის მოედანი | continue | 0.15 | capture | pass 2 of 2 — left lanes |
-| 552 | გიორგი სააკაძის მოედანი | continue | 0.04 | deadhead | pass 4 of 2 — centre lanes |
-| 553 | გიორგი სააკაძის მოედანი | turn right | 0.04 | deadhead | — |
-| 554 | გიორგი სააკაძის დაღმართი | continue | 0.26 | deadhead | — |
-| 555 | გიორგი სააკაძის I გასასვლელი | continue | 0.19 | deadhead | — |
-| 556 | გიორგი სააკაძის I გასასვლელი | continue | 0.39 | capture | — |
-| 557 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | capture | — |
-| 558 | (unnamed) | continue | 0.51 | capture | — |
-| 559 | თამარ მეფის გამზირი | U-turn | 0.03 | capture | — |
-| 560 | თამარ მეფის გამზირი | U-turn | 0.09 | capture | — |
-| 561 | თამარ მეფის გამზირი | U-turn | 0.06 | capture | — |
-| 562 | თამარ მეფის გამზირი | continue | 0.06 | deadhead | — |
-| 563 | თამარ მეფის გამზირი | U-turn | 0.02 | capture | — |
-| 564 | თამარ მეფის გამზირი | turn right | 0.02 | deadhead | — |
-| 565 | (unnamed) | continue | 0.41 | deadhead | — |
-| 566 | (unnamed) | continue | 0.08 | capture | — |
-| 567 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | capture | pass 2 of 2 — left lanes |
-| 568 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 2.34 | deadhead | — |
-| 569 | აკაკი ბაქრაძის ქუჩა | continue | 0.34 | deadhead | — |
-| 570 | აკაკი ბაქრაძის ქუჩა | continue | 0.02 | capture | — |
-| 571 | აკაკი ბაქრაძის ქუჩა | turn left | 1.19 | deadhead | — |
-| 572 | ჯემალ ჭკუასელის ქუჩა | continue | 0.04 | capture | pass 2 of 2 — left lanes |
-| 573 | ჯემალ ჭკუასელის ქუჩა | turn right | 0.27 | deadhead | — |
-| 574 | გრიგოლ რობაქიძის გამზირი | continue | 0.05 | deadhead | — |
-| 575 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
-| 576 | აკაკი წერეთლის გამზირი | turn right | 0.00 | deadhead | — |
-| 577 | (unnamed) | continue | 0.25 | capture | pass 1 of 2 — right lanes |
-| 578 | (unnamed) | continue | 0.08 | capture | — |
-| 579 | კოსმონავტების სანაპირო | turn left | 1.01 | capture | — |
-| 580 | სამტრედიის ქუჩა | turn right | 0.25 | capture | — |
-| 581 | (unnamed) | turn right | 0.16 | capture | — |
-| 582 | (unnamed) | turn left | 0.04 | deadhead | — |
-| 583 | სამტრედიის ქუჩა | continue | 0.07 | deadhead | — |
-| 584 | სამტრედიის ქუჩა | turn right | 0.06 | capture | — |
-| 585 | კოსმონავტების სანაპირო | turn right | 0.29 | capture | — |
-| 586 | ალიო მირცხულავას ქუჩა | turn right | 0.22 | capture | — |
-| 587 | რაფიელ აგლაძის ქუჩა | turn left | 0.09 | deadhead | — |
-| 588 | წყალტუბოს ქუჩა | turn left | 0.37 | capture | — |
-| 589 | აკაკი წერეთლის გამზირი | continue | 0.11 | capture | — |
-| 590 | აკაკი წერეთლის გამზირი | continue | 0.14 | capture | pass 1 of 2 — right lanes |
-| 591 | აკაკი წერეთლის გამზირი | turn right | 0.19 | deadhead | — |
-| 592 | ანტონ აბულაშვილის ქუჩა | continue | 0.13 | deadhead | — |
-| 593 | (unnamed) | turn left | 0.03 | deadhead | — |
-| 594 | (unnamed) | turn left | 0.01 | capture | — |
-| 595 | (unnamed) | turn left | 0.00 | deadhead | — |
-| 596 | (unnamed) | turn left | 0.01 | capture | — |
-| 597 | (unnamed) | continue | 0.04 | deadhead | — |
-| 598 | ანტონ აბულაშვილის ქუჩა | continue | 0.02 | deadhead | — |
-| 599 | ანტონ აბულაშვილის ქუჩა | turn right | 0.12 | capture | — |
-| 600 | აკაკი წერეთლის გამზირი | continue | 0.25 | capture | — |
-| 601 | აკაკი წერეთლის გამზირი | continue | 0.08 | deadhead | — |
-| 602 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
-| 603 | გრიგოლ რობაქიძის გამზირი | turn right | 0.05 | deadhead | — |
-| 604 | აკაკი ბელიაშვილის ქუჩა | turn right | 0.26 | capture | — |
-| 605 | (unnamed) | turn right | 0.03 | capture | — |
-| 606 | აკაკი ბაქრაძის ქუჩა | turn right | 0.50 | deadhead | — |
-| 607 | ჯემალ ჭკუასელის ქუჩა | turn left | 0.02 | capture | — |
-| 608 | ჯემალ ჭკუასელის ქუჩა | continue | 0.04 | capture | pass 2 of 2 — left lanes |
-| 609 | აკაკი ბაქრაძის ქუჩა | turn right | 0.01 | deadhead | — |
-| 610 | (unnamed) | U-turn | 0.52 | deadhead | — |
-| 611 | (unnamed) | turn right | 0.52 | capture | — |
-| 612 | აკაკი ბაქრაძის ქუჩა | continue | 0.22 | deadhead | — |
-| 613 | აკაკი ბაქრაძის ქუჩა | continue | 0.03 | capture | — |
-| 614 | აკაკი ბაქრაძის ქუჩა | continue | 0.93 | deadhead | — |
-| 615 | აკაკი ბაქრაძის ქუჩა | continue | 0.02 | capture | — |
-| 616 | აკაკი ბაქრაძის ქუჩა | continue | 0.16 | deadhead | — |
-| 617 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.64 | deadhead | — |
-| 618 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.28 | capture | — |
-| 619 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.80 | deadhead | — |
-| 620 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.19 | capture | — |
-| 621 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.48 | deadhead | — |
-| 622 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.13 | capture | — |
-| 623 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | deadhead | — |
-| 624 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.08 | capture | — |
-| 625 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.90 | deadhead | — |
-| 626 | (unnamed) | continue | 0.19 | capture | — |
-| 627 | გმირთა მოედანი | continue | 0.05 | capture | — |
-| 628 | გმირთა მოედანი | continue | 0.04 | capture | pass 1 of 2 — right lanes |
-| 629 | გმირთა მოედანი | continue | 0.13 | capture | — |
-| 630 | (unnamed) | turn left | 0.10 | capture | — |
-| 631 | გმირთა მოედანი | continue | 0.01 | capture | — |
-| 632 | გმირთა მოედანი | continue | 0.16 | capture | pass 1 of 2 — right lanes |
-| 633 | (unnamed) | continue | 0.32 | capture | — |
-| 634 | (unnamed) | continue | 0.13 | deadhead | — |
-| 635 | გმირთა მოედანი | continue | 0.05 | deadhead | — |
-| 636 | გმირთა მოედანი | continue | 0.04 | capture | pass 2 of 2 — left lanes |
-| 637 | გმირთა მოედანი | continue | 0.13 | deadhead | — |
-| 638 | (unnamed) | turn left | 0.10 | deadhead | — |
-| 639 | გმირთა მოედანი | continue | 0.01 | deadhead | — |
-| 640 | გმირთა მოედანი | continue | 0.16 | capture | pass 2 of 2 — left lanes |
-| 641 | (unnamed) | continue | 0.52 | capture | — |
-| 642 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.75 | deadhead | — |
-| 643 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | deadhead | pass 3 of 2 — centre lanes |
-| 644 | გიორგი სააკაძის I გასასვლელი | turn right | 0.16 | capture | — |
-| 645 | (unnamed) | turn left | 0.06 | capture | — |
-| 646 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 2.20 | deadhead | — |
-| 647 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.18 | capture | — |
-| 648 | მარშალ გელოვანის გამზირი | continue | 0.04 | capture | — |
-| 649 | მარშალ გელოვანის გამზირი | turn right | 0.93 | deadhead | — |
-| 650 | (unnamed) | turn left | 0.13 | capture | — |
-| 651 | (unnamed) | turn right | 0.15 | deadhead | — |
-| 652 | (unnamed) | continue | 0.34 | capture | — |
-| 653 | (unnamed) | turn right | 0.04 | deadhead | — |
-| 654 | აკაკი ბაქრაძის ქუჩა | turn right | 1.06 | deadhead | — |
-| 655 | (unnamed) | turn right | 0.03 | capture | — |
-| 656 | მარშალ გელოვანის გამზირი | continue | 2.25 | deadhead | — |
-| 657 | გრიგოლ რობაქიძის გამზირი | continue | 0.08 | deadhead | — |
-| 658 | გრიგოლ რობაქიძის გამზირი | continue | 0.56 | capture | pass 2 of 2 — left lanes |
-| 659 | გრიგოლ რობაქიძის გამზირი | continue | 0.36 | deadhead | pass 3 of 2 — centre lanes |
-| 660 | გრიგოლ რობაქიძის გამზირი | continue | 0.12 | deadhead | — |
-| 661 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
-| 662 | აკაკი წერეთლის გამზირი | turn right | 0.00 | deadhead | — |
-| 663 | (unnamed) | continue | 0.25 | capture | pass 2 of 2 — left lanes |
-| 664 | (unnamed) | continue | 0.08 | deadhead | — |
-| 665 | კოსმონავტების სანაპირო | continue | 1.01 | deadhead | — |
-| 666 | კოსმონავტების სანაპირო | U-turn | 0.40 | capture | — |
-| 667 | კოსმონავტების სანაპირო | turn right | 0.40 | capture | — |
-| 668 | სამტრედიის ქუჩა | turn right | 0.13 | deadhead | — |
-| 669 | (unnamed) | turn left | 0.04 | capture | — |
-| 670 | (unnamed) | turn right | 0.16 | deadhead | — |
-| 671 | სამტრედიის ქუჩა | U-turn | 0.49 | capture | — |
-| 672 | სამტრედიის ქუჩა | continue | 0.10 | deadhead | — |
-| 673 | სამტრედიის ქუჩა | turn left | 0.36 | capture | — |
-| 674 | რაფიელ აგლაძის ქუჩა | turn left | 0.91 | capture | — |
-| 675 | დავით ბაქრაძის ქუჩა | turn left | 0.33 | capture | — |
-| 676 | აკაკი წერეთლის გამზირი | continue | 0.23 | capture | — |
-| 677 | აკაკი წერეთლის გამზირი | continue | 0.08 | capture | pass 1 of 2 — right lanes |
-| 678 | აკაკი წერეთლის გამზირი | turn left | 0.02 | capture | — |
-| 679 | კონსტანტინე სტანისლავსკის ქუჩა | turn right | 0.33 | capture | — |
-| 680 | რაფიელ აგლაძის ქუჩა | turn right | 0.83 | capture | — |
-| 681 | ალიო მირცხულავას ქუჩა | turn right | 0.35 | capture | — |
-| 682 | აკაკი წერეთლის გამზირი | turn right | 0.76 | deadhead | — |
-| 683 | კონსტანტინე სტანისლავსკის ქუჩა | U-turn | 0.01 | deadhead | — |
-| 684 | კონსტანტინე სტანისლავსკის ქუჩა | turn left | 0.02 | capture | — |
-| 685 | აკაკი წერეთლის გამზირი | continue | 0.42 | capture | — |
-| 686 | აკაკი წერეთლის გამზირი | turn left | 0.08 | capture | pass 1 of 2 — right lanes |
-| 687 | სამტრედიის ქუჩა | turn left | 0.36 | deadhead | — |
-| 688 | რაფიელ აგლაძის ქუჩა | turn left | 0.58 | deadhead | — |
-| 689 | კონსტანტინე სტანისლავსკის ქუჩა | continue | 0.31 | capture | — |
-| 690 | კონსტანტინე სტანისლავსკის ქუჩა | turn left | 0.02 | deadhead | — |
-| 691 | აკაკი წერეთლის გამზირი | continue | 0.42 | deadhead | — |
-| 692 | აკაკი წერეთლის გამზირი | continue | 0.08 | capture | pass 2 of 2 — left lanes |
-| 693 | აკაკი წერეთლის გამზირი | continue | 0.16 | capture | — |
-| 694 | აკაკი წერეთლის გამზირი | continue | 0.11 | deadhead | — |
-| 695 | აკაკი წერეთლის გამზირი | continue | 0.14 | capture | pass 2 of 2 — left lanes |
-| 696 | აკაკი წერეთლის გამზირი | continue | 0.19 | deadhead | — |
-| 697 | აკაკი წერეთლის გამზირი | continue | 0.12 | capture | — |
-| 698 | აკაკი წერეთლის გამზირი | continue | 0.27 | deadhead | — |
-| 699 | ნონა გაფრინდაშვილის ქუჩა | continue | 1.60 | capture | — |
-| 700 | ნონა გაფრინდაშვილის ქუჩა | continue | 0.03 | capture | pass 1 of 2 — right lanes |
-| 701 | (unnamed) | turn left | 0.08 | capture | — |
-| 702 | ნონა გაფრინდაშვილის ქუჩა | continue | 1.38 | capture | — |
-| 703 | ნონა გაფრინდაშვილის ქუჩა | continue | 0.04 | capture | pass 1 of 2 — right lanes |
-| 704 | ნონა გაფრინდაშვილის ქუჩა | turn right | 0.17 | capture | — |
-| 705 | აკაკი წერეთლის გამზირი | continue | 0.01 | deadhead | — |
-| 706 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
-| 707 | გრიგოლ რობაქიძის გამზირი | turn right | 0.05 | deadhead | — |
-| 708 | აკაკი ბელიაშვილის ქუჩა | continue | 0.26 | deadhead | — |
-| 709 | აკაკი ბელიაშვილის ქუჩა | continue | 0.07 | capture | — |
-| 710 | აკაკი ბელიაშვილის ქუჩა | U-turn | 0.04 | deadhead | — |
-| 711 | აკაკი ბელიაშვილის ქუჩა | continue | 0.05 | deadhead | — |
-| 712 | აკაკი ბელიაშვილის ქუჩა | turn right | 0.32 | capture | — |
-| 713 | გრიგოლ რობაქიძის გამზირი | turn left | 0.36 | capture | pass 2 of 2 — left lanes |
-| 714 | (unnamed) | continue | 0.02 | deadhead | — |
-| 715 | კორნელი ჩალაძის ქუჩა | turn right | 0.55 | capture | — |
-| 716 | მარშალ გელოვანის გამზირი | continue | 2.99 | deadhead | — |
-| 717 | (unnamed) | continue | 0.17 | capture | — |
-| 718 | იური გაგარინის ქუჩა | continue | 0.58 | capture | — |
-| 719 | იური გაგარინის ქუჩა | continue | 0.31 | deadhead | — |
-| 720 | იური გაგარინის ქუჩა | turn right | 0.04 | capture | — |
-| 721 | ზურაბ ჟვანიას მოედანი | continue | 0.02 | capture | — |
-| 722 | ზურაბ ჟვანიას მოედანი | continue | 0.03 | deadhead | — |
-| 723 | ოთარ ონიაშვილის ქუჩა | turn left | 0.69 | capture | — |
-| 724 | (unnamed) | turn right | 0.08 | capture | — |
-| 725 | სიმონ კანდელაკის ქუჩა | turn left | 0.02 | capture | — |
-| 726 | იონა ვაკელის ქუჩა | U-turn | 0.17 | capture | — |
-| 727 | იონა ვაკელის ქუჩა | continue | 0.16 | capture | — |
-| 728 | იონა ვაკელის ქუჩა | turn left | 0.01 | deadhead | — |
-| 729 | სიმონ კანდელაკის ქუჩა | continue | 0.02 | capture | — |
-| 730 | ბუდაპეშტის ქუჩა | turn left | 0.08 | deadhead | — |
-| 731 | (unnamed) | turn left | 0.04 | capture | — |
-| 732 | შალვა ნუცუბიძის ქუჩა | turn right | 0.08 | deadhead | — |
-| 733 | ბუდაპეშტის ქუჩა | continue | 0.06 | capture | — |
-| 734 | ბუდაპეშტის ქუჩა | continue | 0.24 | deadhead | — |
-| 735 | გურამ ფანჯიკიძის ქუჩა | turn left | 0.11 | deadhead | — |
-| 736 | ტაშკენტის ქუჩა | continue | 0.15 | deadhead | — |
-| 737 | ტაშკენტის ქუჩა | continue | 0.16 | capture | — |
-| 738 | ტაშკენტის ქუჩა | continue | 0.00 | deadhead | — |
-| 739 | ტაშკენტის ქუჩა | turn right | 0.07 | capture | — |
-| 740 | ზოვრეთის ქუჩა | turn right | 0.18 | capture | — |
-| 741 | მირზა გელოვანის ქუჩა | turn right | 0.07 | deadhead | — |
-| 742 | ლვოვის ქუჩა | continue | 0.18 | deadhead | — |
-| 743 | ლვოვის ქუჩა | continue | 0.14 | capture | — |
-| 744 | ლვოვის ქუჩა | continue | 0.06 | deadhead | — |
-| 745 | ლვოვის ქუჩა | turn right | 0.07 | capture | — |
-| 746 | მიხეილ ლომონოსოვის ქუჩა | turn right | 0.14 | capture | — |
-| 747 | ვაზისუბნის ქუჩა | turn right | 0.07 | capture | — |
-| 748 | ცხინვალის ქუჩა | continue | 0.15 | capture | — |
-| 749 | ცხინვალის ქუჩა | turn right | 0.16 | deadhead | — |
-| 750 | სიმონ კანდელაკის ქუჩა | continue | 0.08 | deadhead | — |
-| 751 | სიმონ კანდელაკის ქუჩა | turn right | 0.03 | capture | — |
-| 752 | (unnamed) | turn left | 0.08 | deadhead | — |
-| 753 | ოთარ ონიაშვილის ქუჩა | turn right | 0.15 | capture | — |
-| 754 | ბუდაპეშტის ქუჩა | turn right | 0.11 | deadhead | — |
-| 755 | ლვოვის ქუჩა | U-turn | 0.10 | deadhead | — |
-| 756 | ლვოვის ქუჩა | turn left | 0.10 | capture | — |
-| 757 | ბუდაპეშტის ქუჩა | turn right | 0.02 | capture | — |
-| 758 | ავქსენტი მეგრელიძის ქუჩა | turn left | 0.46 | capture | — |
-| 759 | ვახტანგ ჩიქოვანის ქუჩა | turn right | 0.02 | deadhead | — |
-| 760 | ემანუელ აფხაიძეს ქუჩა | continue | 0.11 | capture | — |
-| 761 | ემანუელ აფხაიძეს I შესახვევი | turn left | 0.07 | deadhead | — |
-| 762 | დელისის ქუჩა | turn left | 0.35 | deadhead | — |
-| 763 | შალვა ნუცუბიძის ქუჩა | turn left | 0.26 | deadhead | — |
-| 764 | ვახტანგ ჩიქოვანის ქუჩა | continue | 0.41 | capture | — |
-| 765 | ბუდაპეშტის ქუჩა | turn right | 0.11 | capture | — |
-| 766 | ივანე ბერიტაშვილის ქუჩა | turn left | 0.04 | capture | — |
-| 767 | დავით ართმელიძის ქუჩა | turn left | 0.38 | capture | — |
-| 768 | ომარ ფურცულიანის ქუჩა | U-turn | 0.03 | capture | — |
-| 769 | ომარ ფურცულიანის ქუჩა | turn left | 0.03 | deadhead | — |
-| 770 | ომარ ფურცულიანის ქუჩა | turn left | 0.15 | capture | — |
-| 771 | ნიშრევან ჯიშკარიანის ქუჩა | turn right | 0.03 | deadhead | — |
-| 772 | ნიშრევან ჯიშკარიანის I შესახვევი | U-turn | 0.20 | capture | — |
-| 773 | ნიშრევან ჯიშკარიანის I შესახვევი | turn right | 0.20 | deadhead | — |
-| 774 | ნიშრევან ჯიშკარიანის ქუჩა | U-turn | 0.10 | deadhead | — |
-| 775 | ნიშრევან ჯიშკარიანის ქუჩა | continue | 0.23 | capture | — |
-| 776 | ივანე ბერიტაშვილის ქუჩა | turn left | 0.38 | deadhead | — |
-| 777 | ბუდაპეშტის ქუჩა | U-turn | 0.11 | deadhead | — |
-| 778 | ბუდაპეშტის ქუჩა | turn left | 0.13 | capture | — |
-| 779 | მამია ალასანიას I შესახვევი | turn right | 0.18 | capture | — |
-| 780 | მამია ალასანიას ქუჩა | turn left | 0.04 | capture | — |
-| 781 | ლვოვის II შესახვევი | U-turn | 0.05 | capture | — |
-| 782 | ლვოვის II შესახვევი | turn right | 0.05 | deadhead | — |
-| 783 | მამია ალასანიას ქუჩა | turn left | 0.04 | deadhead | — |
-| 784 | მამია ალასანიას I შესახვევი | turn right | 0.18 | deadhead | — |
-| 785 | ბუდაპეშტის ქუჩა | turn right | 0.05 | deadhead | — |
-| 786 | ბუდაპეშტის I შესახვევი | U-turn | 0.15 | capture | — |
-| 787 | ბუდაპეშტის I შესახვევი | turn right | 0.15 | deadhead | — |
-| 788 | ბუდაპეშტის ქუჩა | U-turn | 0.08 | deadhead | — |
-| 789 | ბუდაპეშტის ქუჩა | turn right | 0.11 | deadhead | — |
-| 790 | ივანე ბერიტაშვილის ქუჩა | turn left | 0.04 | deadhead | — |
-| 791 | ივანე ბერიტაშვილის ქუჩა | turn left | 0.70 | capture | — |
-| 792 | ივანე ბერიტაშვილის III შესახვევი | U-turn | 0.29 | deadhead | — |
-| 793 | ივანე ბერიტაშვილის III შესახვევი | turn left | 0.29 | capture | — |
-| 794 | ივანე ბერიტაშვილის ქუჩა | continue | 0.79 | capture | — |
-| 795 | (unnamed) | continue | 0.07 | capture | — |
-| 796 | (unnamed) | continue | 0.02 | deadhead | — |
-| 797 | მუხრან მაჭავარიანის ქუჩა | turn left | 0.30 | deadhead | — |
-| 798 | (unnamed) | turn right | 0.05 | capture | — |
-| 799 | ცაცხვების I შესახვევი | U-turn | 0.09 | capture | — |
-| 800 | ცაცხვების I შესახვევი | continue | 0.09 | deadhead | — |
-| 801 | ცაცხვების I შესახვევი | turn left | 0.10 | capture | — |
-| 802 | ივანე გვარამიძის ქუჩა | continue | 0.15 | deadhead | — |
-| 803 | მუხრან მაჭავარიანის ქუჩა | continue | 0.06 | deadhead | — |
-| 804 | (unnamed) | continue | 0.07 | capture | — |
-| 805 | ლეო კვაჭაძის ქუჩა | turn left | 0.07 | capture | — |
-| 806 | ტოგო გუდავას ქუჩა | turn right | 0.40 | capture | — |
-| 807 | ბარბარე ყიფიანის ქუჩა | turn right | 0.51 | capture | — |
-| 808 | ლეო კვაჭაძის ქუჩა | continue | 0.22 | deadhead | — |
-| 809 | ლეო კვაჭაძის ქუჩა | continue | 0.02 | capture | — |
-| 810 | (unnamed) | U-turn | 0.08 | capture | — |
-| 811 | (unnamed) | turn right | 0.06 | deadhead | — |
-| 812 | ლისის წრე | continue | 0.02 | deadhead | — |
-| 813 | (unnamed) | continue | 0.05 | deadhead | — |
-| 814 | მუხრან მაჭავარიანის ქუჩა | continue | 0.06 | deadhead | — |
-| 815 | ივანე გვარამიძის ქუჩა | turn right | 0.16 | capture | — |
-| 816 | ცაცხვების II შესახვევი | U-turn | 0.19 | capture | — |
-| 817 | ცაცხვების II შესახვევი | turn right | 0.19 | deadhead | — |
-| 818 | ივანე გვარამიძის ქუჩა | turn right | 0.07 | capture | — |
-| 819 | ცაცხვების III შესახვევი | U-turn | 0.21 | deadhead | — |
-| 820 | ცაცხვების III შესახვევი | turn right | 0.21 | capture | — |
-| 821 | ივანე გვარამიძის ქუჩა | continue | 0.01 | capture | — |
-| 822 | ცაცხვების ქუჩა | turn right | 0.07 | capture | — |
-| 823 | ცაცხვების IV შესახვევი | turn right | 0.25 | capture | — |
-| 824 | ცაცხვების V შესახვევი | U-turn | 0.15 | capture | — |
-| 825 | ცაცხვების V შესახვევი | turn right | 0.15 | deadhead | — |
-| 826 | ცაცხვების IV შესახვევი | turn right | 0.01 | capture | — |
-| 827 | ცაცხვების ქუჩა | turn right | 0.08 | capture | — |
-| 828 | ცაცხვების VII შესახვევი | U-turn | 0.13 | capture | — |
-| 829 | ცაცხვების VII შესახვევი | turn right | 0.13 | deadhead | — |
-| 830 | ცაცხვების ქუჩა | turn right | 0.14 | capture | — |
-| 831 | ცაცხვების IX შესახვევი | turn left | 0.38 | capture | — |
-| 832 | ცაცხვების IX შესახვევი | turn left | 0.21 | deadhead | — |
-| 833 | ცაცხვების ქუჩა | turn right | 0.04 | deadhead | — |
-| 834 | ცაცხვების VIII შესახვევი | continue | 0.43 | capture | — |
-| 835 | ცაცხვების IX შესახვევი | turn left | 0.25 | capture | — |
-| 836 | ცაცხვების IX შესახვევი | turn right | 0.14 | deadhead | — |
-| 837 | ცაცხვების ქუჩა | U-turn | 0.12 | capture | — |
-| 838 | ცაცხვების ქუჩა | U-turn | 0.50 | deadhead | — |
-| 839 | ცაცხვების ქუჩა | turn right | 0.16 | capture | — |
-| 840 | ცაცხვების IV შესახვევი | turn left | 0.25 | deadhead | — |
-| 841 | ცაცხვების ქუჩა | turn right | 0.07 | deadhead | — |
-| 842 | ივანე გვარამიძის ქუჩა | U-turn | 0.17 | capture | — |
-| 843 | ივანე გვარამიძის ქუჩა | turn right | 0.02 | deadhead | — |
-| 844 | მზია ერისთავის ქუჩა | turn left | 0.17 | capture | — |
-| 845 | (unnamed) | U-turn | 0.05 | capture | — |
-| 846 | (unnamed) | continue | 0.05 | deadhead | — |
-| 847 | მზია ერისთავის ქუჩა | U-turn | 0.09 | capture | — |
-| 848 | ლეო კვაჭაძის ქუჩა | continue | 0.13 | deadhead | — |
-| 849 | (unnamed) | turn right | 0.03 | capture | — |
-| 850 | ლისის წრე | turn left | 0.02 | capture | — |
-| 851 | ლისის წრე | turn left | 0.02 | deadhead | — |
-| 852 | ლისის წრე | turn right | 0.02 | capture | — |
-| 853 | (unnamed) | continue | 0.03 | capture | — |
-| 854 | ლეო კვაჭაძის ქუჩა | continue | 0.07 | deadhead | — |
-| 855 | ლეო კვაჭაძის ქუჩა | turn left | 0.44 | capture | — |
-| 856 | ლევან ჩარკვიანის ქუჩა | U-turn | 0.46 | capture | — |
-| 857 | ლევან ჩარკვიანის ქუჩა | turn right | 0.46 | deadhead | — |
-| 858 | ლეო კვაჭაძის ქუჩა | continue | 0.51 | deadhead | — |
-| 859 | (unnamed) | turn right | 0.03 | deadhead | — |
-| 860 | ლისის წრე | turn right | 0.02 | deadhead | — |
-| 861 | (unnamed) | U-turn | 0.05 | capture | — |
-| 862 | (unnamed) | continue | 0.02 | deadhead | — |
-| 863 | (unnamed) | turn right | 0.02 | capture | — |
-| 864 | ლისის წრე | turn right | 0.02 | deadhead | — |
-| 865 | (unnamed) | turn right | 0.01 | deadhead | — |
-| 866 | (unnamed) | turn right | 0.01 | capture | — |
-| 867 | ნიკოლოზ დგებუაძის ქუჩა | turn right | 0.24 | capture | — |
-| 868 | ივანე გვარამიძის ქუჩა | turn right | 0.25 | deadhead | — |
-| 869 | (unnamed) | U-turn | 0.05 | capture | — |
-| 870 | (unnamed) | turn right | 0.05 | deadhead | — |
-| 871 | ივანე გვარამიძის ქუჩა | continue | 0.06 | deadhead | — |
-| 872 | მუხრან მაჭავარიანის ქუჩა | continue | 0.06 | deadhead | — |
-| 873 | (unnamed) | continue | 0.02 | deadhead | — |
-| 874 | (unnamed) | turn right | 0.03 | capture | — |
-| 875 | ლისის წრე | turn left | 0.00 | deadhead | — |
-| 876 | ლისის წრე | turn left | 0.01 | capture | — |
-| 877 | ლისის წრე | continue | 0.00 | deadhead | — |
-| 878 | (unnamed) | continue | 0.05 | capture | — |
-| 879 | (unnamed) | U-turn | 0.01 | deadhead | — |
-| 880 | (unnamed) | continue | 0.02 | deadhead | — |
-| 881 | (unnamed) | continue | 0.07 | capture | — |
-| 882 | ივანე ბერიტაშვილის ქუჩა | U-turn | 0.43 | deadhead | — |
-| 883 | ივანე ბერიტაშვილის IV შესახვევი | turn left | 0.04 | capture | — |
-| 884 | ივანე ბერიტაშვილის II ჩიხი | U-turn | 0.07 | capture | — |
-| 885 | ივანე ბერიტაშვილის II ჩიხი | turn right | 0.07 | deadhead | — |
-| 886 | ივანე ბერიტაშვილის IV შესახვევი | continue | 0.04 | deadhead | — |
-| 887 | ივანე ბერიტაშვილის ქუჩა | turn right | 0.29 | deadhead | — |
-| 888 | ივანე ბერიტაშვილის IV შესახვევი | turn right | 0.16 | capture | — |
-| 889 | ივანე ბერიტაშვილის IV შესახვევი | U-turn | 0.04 | deadhead | — |
-| 890 | ივანე ბერიტაშვილის ქუჩა | continue | 0.43 | deadhead | — |
-| 891 | (unnamed) | turn right | 0.04 | deadhead | — |
-| 892 | ლისის წრე | continue | 0.01 | deadhead | — |
-| 893 | (unnamed) | continue | 0.05 | deadhead | — |
-| 894 | მუხრან მაჭავარიანის ქუჩა | turn right | 0.37 | deadhead | — |
-| 895 | (unnamed) | U-turn | 0.96 | capture | — |
-| 896 | (unnamed) | turn left | 0.37 | deadhead | — |
-| 897 | (unnamed) | turn right | 0.16 | capture | — |
-| 898 | ცხინვალის II შესახვევი | U-turn | 0.12 | capture | — |
-| 899 | ცხინვალის II შესახვევი | turn right | 0.12 | deadhead | — |
-| 900 | ცხინვალის II შესახვევი | turn right | 0.06 | capture | — |
-| 901 | ცხინვალის ქუჩა | turn right | 0.09 | capture | — |
-| 902 | ცხინვალის II ჩიხი | U-turn | 0.05 | deadhead | — |
-| 903 | ცხინვალის II ჩიხი | turn right | 0.05 | capture | — |
-| 904 | ცხინვალის ქუჩა | turn left | 0.15 | capture | — |
-| 905 | ცხინვალის I შესახვევი | U-turn | 0.15 | capture | — |
-| 906 | ცხინვალის I შესახვევი | turn left | 0.15 | deadhead | — |
-| 907 | ცხინვალის ქუჩა | turn right | 0.04 | capture | — |
-| 908 | ვაზისუბნის ქუჩა | U-turn | 0.12 | deadhead | — |
-| 909 | ვაზისუბნის ქუჩა | turn right | 0.05 | capture | — |
-| 910 | მიხეილ ლომონოსოვის ქუჩა | turn right | 0.14 | deadhead | — |
-| 911 | ლვოვის ქუჩა | turn right | 0.07 | capture | — |
-| 912 | ლვოვის I შესახვევი | U-turn | 0.11 | capture | — |
-| 913 | ლვოვის I შესახვევი | turn right | 0.11 | deadhead | — |
-| 914 | ლვოვის ქუჩა | continue | 0.06 | capture | — |
-| 915 | ლვოვის ქუჩა | U-turn | 0.04 | deadhead | — |
-| 916 | ლვოვის ქუჩა | turn left | 0.04 | capture | — |
-| 917 | მამია ალასანიას ქუჩა | continue | 0.04 | capture | — |
-| 918 | მამია ალასანიას ქუჩა | continue | 0.04 | deadhead | — |
-| 919 | მამია ალასანიას ქუჩა | turn right | 0.03 | capture | — |
-| 920 | ვაზისუბნის ქუჩა | U-turn | 0.12 | capture | — |
-| 921 | ვაზისუბნის ქუჩა | turn right | 0.12 | deadhead | — |
-| 922 | ზემო ვეძისის II ჩიხი | turn right | 0.02 | capture | — |
-| 923 | მამია ალასანიას ქუჩა | turn right | 0.15 | capture | — |
-| 924 | მამია ალასანიას II ჩიხი | U-turn | 0.04 | capture | — |
-| 925 | მამია ალასანიას II ჩიხი | turn right | 0.04 | deadhead | — |
-| 926 | მამია ალასანიას ქუჩა | continue | 0.11 | capture | — |
-| 927 | (unnamed) | U-turn | 0.09 | capture | — |
-| 928 | (unnamed) | continue | 0.09 | deadhead | — |
-| 929 | მამია ალასანიას ქუჩა | turn right | 0.26 | deadhead | — |
-| 930 | ზემო ვეძისის II ჩიხი | U-turn | 0.22 | capture | — |
-| 931 | ზემო ვეძისის II ჩიხი | turn right | 0.24 | deadhead | — |
-| 932 | მამია ალასანიას ქუჩა | turn right | 0.03 | deadhead | — |
-| 933 | მამია ალასანიას I შესახვევი | turn left | 0.18 | deadhead | — |
-| 934 | ბუდაპეშტის ქუჩა | continue | 0.06 | capture | — |
-| 935 | ბუდაპეშტის ქუჩა | continue | 0.02 | deadhead | — |
-| 936 | ბუდაპეშტის ქუჩა | U-turn | 0.22 | capture | — |
-| 937 | შალვა ნუცუბიძის ქუჩა | continue | 1.27 | capture | — |
-| 938 | შალვა ნუცუბიძის ქუჩა | continue | 0.25 | deadhead | — |
-| 939 | შალვა ნუცუბიძის ქუჩა | continue | 0.30 | capture | — |
-| 940 | შალვა ნუცუბიძის ქუჩა | continue | 0.22 | deadhead | — |
-| 941 | შალვა ნუცუბიძის ქუჩა | continue | 0.20 | capture | — |
-| 942 | შალვა ნუცუბიძის ქუჩა | turn right | 0.02 | deadhead | — |
-| 943 | რამაზ ჩხიკვაძის ქუჩა | continue | 0.01 | deadhead | — |
-| 944 | რამაზ ჩხიკვაძის ქუჩა | turn left | 0.45 | capture | — |
-| 945 | რამაზ ჩხიკვაძის ქუჩა | continue | 0.77 | deadhead | — |
-| 946 | რამაზ ჩხიკვაძის ქუჩა | continue | 0.03 | capture | — |
-| 947 | რამაზ ჩხიკვაძის ქუჩა | continue | 0.04 | deadhead | — |
+| 110 | ციალა გაბაშვილის ქუჩა | continue | 0.13 | capture | — |
+| 111 | ციალა გაბაშვილის ქუჩა | turn left | 0.22 | deadhead | — |
+| 112 | ვალენტინ თოფურიძის ქუჩა | turn right | 0.25 | deadhead | — |
+| 113 | ვალენტინი  თოფურიძის მე-2 შესასვლელი | continue | 0.17 | capture | — |
+| 114 | (unnamed) | turn right | 0.23 | capture | — |
+| 115 | არზაყან (დიმიტრი) ემუხვარის I შესახვევი | turn left | 0.14 | capture | — |
+| 116 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | continue | 0.09 | deadhead | — |
+| 117 | არზაყან (დიმიტრი) ემუხვარის II შესახვევი | U-turn | 0.09 | capture | — |
+| 118 | არზაყან (დიმიტრი) ემუხვარის II შესახვევი | turn right | 0.09 | deadhead | — |
+| 119 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | U-turn | 0.05 | deadhead | — |
+| 120 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | turn right | 0.10 | capture | — |
+| 121 | (unnamed) | U-turn | 0.08 | deadhead | — |
+| 122 | (unnamed) | turn right | 0.08 | capture | — |
+| 123 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | continue | 0.04 | capture | — |
+| 124 | არზაყან (დიმიტრი) ემუხვარის ქუჩა | turn right | 0.09 | deadhead | — |
+| 125 | მუხრან მაჭავარიანის ქუჩა | U-turn | 1.31 | deadhead | — |
+| 126 | მუხრან მაჭავარიანის ქუჩა | continue | 0.03 | deadhead | — |
+| 127 | მუხრან მაჭავარიანის ქუჩა | continue | 0.12 | capture | — |
+| 128 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 0.04 | capture | — |
+| 129 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 0.00 | deadhead | — |
+| 130 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 0.06 | capture | — |
+| 131 | მუხრან მაჭავარიანი-მარშალ გელოვანი | continue | 1.54 | deadhead | — |
+| 132 | მარშალ გელოვანის გამზირი | continue | 0.00 | deadhead | — |
+| 133 | მარშალ გელოვანის გამზირი | turn left | 0.45 | capture | — |
+| 134 | (unnamed) | turn left | 0.01 | capture | — |
+| 135 | მარშალ გელოვანის გამზირი | turn right | 1.35 | capture | — |
+| 136 | (unnamed) | turn left | 0.09 | deadhead | — |
+| 137 | (unnamed) | turn left | 1.00 | capture | — |
+| 138 | (unnamed) | continue | 0.15 | deadhead | — |
+| 139 | (unnamed) | turn right | 0.19 | capture | — |
+| 140 | მარშალ გელოვანის გამზირი | continue | 0.75 | deadhead | — |
+| 141 | მარშალ გელოვანის გამზირი | continue | 0.15 | capture | — |
+| 142 | მარშალ გელოვანის გამზირი | continue | 2.34 | deadhead | — |
+| 143 | მარშალ გელოვანის გამზირი | continue | 0.12 | capture | — |
+| 144 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.57 | capture | — |
+| 145 | ლევან გოთუას ქუჩა | turn right | 0.17 | capture | — |
+| 146 | (unnamed) | continue | 0.01 | capture | — |
+| 147 | ლევან გოთუას ქუჩა | turn right | 0.05 | capture | — |
+| 148 | (unnamed) | U-turn | 0.06 | deadhead | — |
+| 149 | (unnamed) | turn right | 0.06 | capture | — |
+| 150 | ლევან გოთუას ქუჩა | continue | 0.92 | capture | — |
+| 151 | (unnamed) | turn right | 0.05 | capture | — |
+| 152 | გიორგი სააკაძის დაღმართი | continue | 0.03 | capture | pass 1 of 2 — right lanes |
+| 153 | გიორგი სააკაძის მოედანი | turn right | 0.07 | capture | pass 1 of 2 — right lanes |
+| 154 | ჟიული შარტავას ქუჩა | continue | 0.23 | deadhead | — |
+| 155 | ანა კალანდაძის ქუჩა | continue | 0.29 | deadhead | — |
+| 156 | ანა კალანდაძის ქუჩა | continue | 0.01 | capture | — |
+| 157 | ანა კალანდაძის ქუჩა | turn left | 0.16 | deadhead | — |
+| 158 | პეკინის გამზირი | continue | 1.01 | deadhead | — |
+| 159 | 26 მაისის მოედანი | continue | 0.05 | deadhead | — |
+| 160 | (unnamed) | continue | 0.16 | deadhead | — |
+| 161 | 26 მაისის მოედანი | continue | 0.02 | deadhead | — |
+| 162 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.12 | deadhead | — |
+| 163 | კონსტანტინე გამსახურდიას გამზირი | turn left | 0.00 | capture | pass 1 of 2 — right lanes |
+| 164 | (unnamed) | turn left | 0.14 | capture | — |
+| 165 | პეკინის გამზირი | continue | 0.14 | deadhead | — |
+| 166 | 26 მაისის მოედანი | continue | 0.05 | deadhead | — |
+| 167 | (unnamed) | continue | 0.16 | deadhead | — |
+| 168 | 26 მაისის მოედანი | continue | 0.02 | deadhead | — |
+| 169 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.12 | deadhead | — |
+| 170 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.00 | capture | pass 2 of 2 — left lanes |
+| 171 | კონსტანტინე გამსახურდიას გამზირი | turn right | 0.01 | capture | pass 1 of 2 — right lanes |
+| 172 | გიორგი მიროტაძის ქუჩა | turn right | 0.14 | deadhead | — |
+| 173 | ანდრია აფაქიძის ქუჩა | U-turn | 0.04 | capture | — |
+| 174 | ანდრია აფაქიძის ქუჩა | turn right | 0.04 | deadhead | — |
+| 175 | გიორგი მიროტაძის ქუჩა | turn right | 0.05 | deadhead | — |
+| 176 | (unnamed) | U-turn | 0.09 | deadhead | — |
+| 177 | (unnamed) | turn right | 0.09 | capture | — |
+| 178 | გიორგი მიროტაძის ქუჩა | continue | 0.06 | deadhead | — |
+| 179 | გიორგი მიროტაძის ქუჩა | turn right | 0.05 | capture | — |
+| 180 | ვახტანგ ბოჭორიშვილის ქუჩა | U-turn | 0.14 | deadhead | — |
+| 181 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.16 | capture | — |
+| 182 | ვახტანგ ბოჭორიშვილის IV შესახვევი | U-turn | 0.04 | deadhead | — |
+| 183 | ვახტანგ ბოჭორიშვილის IV შესახვევი | turn right | 0.04 | capture | — |
+| 184 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.21 | capture | — |
+| 185 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.18 | deadhead | — |
+| 186 | გიორგი სააკაძის I გასასვლელი | U-turn | 0.10 | capture | — |
+| 187 | გიორგი სააკაძის I გასასვლელი | continue | 0.16 | capture | — |
+| 188 | ვახუშტი ბაგრატიონის ხიდი | continue | 0.27 | capture | — |
+| 189 | ვახუშტი ბაგრატიონის ქუჩა | continue | 0.43 | capture | — |
+| 190 | ვახუშტი ბაგრატიონის ქუჩა | turn right | 0.01 | deadhead | — |
+| 191 | აკაკი წერეთლის გამზირი | continue | 0.17 | capture | — |
+| 192 | აკაკი წერეთლის გამზირი | turn left | 0.07 | capture | pass 1 of 2 — right lanes |
+| 193 | გორის ქუჩა | continue | 0.02 | capture | — |
+| 194 | გორის ქუჩა | turn right | 0.07 | deadhead | — |
+| 195 | გორის შესახვევი | turn right | 0.14 | deadhead | — |
+| 196 | ეგნატე და ვახტანგ ფიფიების ქუჩა | turn right | 0.07 | deadhead | — |
+| 197 | აკაკი წერეთლის გამზირი | continue | 0.15 | deadhead | — |
+| 198 | აკაკი წერეთლის გამზირი | continue | 0.07 | capture | — |
+| 199 | აკაკი წერეთლის გამზირი | continue | 0.09 | deadhead | — |
+| 200 | აკაკი წერეთლის გამზირი | continue | 0.24 | capture | — |
+| 201 | აკაკი წერეთლის გამზირი | turn right | 0.15 | deadhead | — |
+| 202 | თემურ ფიფიას ქუჩა | turn right | 0.20 | deadhead | — |
+| 203 | ზუგდიდის ქუჩა | turn right | 0.15 | deadhead | — |
+| 204 | იროდიონ ევდოშვილის ქუჩა | continue | 0.13 | deadhead | — |
+| 205 | იროდიონ ევდოშვილის ქუჩა | continue | 0.09 | capture | — |
+| 206 | იროდიონ ევდოშვილის ქუჩა | turn left | 0.13 | deadhead | — |
+| 207 | დავით ყიფიანის ქუჩა | continue | 0.08 | deadhead | — |
+| 208 | დავით ყიფიანის ქუჩა | turn right | 0.20 | capture | — |
+| 209 | (unnamed) | U-turn | 0.07 | deadhead | — |
+| 210 | (unnamed) | turn left | 0.07 | deadhead | — |
+| 211 | დავით ყიფიანის ქუჩა | continue | 0.20 | capture | — |
+| 212 | დავით ყიფიანის ქუჩა | turn right | 0.08 | deadhead | — |
+| 213 | იროდიონ ევდოშვილის ქუჩა | continue | 0.12 | deadhead | — |
+| 214 | იროდიონ ევდოშვილის ქუჩა | turn right | 0.01 | capture | — |
+| 215 | აკაკი წერეთლის გამზირი | turn right | 0.08 | capture | — |
+| 216 | ქუთაისის ქუჩა | continue | 0.35 | capture | — |
+| 217 | ქუთაისის ქუჩა | turn left | 0.02 | deadhead | — |
+| 218 | ვახუშტი ბაგრატიონის ხიდი | continue | 0.33 | capture | — |
+| 219 | გიორგი სააკაძის დაღმართი | continue | 0.07 | capture | — |
+| 220 | გიორგი სააკაძის დაღმართი | continue | 0.20 | capture | pass 1 of 2 — right lanes |
+| 221 | გიორგი სააკაძის დაღმართი | continue | 0.05 | capture | — |
+| 222 | გიორგი სააკაძის დაღმართი | continue | 0.03 | capture | pass 2 of 2 — left lanes |
+| 223 | გიორგი სააკაძის მოედანი | turn right | 0.07 | capture | pass 2 of 2 — left lanes |
+| 224 | ჟიული შარტავას ქუჩა | turn left | 0.10 | deadhead | — |
+| 225 | ალექსანდრე ქუთათელის ქუჩა | turn left | 0.17 | capture | — |
+| 226 | თინა იოსებიძის ქუჩა | turn left | 0.17 | capture | — |
+| 227 | იპოლიტე ხვიჩიას ქუჩა | turn left | 0.10 | capture | — |
+| 228 | ალექსანდრე ქუთათელის ქუჩა | turn right | 0.07 | deadhead | — |
+| 229 | თინა იოსებიძის ქუჩა | continue | 0.30 | capture | — |
+| 230 | თინა იოსებიძის ქუჩა | turn right | 0.23 | deadhead | — |
+| 231 | დები იშხნელების ქუჩა | turn left | 0.15 | deadhead | — |
+| 232 | ჟიული შარტავას ქუჩა | continue | 0.23 | deadhead | — |
+| 233 | ჟიული შარტავას ქუჩა | turn left | 0.02 | capture | pass 1 of 2 — right lanes |
+| 234 | სიმონ კანდელაკის ქუჩა | continue | 0.11 | capture | pass 1 of 2 — right lanes |
+| 235 | სიმონ კანდელაკის ქუჩა | turn right | 0.21 | capture | — |
+| 236 | მირზა გელოვანის ქუჩა | continue | 0.23 | capture | — |
+| 237 | მირზა გელოვანის ქუჩა | continue | 0.06 | deadhead | — |
+| 238 | მირზა გელოვანის ქუჩა | turn left | 0.16 | capture | — |
+| 239 | ილია ოდიშელიძის ქუჩა | turn left | 0.18 | capture | — |
+| 240 | ტაშკენტის ქუჩა | turn left | 0.11 | deadhead | — |
+| 241 | ოდესას ქუჩა | turn right | 0.17 | capture | — |
+| 242 | მირზა გელოვანის ქუჩა | turn right | 0.31 | deadhead | — |
+| 243 | სიმონ კანდელაკის ქუჩა | continue | 0.47 | capture | — |
+| 244 | (unnamed) | turn left | 0.06 | capture | — |
+| 245 | ბუდაპეშტის ქუჩა | continue | 0.04 | capture | — |
+| 246 | ბუდაპეშტის ქუჩა | continue | 0.20 | deadhead | — |
+| 247 | გურამ ფანჯიკიძის ქუჩა | turn left | 0.11 | deadhead | — |
+| 248 | ტაშკენტის ქუჩა | continue | 0.14 | deadhead | — |
+| 249 | ტაშკენტის ქუჩა | turn left | 0.01 | capture | — |
+| 250 | სიმონ კანდელაკის ქუჩა | turn right | 0.21 | deadhead | — |
+| 251 | ცხინვალის ქუჩა | turn right | 0.16 | capture | — |
+| 252 | ლვოვის ქუჩა | turn left | 0.06 | capture | — |
+| 253 | ჰაიდარ აბაშიძის ქუჩა | continue | 0.00 | capture | — |
+| 254 | ჰაიდარ აბაშიძის ქუჩა | turn right | 0.17 | deadhead | — |
+| 255 | ვაზისუბნის ქუჩა | continue | 0.07 | deadhead | — |
+| 256 | ვაზისუბნის ქუჩა | continue | 0.08 | capture | — |
+| 257 | გაბრიელ ისაკაძის ქუჩა | turn left | 0.50 | capture | — |
+| 258 | ბაჩანა ბრეგვაძის ქუჩა | turn right | 0.14 | capture | — |
+| 259 | ლავრენტი არდაზიანის ქუჩა | U-turn | 0.18 | capture | — |
+| 260 | ლავრენტი არდაზიანის ქუჩა | turn right | 0.18 | deadhead | — |
+| 261 | ბაჩანა ბრეგვაძის ქუჩა | turn right | 0.02 | capture | — |
+| 262 | თედო სახოკიას ქუჩა | U-turn | 0.12 | capture | — |
+| 263 | თედო სახოკიას ქუჩა | turn right | 0.12 | deadhead | — |
+| 264 | ბაჩანა ბრეგვაძის ქუჩა | continue | 0.06 | capture | — |
+| 265 | ილია ოდიშელიძის II ჩიხი | U-turn | 0.11 | capture | — |
+| 266 | ილია ოდიშელიძის II ჩიხი | turn right | 0.11 | deadhead | — |
+| 267 | ილია ოდიშელიძის ქუჩა | turn right | 0.16 | capture | — |
+| 268 | იოსებ ბაქრაძის ქუჩა | continue | 0.03 | deadhead | — |
+| 269 | იოსებ ბაქრაძის I ჩიხი | U-turn | 0.04 | deadhead | — |
+| 270 | იოსებ ბაქრაძის I ჩიხი | turn right | 0.04 | capture | — |
+| 271 | იოსებ ბაქრაძის ქუჩა | U-turn | 0.12 | deadhead | — |
+| 272 | იოსებ ბაქრაძის ქუჩა | turn right | 0.15 | capture | — |
+| 273 | ილია ოდიშელიძის ქუჩა | continue | 0.14 | capture | — |
+| 274 | ილია ოდიშელიძის ქუჩა | turn right | 0.18 | deadhead | — |
+| 275 | ტაშკენტის ქუჩა | turn right | 0.08 | deadhead | — |
+| 276 | მერი დავითაშვილის ქუჩა | continue | 0.17 | deadhead | — |
+| 277 | ვარდან წულუკიძის ქუჩა | turn right | 0.52 | capture | — |
+| 278 | ილია ოდიშელიძის ქუჩა | continue | 0.16 | capture | — |
+| 279 | ილია ოდიშელიძის ქუჩა | turn left | 0.11 | deadhead | — |
+| 280 | სოფრომ მგალობლიშვილის ქუჩა | turn right | 0.04 | capture | — |
+| 281 | ლავრენტი არდაზიანის ქუჩა | U-turn | 0.04 | deadhead | — |
+| 282 | ლავრენტი არდაზიანის ქუჩა | turn right | 0.19 | capture | — |
+| 283 | ბაჩანა ბრეგვაძის ქუჩა | turn left | 0.07 | deadhead | — |
+| 284 | ელისაბედ ჩერქეზიშვილის ქუჩა | U-turn | 0.08 | deadhead | — |
+| 285 | ელისაბედ ჩერქეზიშვილის ქუჩა | turn right | 0.35 | capture | — |
+| 286 | ილია ოდიშელიძის ქუჩა | turn right | 0.13 | deadhead | — |
+| 287 | სოფრომ მგალობლიშვილის ქუჩა | continue | 0.04 | deadhead | — |
+| 288 | სოფრომ მგალობლიშვილის ქუჩა | turn left | 0.11 | capture | — |
+| 289 | გაბრიელ ისაკაძის ქუჩა | continue | 0.14 | deadhead | — |
+| 290 | გაბრიელ ისაკაძის ქუჩა | turn right | 0.10 | capture | — |
+| 291 | იური გაგარინის ქუჩა | U-turn | 0.17 | capture | — |
+| 292 | იური გაგარინის ქუჩა | turn right | 0.02 | capture | — |
+| 293 | ოჩამჩირის ქუჩა | continue | 0.05 | capture | — |
+| 294 | ოჩამჩირის ქუჩა | turn left | 0.06 | deadhead | — |
+| 295 | ჟიული შარტავას ქუჩა | turn left | 0.07 | deadhead | — |
+| 296 | სოკრატ არშბას ქუჩა | turn right | 0.09 | capture | — |
+| 297 | იური გაგარინის ქუჩა | continue | 0.65 | capture | — |
+| 298 | (unnamed) | turn right | 0.08 | capture | — |
+| 299 | მარშალ გელოვანის გამზირი | continue | 0.01 | deadhead | — |
+| 300 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.57 | deadhead | — |
+| 301 | ლევან გოთუას ქუჩა | turn right | 0.17 | deadhead | — |
+| 302 | (unnamed) | turn left | 0.01 | deadhead | — |
+| 303 | (unnamed) | turn right | 0.01 | capture | — |
+| 304 | ლევან გოთუას ქუჩა | continue | 0.02 | capture | — |
+| 305 | ლევან გოთუას ქუჩა | turn right | 0.41 | deadhead | — |
+| 306 | ლევან გოთუას შესახვევი | U-turn | 0.00 | deadhead | — |
+| 307 | ლევან გოთუას შესახვევი | turn right | 0.00 | capture | — |
+| 308 | ლევან გოთუას ქუჩა | continue | 0.57 | deadhead | — |
+| 309 | ლევან გოთუას ქუჩა | turn right | 0.05 | capture | — |
+| 310 | გიორგი სააკაძის დაღმართი | continue | 0.05 | deadhead | — |
+| 311 | გიორგი სააკაძის დაღმართი | continue | 0.03 | deadhead | pass 3 of 2 — centre lanes |
+| 312 | გიორგი სააკაძის მოედანი | continue | 0.03 | deadhead | pass 3 of 2 — centre lanes |
+| 313 | გიორგი სააკაძის მოედანი | continue | 0.05 | capture | — |
+| 314 | გიორგი სააკაძის მოედანი | turn left | 0.02 | capture | pass 1 of 2 — right lanes |
+| 315 | გიორგი სააკაძის მოედანი | turn right | 0.08 | capture | — |
+| 316 | გიორგი სააკაძის მოედანი | continue | 0.02 | deadhead | — |
+| 317 | ვახტანგ ჭაბუკიანის ქუჩა | turn left | 0.08 | deadhead | — |
+| 318 | იპოლიტე ხვიჩიას ქუჩა | continue | 0.18 | deadhead | — |
+| 319 | იპოლიტე ხვიჩიას ქუჩა | turn right | 0.07 | capture | — |
+| 320 | არჩილ სულაკაურის ქუჩა | U-turn | 0.08 | capture | — |
+| 321 | არჩილ სულაკაურის ქუჩა | turn left | 0.14 | deadhead | — |
+| 322 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.17 | capture | pass 1 of 2 — right lanes |
+| 323 | გიორგი სააკაძის მოედანი | continue | 0.14 | capture | — |
+| 324 | ვახტანგ ჭაბუკიანის ქუჩა | turn left | 0.28 | deadhead | — |
+| 325 | პეკინის გამზირი | continue | 0.54 | deadhead | — |
+| 326 | 26 მაისის მოედანი | continue | 0.05 | deadhead | — |
+| 327 | (unnamed) | continue | 0.16 | deadhead | — |
+| 328 | 26 მაისის მოედანი | continue | 0.02 | deadhead | — |
+| 329 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.12 | deadhead | — |
+| 330 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.00 | deadhead | pass 3 of 2 — centre lanes |
+| 331 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.01 | capture | pass 2 of 2 — left lanes |
+| 332 | კონსტანტინე გამსახურდიას გამზირი | turn left | 0.17 | capture | pass 1 of 2 — right lanes |
+| 333 | არჩილ სულაკაურის ქუჩა | turn right | 0.06 | capture | — |
+| 334 | იპოლიტე ხვიჩიას ქუჩა | continue | 0.07 | deadhead | — |
+| 335 | იპოლიტე ხვიჩიას ქუჩა | turn left | 0.29 | capture | — |
+| 336 | თინა იოსებიძის ქუჩა | turn right | 0.71 | deadhead | — |
+| 337 | დები იშხნელების ქუჩა | turn left | 0.15 | deadhead | — |
+| 338 | ჟიული შარტავას ქუჩა | continue | 0.23 | deadhead | — |
+| 339 | ჟიული შარტავას ქუჩა | turn left | 0.02 | capture | pass 2 of 2 — left lanes |
+| 340 | სიმონ კანდელაკის ქუჩა | turn right | 0.11 | capture | pass 2 of 2 — left lanes |
+| 341 | ზურაბ ჟვანიას მოედანი | continue | 0.09 | capture | — |
+| 342 | იური გაგარინის ქუჩა | turn right | 0.04 | capture | — |
+| 343 | ვიტალი დარასელიას ქუჩა | turn right | 0.13 | deadhead | — |
+| 344 | ჟიული შარტავას ქუჩა | continue | 0.06 | deadhead | — |
+| 345 | ჟიული შარტავას ქუჩა | continue | 0.03 | capture | — |
+| 346 | სიმონ კანდელაკის ქუჩა | turn right | 0.11 | deadhead | pass 3 of 2 — centre lanes |
+| 347 | ზურაბ ჟვანიას მოედანი | turn left | 0.07 | deadhead | — |
+| 348 | (unnamed) | turn left | 0.02 | capture | — |
+| 349 | ზურაბ ჟვანიას მოედანი | continue | 0.02 | capture | — |
+| 350 | ზურაბ ჟვანიას მოედანი | turn right | 0.01 | deadhead | — |
+| 351 | სოფრომ მგალობლიშვილის ქუჩა | continue | 0.15 | deadhead | — |
+| 352 | სოფრომ მგალობლიშვილის ქუჩა | turn right | 0.15 | capture | — |
+| 353 | გაბრიელ ისაკაძის ქუჩა | turn right | 0.24 | deadhead | — |
+| 354 | იური გაგარინის ქუჩა | continue | 0.17 | deadhead | — |
+| 355 | იური გაგარინის ქუჩა | U-turn | 0.14 | capture | — |
+| 356 | იური გაგარინის ქუჩა | continue | 0.14 | capture | — |
+| 357 | იური გაგარინის ქუჩა | turn right | 0.02 | deadhead | — |
+| 358 | ოჩამჩირის ქუჩა | continue | 0.05 | deadhead | — |
+| 359 | ოჩამჩირის ქუჩა | turn left | 0.11 | capture | — |
+| 360 | ჟიული შარტავას ქუჩა | continue | 0.07 | deadhead | — |
+| 361 | ოჩამჩირის ქუჩა | continue | 0.06 | capture | — |
+| 362 | ოჩამჩირის ქუჩა | turn right | 0.05 | deadhead | — |
+| 363 | იური გაგარინის ქუჩა | turn right | 0.08 | capture | — |
+| 364 | სოკრატ არშბას ქუჩა | turn left | 0.09 | deadhead | — |
+| 365 | ჟიული შარტავას ქუჩა | U-turn | 0.16 | deadhead | — |
+| 366 | ჟიული შარტავას ქუჩა | turn right | 0.04 | capture | — |
+| 367 | გაბრიელ ისაკაძის ქუჩა | turn right | 0.09 | capture | — |
+| 368 | იური გაგარინის ქუჩა | continue | 0.58 | deadhead | — |
+| 369 | (unnamed) | continue | 0.02 | deadhead | — |
+| 370 | (unnamed) | continue | 0.12 | capture | — |
+| 371 | მარშალ გელოვანის გამზირი | continue | 2.25 | deadhead | — |
+| 372 | გრიგოლ რობაქიძის გამზირი | continue | 0.08 | capture | — |
+| 373 | გრიგოლ რობაქიძის გამზირი | turn left | 0.44 | capture | pass 1 of 2 — right lanes |
+| 374 | ბორის პაიჭაძეს ქუჩა | continue | 0.02 | capture | — |
+| 375 | ბორის პაიჭაძის ქუჩა | turn right | 0.23 | capture | — |
+| 376 | ნოდარ ახალკაცის ქუჩა | turn right | 0.04 | deadhead | — |
+| 377 | ბორის პაიჭაძის ქუჩა | continue | 0.22 | capture | — |
+| 378 | ბორის პაიჭაძის ქუჩა | turn right | 0.06 | deadhead | — |
+| 379 | გრიგოლ რობაქიძის გამზირი | turn left | 0.06 | deadhead | — |
+| 380 | ბორის პაიჭაძეს ქუჩა | turn left | 0.02 | capture | — |
+| 381 | გრიგოლ რობაქიძის გამზირი | continue | 0.47 | capture | pass 1 of 2 — right lanes |
+| 382 | ჯემალ ჭკუასელის ქუჩა | continue | 0.27 | capture | — |
+| 383 | ჯემალ ჭკუასელის ქუჩა | continue | 0.04 | capture | pass 1 of 2 — right lanes |
+| 384 | აკაკი ბაქრაძის ქუჩა | turn left | 0.13 | capture | — |
+| 385 | (unnamed) | turn left | 0.01 | capture | — |
+| 386 | აკაკი ბაქრაძის ქუჩა | continue | 0.74 | capture | — |
+| 387 | აკაკი ბელიაშვილის ქუჩა | continue | 0.98 | capture | — |
+| 388 | აკაკი ბელიაშვილის ქუჩა | turn left | 0.11 | deadhead | — |
+| 389 | დევი აბაშიძის ქუჩა | continue | 0.12 | deadhead | — |
+| 390 | დევი აბაშიძის ქუჩა | continue | 0.30 | capture | — |
+| 391 | დევი აბაშიძის ქუჩა | turn left | 0.06 | deadhead | — |
+| 392 | რობერტ ბარძიმაშვილის ქუჩა | turn right | 0.37 | capture | — |
+| 393 | ევგენი მიქელაძის ქუჩა | turn right | 0.47 | deadhead | — |
+| 394 | დავით აღმაშენებლის ხეივანი | continue | 0.30 | deadhead | — |
+| 395 | დევი აბაშიძის ქუჩა | continue | 0.49 | deadhead | — |
+| 396 | დევი აბაშიძის ქუჩა | continue | 0.01 | capture | — |
+| 397 | დევი აბაშიძის ქუჩა | turn right | 0.47 | deadhead | — |
+| 398 | აკაკი ბელიაშვილის ქუჩა | continue | 0.11 | deadhead | — |
+| 399 | აკაკი ბელიაშვილის ქუჩა | turn right | 0.26 | capture | — |
+| 400 | ევგენი მიქელაძის ქუჩა | continue | 0.09 | capture | — |
+| 401 | ევგენი მიქელაძის ქუჩა | turn right | 0.32 | deadhead | — |
+| 402 | რობერტ ბარძიმაშვილის ქუჩა | turn left | 0.37 | capture | — |
+| 403 | დევი აბაშიძის ქუჩა | turn left | 0.06 | deadhead | — |
+| 404 | რობერტ ბარძიმაშვილის ქუჩა | continue | 0.37 | deadhead | — |
+| 405 | ბორის პაიჭაძის ქუჩა | turn left | 0.15 | capture | — |
+| 406 | (unnamed) | turn left | 0.01 | capture | — |
+| 407 | ბორის პაიჭაძის ქუჩა | turn left | 0.04 | capture | — |
+| 408 | (unnamed) | turn left | 0.01 | capture | — |
+| 409 | ბორის პაიჭაძის ქუჩა | continue | 0.04 | deadhead | — |
+| 410 | ბორის პაიჭაძის ქუჩა | continue | 0.03 | capture | — |
+| 411 | ბორის პაიჭაძის ქუჩა | turn left | 0.17 | deadhead | — |
+| 412 | ნოდარ ახალკაცის ქუჩა | turn right | 0.04 | deadhead | — |
+| 413 | ბორის პაიჭაძის ქუჩა | U-turn | 0.07 | deadhead | — |
+| 414 | ბორის პაიჭაძის ქუჩა | turn left | 0.08 | capture | — |
+| 415 | ნოდარ ახალკაცის ქუჩა | turn right | 0.07 | capture | — |
+| 416 | ბორის პაიჭაძის ქუჩა | continue | 0.20 | capture | — |
+| 417 | ბორის პაიჭაძის ქუჩა | turn right | 0.15 | deadhead | — |
+| 418 | ევგენი მიქელაძის ქუჩა | continue | 0.06 | deadhead | — |
+| 419 | ევგენი მიქელაძის ქუჩა | turn right | 0.41 | capture | — |
+| 420 | აკაკი ბელიაშვილის ქუჩა | turn left | 0.73 | capture | — |
+| 421 | აკაკი ბაქრაძის ქუჩა | continue | 0.61 | capture | — |
+| 422 | აკაკი ბაქრაძის ქუჩა | continue | 0.13 | deadhead | — |
+| 423 | აკაკი ბაქრაძის ქუჩა | turn right | 0.10 | capture | — |
+| 424 | (unnamed) | U-turn | 0.05 | capture | — |
+| 425 | (unnamed) | turn right | 0.04 | capture | — |
+| 426 | აკაკი ბაქრაძის ქუჩა | turn left | 0.93 | capture | — |
+| 427 | (unnamed) | turn left | 0.02 | capture | — |
+| 428 | აკაკი ბაქრაძის ქუჩა | continue | 1.05 | capture | — |
+| 429 | აკაკი ბაქრაძის ქუჩა | turn left | 0.14 | deadhead | — |
+| 430 | ჯემალ ჭკუასელის ქუჩა | continue | 0.04 | capture | pass 1 of 2 — right lanes |
+| 431 | ჯემალ ჭკუასელის ქუჩა | continue | 0.21 | deadhead | — |
+| 432 | ჯემალ ჭკუასელის ქუჩა | turn right | 0.06 | capture | — |
+| 433 | გრიგოლ რობაქიძის გამზირი | continue | 0.05 | capture | — |
+| 434 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | capture | — |
+| 435 | აკაკი წერეთლის გამზირი | continue | 0.00 | capture | — |
+| 436 | აკაკი წერეთლის გამზირი | continue | 0.02 | capture | pass 1 of 2 — right lanes |
+| 437 | ანზორ აბულაშვილის ქუჩა | continue | 0.34 | capture | — |
+| 438 | (unnamed) | continue | 0.00 | capture | — |
+| 439 | ანტონ აბულაშვილის ქუჩა | turn left | 0.15 | capture | — |
+| 440 | აკაკი წერეთლის გამზირი | turn left | 0.18 | capture | pass 1 of 2 — right lanes |
+| 441 | თორნიკე ერისთავის ქუჩა | turn left | 0.56 | capture | — |
+| 442 | (unnamed) | turn right | 0.24 | deadhead | — |
+| 443 | (unnamed) | turn right | 0.89 | capture | — |
+| 444 | თორნიკე ერისთავის ქუჩა | continue | 0.41 | capture | — |
+| 445 | თორნიკე ერისთავის ქუჩა | turn right | 0.13 | capture | pass 1 of 2 — right lanes |
+| 446 | აკაკი წერეთლის გამზირი | turn right | 0.19 | capture | — |
+| 447 | ანტონ აბულაშვილის ქუჩა | continue | 0.09 | deadhead | — |
+| 448 | ანტონ აბულაშვილის ქუჩა | continue | 0.04 | capture | — |
+| 449 | (unnamed) | continue | 0.03 | capture | — |
+| 450 | ანზორ აბულაშვილის ქუჩა | turn right | 0.29 | capture | — |
+| 451 | აკაკი წერეთლის გამზირი | continue | 0.01 | capture | — |
+| 452 | აკაკი წერეთლის გამზირი | continue | 0.07 | deadhead | — |
+| 453 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
+| 454 | გრიგოლ რობაქიძის გამზირი | continue | 0.18 | deadhead | — |
+| 455 | გრიგოლ რობაქიძის გამზირი | turn left | 0.30 | capture | pass 1 of 2 — right lanes |
+| 456 | (unnamed) | turn left | 0.02 | capture | — |
+| 457 | გრიგოლ რობაქიძის გამზირი | continue | 0.36 | capture | pass 2 of 2 — left lanes |
+| 458 | გრიგოლ რობაქიძის გამზირი | continue | 0.07 | capture | — |
+| 459 | გრიგოლ რობაქიძის გამზირი | continue | 0.05 | deadhead | — |
+| 460 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
+| 461 | აკაკი წერეთლის გამზირი | continue | 0.00 | deadhead | — |
+| 462 | აკაკი წერეთლის გამზირი | continue | 0.02 | capture | pass 2 of 2 — left lanes |
+| 463 | აკაკი წერეთლის გამზირი | continue | 0.06 | capture | — |
+| 464 | აკაკი წერეთლის გამზირი | continue | 0.12 | deadhead | — |
+| 465 | აკაკი წერეთლის გამზირი | continue | 0.25 | capture | — |
+| 466 | აკაკი წერეთლის გამზირი | turn left | 0.18 | capture | pass 2 of 2 — left lanes |
+| 467 | თორნიკე ერისთავის ქუჩა | U-turn | 0.30 | deadhead | — |
+| 468 | თორნიკე ერისთავის ქუჩა | continue | 0.14 | deadhead | — |
+| 469 | თორნიკე ერისთავის ქუჩა | continue | 0.13 | capture | pass 2 of 2 — left lanes |
+| 470 | თორნიკე ერისთავის ქუჩა | turn left | 0.01 | capture | — |
+| 471 | აკაკი წერეთლის გამზირი | continue | 1.25 | capture | — |
+| 472 | აკაკი წერეთლის გამზირი | continue | 0.75 | deadhead | — |
+| 473 | აკაკი წერეთლის გამზირი | continue | 0.22 | capture | — |
+| 474 | აკაკი წერეთლის გამზირი | continue | 0.08 | deadhead | — |
+| 475 | აკაკი წერეთლის გამზირი | continue | 0.08 | capture | — |
+| 476 | აკაკი წერეთლის გამზირი | turn right | 0.12 | deadhead | — |
+| 477 | ბათუმის ქუჩა | continue | 0.02 | capture | — |
+| 478 | ბათუმის ქუჩა | turn right | 0.29 | deadhead | — |
+| 479 | დავით ყიფიანის ქუჩა | turn right | 0.11 | deadhead | — |
+| 480 | ფოთის ქუჩა | continue | 0.01 | capture | — |
+| 481 | ფოთის ქუჩა | turn right | 0.28 | deadhead | — |
+| 482 | ბათუმის ქუჩა | turn left | 0.03 | deadhead | — |
+| 483 | (unnamed) | turn left | 0.00 | deadhead | — |
+| 484 | ბათუმის ქუჩა | continue | 0.02 | deadhead | — |
+| 485 | ბათუმის ქუჩა | turn right | 0.02 | capture | — |
+| 486 | აკაკი წერეთლის გამზირი | continue | 0.07 | capture | pass 2 of 2 — left lanes |
+| 487 | აკაკი წერეთლის გამზირი | continue | 0.03 | capture | — |
+| 488 | აკაკი წერეთლის გამზირი | continue | 0.38 | deadhead | — |
+| 489 | მიხეილ წინამძღვრიშვილის ქუჩა | turn right | 0.36 | deadhead | — |
+| 490 | თამარ მეფის გამზირი | continue | 0.54 | deadhead | — |
+| 491 | თამარ მეფის ხიდი | continue | 0.13 | deadhead | — |
+| 492 | თამარ მეფის გამზირი | turn right | 0.02 | capture | — |
+| 493 | (unnamed) | turn right | 0.44 | capture | — |
+| 494 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 1.01 | capture | — |
+| 495 | ზვიად გამსახურდიას სანაპირო | continue | 0.11 | capture | — |
+| 496 | ზვიად გამსახურდიას სანაპირო | continue | 0.12 | deadhead | — |
+| 497 | (unnamed) | continue | 0.49 | deadhead | — |
+| 498 | ზვიად გამსახურდიას სანაპირო | continue | 0.07 | deadhead | — |
+| 499 | ზვიად გამსახურდიას სანაპირო | continue | 0.22 | capture | — |
+| 500 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 1.06 | capture | — |
+| 501 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | capture | pass 1 of 2 — right lanes |
+| 502 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 2.34 | capture | — |
+| 503 | აკაკი ბაქრაძის ქუჩა | turn left | 0.34 | capture | — |
+| 504 | (unnamed) | turn left | 0.02 | capture | — |
+| 505 | აკაკი ბაქრაძის ქუჩა | continue | 0.16 | capture | — |
+| 506 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.08 | capture | — |
+| 507 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.57 | deadhead | — |
+| 508 | ლევან გოთუას ქუჩა | turn right | 0.17 | deadhead | — |
+| 509 | (unnamed) | turn left | 0.02 | deadhead | — |
+| 510 | (unnamed) | turn left | 0.01 | capture | — |
+| 511 | (unnamed) | turn right | 0.03 | deadhead | — |
+| 512 | (unnamed) | continue | 0.13 | capture | — |
+| 513 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.80 | capture | — |
+| 514 | გიორგი სააკაძის II გასასვლელი | turn right | 0.38 | capture | — |
+| 515 | გიორგი სააკაძის დაღმართი | continue | 0.19 | capture | pass 2 of 2 — left lanes |
+| 516 | გიორგი სააკაძის დაღმართი | continue | 0.05 | deadhead | — |
+| 517 | გიორგი სააკაძის დაღმართი | turn left | 0.03 | deadhead | pass 4 of 2 — centre lanes |
+| 518 | გიორგი სააკაძის დაღმართი | continue | 0.39 | capture | — |
+| 519 | ვახუშტი ბაგრატიონის ხიდი | turn right | 0.27 | deadhead | — |
+| 520 | (unnamed) | turn right | 0.03 | capture | — |
+| 521 | (unnamed) | turn right | 0.12 | deadhead | — |
+| 522 | კოსმონავტების სანაპირო | turn right | 0.15 | deadhead | — |
+| 523 | (unnamed) | turn right | 0.15 | deadhead | — |
+| 524 | ვახუშტი ბაგრატიონის ხიდი | continue | 0.33 | deadhead | — |
+| 525 | გიორგი სააკაძის დაღმართი | turn right | 0.05 | deadhead | — |
+| 526 | გიორგი სააკაძის II გასასვლელი | continue | 0.03 | capture | — |
+| 527 | გიორგი სააკაძის II გასასვლელი | continue | 0.26 | deadhead | — |
+| 528 | გიორგი სააკაძის II გასასვლელი | continue | 0.12 | capture | — |
+| 529 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | turn right | 0.48 | capture | — |
+| 530 | (unnamed) | turn right | 0.05 | capture | — |
+| 531 | გიორგი სააკაძის I გასასვლელი | continue | 0.24 | capture | — |
+| 532 | გიორგი სააკაძის I გასასვლელი | continue | 0.11 | deadhead | — |
+| 533 | გიორგი სააკაძის I გასასვლელი | continue | 0.06 | capture | — |
+| 534 | გიორგი სააკაძის დაღმართი | continue | 0.03 | capture | — |
+| 535 | გიორგი სააკაძის დაღმართი | continue | 0.01 | capture | pass 2 of 2 — left lanes |
+| 536 | გიორგი სააკაძის დაღმართი | continue | 0.19 | deadhead | pass 3 of 2 — centre lanes |
+| 537 | გიორგი სააკაძის დაღმართი | continue | 0.05 | deadhead | — |
+| 538 | გიორგი სააკაძის დაღმართი | turn left | 0.03 | deadhead | pass 5 of 2 — centre lanes |
+| 539 | გიორგი სააკაძის დაღმართი | continue | 0.30 | deadhead | — |
+| 540 | გიორგი სააკაძის I გასასვლელი | turn right | 0.09 | capture | — |
+| 541 | ვახტანგ ბოჭორიშვილის ქუჩა | U-turn | 0.18 | capture | — |
+| 542 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.14 | capture | — |
+| 543 | ვახტანგ ბოჭორიშვილის ქუჩა | U-turn | 0.13 | deadhead | — |
+| 544 | ვახტანგ ბოჭორიშვილის ქუჩა | continue | 0.13 | capture | — |
+| 545 | ვახტანგ ბოჭორიშვილის ქუჩა | turn left | 0.05 | deadhead | — |
+| 546 | ვახტანგ ბოჭორიშვილის ქუჩა | turn left | 0.17 | capture | — |
+| 547 | ვახტანგ ბოჭორიშვილის ქუჩა | U-turn | 0.06 | deadhead | — |
+| 548 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.20 | capture | — |
+| 549 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.13 | capture | pass 2 of 2 — left lanes |
+| 550 | გიორგი სააკაძის მოედანი | continue | 0.19 | capture | pass 1 of 2 — right lanes |
+| 551 | გიორგი სააკაძის მოედანი | continue | 0.01 | capture | — |
+| 552 | გიორგი სააკაძის მოედანი | turn left | 0.06 | capture | pass 1 of 2 — right lanes |
+| 553 | გიორგი სააკაძის მოედანი | turn left | 0.02 | capture | pass 2 of 2 — left lanes |
+| 554 | გიორგი სააკაძის მოედანი | continue | 0.02 | deadhead | — |
+| 555 | გიორგი სააკაძის მოედანი | turn left | 0.10 | capture | — |
+| 556 | გიორგი სააკაძის მოედანი | continue | 0.04 | capture | pass 2 of 2 — left lanes |
+| 557 | გიორგი სააკაძის მოედანი | continue | 0.01 | deadhead | — |
+| 558 | გიორგი სააკაძის მოედანი | turn left | 0.06 | capture | pass 2 of 2 — left lanes |
+| 559 | გიორგი სააკაძის მოედანი | turn left | 0.02 | deadhead | pass 3 of 2 — centre lanes |
+| 560 | გიორგი სააკაძის მოედანი | turn left | 0.12 | deadhead | — |
+| 561 | გიორგი სააკაძის მოედანი | continue | 0.04 | deadhead | pass 3 of 2 — centre lanes |
+| 562 | გიორგი სააკაძის მოედანი | turn right | 0.04 | capture | — |
+| 563 | გიორგი სააკაძის დაღმართი | continue | 0.03 | deadhead | — |
+| 564 | (unnamed) | continue | 0.06 | capture | — |
+| 565 | ლევან გოთუას ქუჩა | U-turn | 0.01 | capture | — |
+| 566 | (unnamed) | turn right | 0.05 | deadhead | — |
+| 567 | გიორგი სააკაძის დაღმართი | turn left | 0.03 | deadhead | pass 6 of 2 — centre lanes |
+| 568 | გიორგი სააკაძის დაღმართი | turn right | 0.05 | deadhead | — |
+| 569 | (unnamed) | turn left | 0.23 | capture | — |
+| 570 | ვახტანგ ბოჭორიშვილის ქუჩა | turn right | 0.16 | capture | — |
+| 571 | ვახტანგ ბოჭორიშვილის ქუჩა | continue | 0.14 | deadhead | — |
+| 572 | ვახტანგ ბოჭორიშვილის ქუჩა | continue | 0.00 | capture | — |
+| 573 | გიორგი მიროტაძის ქუჩა | turn right | 0.46 | capture | — |
+| 574 | კონსტანტინე გამსახურდიას გამზირი | turn left | 0.11 | capture | pass 2 of 2 — left lanes |
+| 575 | იყალთოს ქუჩა | U-turn | 0.14 | deadhead | — |
+| 576 | იყალთოს ქუჩა | turn left | 0.14 | capture | — |
+| 577 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.10 | capture | pass 2 of 2 — left lanes |
+| 578 | კონსტანტინე გამსახურდიას გამზირი | continue | 0.13 | deadhead | pass 3 of 2 — centre lanes |
+| 579 | გიორგი სააკაძის მოედანი | continue | 0.15 | capture | pass 2 of 2 — left lanes |
+| 580 | გიორგი სააკაძის მოედანი | continue | 0.04 | deadhead | pass 4 of 2 — centre lanes |
+| 581 | გიორგი სააკაძის მოედანი | turn right | 0.04 | deadhead | — |
+| 582 | გიორგი სააკაძის დაღმართი | continue | 0.26 | deadhead | — |
+| 583 | გიორგი სააკაძის I გასასვლელი | continue | 0.19 | deadhead | — |
+| 584 | გიორგი სააკაძის I გასასვლელი | continue | 0.39 | capture | — |
+| 585 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | capture | — |
+| 586 | (unnamed) | continue | 0.51 | capture | — |
+| 587 | თამარ მეფის გამზირი | U-turn | 0.03 | capture | — |
+| 588 | თამარ მეფის გამზირი | U-turn | 0.09 | capture | — |
+| 589 | თამარ მეფის გამზირი | U-turn | 0.06 | capture | — |
+| 590 | თამარ მეფის გამზირი | continue | 0.06 | deadhead | — |
+| 591 | თამარ მეფის გამზირი | U-turn | 0.02 | capture | — |
+| 592 | თამარ მეფის გამზირი | turn right | 0.02 | deadhead | — |
+| 593 | (unnamed) | continue | 0.41 | deadhead | — |
+| 594 | (unnamed) | continue | 0.08 | capture | — |
+| 595 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | capture | pass 2 of 2 — left lanes |
+| 596 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 2.34 | deadhead | — |
+| 597 | აკაკი ბაქრაძის ქუჩა | continue | 0.34 | deadhead | — |
+| 598 | აკაკი ბაქრაძის ქუჩა | continue | 0.02 | capture | — |
+| 599 | აკაკი ბაქრაძის ქუჩა | turn left | 1.19 | deadhead | — |
+| 600 | ჯემალ ჭკუასელის ქუჩა | continue | 0.04 | capture | pass 2 of 2 — left lanes |
+| 601 | ჯემალ ჭკუასელის ქუჩა | turn right | 0.27 | deadhead | — |
+| 602 | გრიგოლ რობაქიძის გამზირი | continue | 0.05 | deadhead | — |
+| 603 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
+| 604 | აკაკი წერეთლის გამზირი | turn right | 0.00 | deadhead | — |
+| 605 | (unnamed) | continue | 0.07 | capture | pass 1 of 2 — right lanes |
+| 606 | (unnamed) | continue | 0.27 | deadhead | — |
+| 607 | კოსმონავტების სანაპირო | continue | 0.73 | deadhead | — |
+| 608 | კოსმონავტების სანაპირო | turn left | 0.29 | capture | — |
+| 609 | სამტრედიის ქუჩა | turn right | 0.25 | capture | — |
+| 610 | (unnamed) | turn right | 0.16 | capture | — |
+| 611 | (unnamed) | turn left | 0.04 | deadhead | — |
+| 612 | სამტრედიის ქუჩა | continue | 0.07 | deadhead | — |
+| 613 | სამტრედიის ქუჩა | turn right | 0.06 | capture | — |
+| 614 | კოსმონავტების სანაპირო | turn right | 0.29 | capture | — |
+| 615 | ალიო მირცხულავას ქუჩა | continue | 0.02 | deadhead | — |
+| 616 | ალიო მირცხულავას ქუჩა | turn right | 0.19 | capture | — |
+| 617 | რაფიელ აგლაძის ქუჩა | turn left | 0.09 | deadhead | — |
+| 618 | წყალტუბოს ქუჩა | turn left | 0.37 | capture | — |
+| 619 | აკაკი წერეთლის გამზირი | continue | 0.11 | capture | — |
+| 620 | აკაკი წერეთლის გამზირი | continue | 0.14 | capture | pass 1 of 2 — right lanes |
+| 621 | აკაკი წერეთლის გამზირი | turn right | 0.19 | deadhead | — |
+| 622 | ანტონ აბულაშვილის ქუჩა | continue | 0.13 | deadhead | — |
+| 623 | (unnamed) | turn left | 0.03 | deadhead | — |
+| 624 | (unnamed) | turn left | 0.01 | capture | — |
+| 625 | (unnamed) | turn left | 0.00 | deadhead | — |
+| 626 | (unnamed) | turn left | 0.01 | capture | — |
+| 627 | (unnamed) | continue | 0.04 | deadhead | — |
+| 628 | ანტონ აბულაშვილის ქუჩა | continue | 0.02 | deadhead | — |
+| 629 | ანტონ აბულაშვილის ქუჩა | turn right | 0.12 | capture | — |
+| 630 | აკაკი წერეთლის გამზირი | continue | 0.25 | capture | — |
+| 631 | აკაკი წერეთლის გამზირი | continue | 0.08 | deadhead | — |
+| 632 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
+| 633 | გრიგოლ რობაქიძის გამზირი | turn right | 0.05 | deadhead | — |
+| 634 | აკაკი ბელიაშვილის ქუჩა | turn right | 0.03 | deadhead | — |
+| 635 | აკაკი ბელიაშვილის ქუჩა | turn right | 0.23 | capture | — |
+| 636 | (unnamed) | turn right | 0.03 | capture | — |
+| 637 | აკაკი ბაქრაძის ქუჩა | turn right | 0.50 | deadhead | — |
+| 638 | ჯემალ ჭკუასელის ქუჩა | turn left | 0.02 | capture | — |
+| 639 | ჯემალ ჭკუასელის ქუჩა | continue | 0.04 | capture | pass 2 of 2 — left lanes |
+| 640 | აკაკი ბაქრაძის ქუჩა | turn right | 0.01 | deadhead | — |
+| 641 | (unnamed) | U-turn | 0.52 | deadhead | — |
+| 642 | (unnamed) | turn right | 0.52 | capture | — |
+| 643 | აკაკი ბაქრაძის ქუჩა | continue | 0.22 | deadhead | — |
+| 644 | აკაკი ბაქრაძის ქუჩა | continue | 0.03 | capture | — |
+| 645 | აკაკი ბაქრაძის ქუჩა | continue | 0.93 | deadhead | — |
+| 646 | აკაკი ბაქრაძის ქუჩა | continue | 0.02 | capture | — |
+| 647 | აკაკი ბაქრაძის ქუჩა | continue | 0.16 | deadhead | — |
+| 648 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.64 | deadhead | — |
+| 649 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.28 | capture | — |
+| 650 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.80 | deadhead | — |
+| 651 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.19 | capture | — |
+| 652 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.48 | deadhead | — |
+| 653 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.13 | capture | — |
+| 654 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | deadhead | — |
+| 655 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.08 | capture | — |
+| 656 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.90 | deadhead | — |
+| 657 | (unnamed) | continue | 0.14 | capture | — |
+| 658 | (unnamed) | continue | 0.05 | deadhead | — |
+| 659 | გმირთა მოედანი | continue | 0.22 | deadhead | — |
+| 660 | (unnamed) | turn left | 0.10 | deadhead | — |
+| 661 | გმირთა მოედანი | continue | 0.18 | deadhead | — |
+| 662 | (unnamed) | continue | 0.18 | deadhead | — |
+| 663 | (unnamed) | continue | 0.14 | capture | — |
+| 664 | (unnamed) | continue | 0.13 | deadhead | — |
+| 665 | გმირთა მოედანი | continue | 0.22 | deadhead | — |
+| 666 | (unnamed) | turn left | 0.10 | deadhead | — |
+| 667 | გმირთა მოედანი | continue | 0.18 | deadhead | — |
+| 668 | (unnamed) | continue | 0.52 | deadhead | — |
+| 669 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.75 | deadhead | — |
+| 670 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.06 | deadhead | pass 3 of 2 — centre lanes |
+| 671 | გიორგი სააკაძის I გასასვლელი | turn right | 0.16 | capture | — |
+| 672 | (unnamed) | turn left | 0.06 | capture | — |
+| 673 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 2.20 | deadhead | — |
+| 674 | ჰეიდარ ალიევის სახელობის მარჯვენა სანაპირო | continue | 0.18 | capture | — |
+| 675 | მარშალ გელოვანის გამზირი | continue | 0.04 | capture | — |
+| 676 | მარშალ გელოვანის გამზირი | turn right | 0.93 | deadhead | — |
+| 677 | (unnamed) | turn left | 0.13 | capture | — |
+| 678 | (unnamed) | turn right | 0.15 | deadhead | — |
+| 679 | (unnamed) | continue | 0.34 | capture | — |
+| 680 | (unnamed) | turn right | 0.04 | deadhead | — |
+| 681 | აკაკი ბაქრაძის ქუჩა | turn right | 1.06 | deadhead | — |
+| 682 | (unnamed) | turn right | 0.03 | capture | — |
+| 683 | მარშალ გელოვანის გამზირი | continue | 2.25 | deadhead | — |
+| 684 | გრიგოლ რობაქიძის გამზირი | continue | 0.08 | deadhead | — |
+| 685 | გრიგოლ რობაქიძის გამზირი | continue | 0.56 | capture | pass 2 of 2 — left lanes |
+| 686 | გრიგოლ რობაქიძის გამზირი | continue | 0.36 | deadhead | pass 3 of 2 — centre lanes |
+| 687 | გრიგოლ რობაქიძის გამზირი | continue | 0.12 | deadhead | — |
+| 688 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
+| 689 | აკაკი წერეთლის გამზირი | turn right | 0.00 | deadhead | — |
+| 690 | (unnamed) | continue | 0.07 | capture | pass 2 of 2 — left lanes |
+| 691 | (unnamed) | continue | 0.27 | deadhead | — |
+| 692 | კოსმონავტების სანაპირო | continue | 1.01 | deadhead | — |
+| 693 | კოსმონავტების სანაპირო | U-turn | 0.40 | capture | — |
+| 694 | კოსმონავტების სანაპირო | turn right | 0.40 | capture | — |
+| 695 | სამტრედიის ქუჩა | turn right | 0.13 | deadhead | — |
+| 696 | (unnamed) | turn left | 0.04 | capture | — |
+| 697 | (unnamed) | turn right | 0.16 | deadhead | — |
+| 698 | სამტრედიის ქუჩა | U-turn | 0.49 | capture | — |
+| 699 | სამტრედიის ქუჩა | continue | 0.10 | deadhead | — |
+| 700 | სამტრედიის ქუჩა | turn left | 0.36 | capture | — |
+| 701 | რაფიელ აგლაძის ქუჩა | continue | 0.58 | capture | — |
+| 702 | რაფიელ აგლაძის ქუჩა | turn left | 0.34 | deadhead | — |
+| 703 | დავით ბაქრაძის ქუჩა | continue | 0.31 | deadhead | — |
+| 704 | დავით ბაქრაძის ქუჩა | turn left | 0.02 | capture | — |
+| 705 | აკაკი წერეთლის გამზირი | turn left | 0.32 | deadhead | — |
+| 706 | კონსტანტინე სტანისლავსკის ქუჩა | continue | 0.09 | capture | — |
+| 707 | კონსტანტინე სტანისლავსკის ქუჩა | turn right | 0.24 | deadhead | — |
+| 708 | რაფიელ აგლაძის ქუჩა | turn right | 0.83 | capture | — |
+| 709 | ალიო მირცხულავას ქუჩა | turn right | 0.35 | capture | — |
+| 710 | აკაკი წერეთლის გამზირი | turn right | 0.76 | deadhead | — |
+| 711 | კონსტანტინე სტანისლავსკის ქუჩა | U-turn | 0.01 | deadhead | — |
+| 712 | კონსტანტინე სტანისლავსკის ქუჩა | turn left | 0.02 | capture | — |
+| 713 | აკაკი წერეთლის გამზირი | continue | 0.42 | capture | — |
+| 714 | აკაკი წერეთლის გამზირი | turn left | 0.08 | capture | pass 1 of 2 — right lanes |
+| 715 | სამტრედიის ქუჩა | turn left | 0.36 | deadhead | — |
+| 716 | რაფიელ აგლაძის ქუჩა | turn left | 0.58 | deadhead | — |
+| 717 | კონსტანტინე სტანისლავსკის ქუჩა | continue | 0.24 | deadhead | — |
+| 718 | კონსტანტინე სტანისლავსკის ქუჩა | continue | 0.07 | capture | — |
+| 719 | კონსტანტინე სტანისლავსკის ქუჩა | turn left | 0.02 | deadhead | — |
+| 720 | აკაკი წერეთლის გამზირი | continue | 0.42 | deadhead | — |
+| 721 | აკაკი წერეთლის გამზირი | continue | 0.08 | capture | pass 2 of 2 — left lanes |
+| 722 | აკაკი წერეთლის გამზირი | continue | 0.16 | capture | — |
+| 723 | აკაკი წერეთლის გამზირი | continue | 0.11 | deadhead | — |
+| 724 | აკაკი წერეთლის გამზირი | continue | 0.14 | capture | pass 2 of 2 — left lanes |
+| 725 | აკაკი წერეთლის გამზირი | continue | 0.19 | deadhead | — |
+| 726 | აკაკი წერეთლის გამზირი | continue | 0.12 | capture | — |
+| 727 | აკაკი წერეთლის გამზირი | continue | 0.27 | deadhead | — |
+| 728 | ნონა გაფრინდაშვილის ქუჩა | continue | 0.67 | capture | — |
+| 729 | ნონა გაფრინდაშვილის ქუჩა | continue | 0.96 | deadhead | — |
+| 730 | (unnamed) | turn left | 0.08 | deadhead | — |
+| 731 | ნონა გაფრინდაშვილის ქუჩა | turn right | 1.59 | deadhead | — |
+| 732 | აკაკი წერეთლის გამზირი | continue | 0.01 | deadhead | — |
+| 733 | შოთა შალიკაშვილის ხიდი | continue | 0.15 | deadhead | — |
+| 734 | გრიგოლ რობაქიძის გამზირი | turn right | 0.05 | deadhead | — |
+| 735 | აკაკი ბელიაშვილის ქუჩა | continue | 0.26 | deadhead | — |
+| 736 | აკაკი ბელიაშვილის ქუჩა | continue | 0.07 | capture | — |
+| 737 | აკაკი ბელიაშვილის ქუჩა | U-turn | 0.04 | deadhead | — |
+| 738 | აკაკი ბელიაშვილის ქუჩა | continue | 0.05 | deadhead | — |
+| 739 | აკაკი ბელიაშვილის ქუჩა | continue | 0.27 | capture | — |
+| 740 | აკაკი ბელიაშვილის ქუჩა | turn right | 0.04 | deadhead | — |
+| 741 | გრიგოლ რობაქიძის გამზირი | continue | 0.07 | deadhead | — |
+| 742 | გრიგოლ რობაქიძის გამზირი | turn left | 0.30 | capture | pass 2 of 2 — left lanes |
+| 743 | (unnamed) | continue | 0.02 | deadhead | — |
+| 744 | კორნელი ჩალაძის ქუჩა | continue | 0.54 | capture | — |
+| 745 | კორნელი ჩალაძის ქუჩა | turn right | 0.01 | deadhead | — |
+| 746 | მარშალ გელოვანის გამზირი | continue | 2.99 | deadhead | — |
+| 747 | (unnamed) | continue | 0.17 | capture | — |
+| 748 | იური გაგარინის ქუჩა | continue | 0.58 | capture | — |
+| 749 | იური გაგარინის ქუჩა | continue | 0.31 | deadhead | — |
+| 750 | იური გაგარინის ქუჩა | turn right | 0.04 | capture | — |
+| 751 | ზურაბ ჟვანიას მოედანი | continue | 0.02 | capture | — |
+| 752 | ზურაბ ჟვანიას მოედანი | continue | 0.03 | deadhead | — |
+| 753 | ოთარ ონიაშვილის ქუჩა | turn left | 0.69 | capture | — |
+| 754 | (unnamed) | turn right | 0.08 | capture | — |
+| 755 | სიმონ კანდელაკის ქუჩა | turn left | 0.02 | capture | — |
+| 756 | იონა ვაკელის ქუჩა | U-turn | 0.17 | capture | — |
+| 757 | იონა ვაკელის ქუჩა | continue | 0.16 | capture | — |
+| 758 | იონა ვაკელის ქუჩა | turn left | 0.01 | deadhead | — |
+| 759 | სიმონ კანდელაკის ქუჩა | continue | 0.02 | capture | — |
+| 760 | ბუდაპეშტის ქუჩა | turn left | 0.08 | deadhead | — |
+| 761 | (unnamed) | continue | 0.00 | capture | — |
+| 762 | (unnamed) | turn left | 0.04 | deadhead | — |
+| 763 | შალვა ნუცუბიძის ქუჩა | turn right | 0.08 | deadhead | — |
+| 764 | ბუდაპეშტის ქუჩა | continue | 0.06 | capture | — |
+| 765 | ბუდაპეშტის ქუჩა | continue | 0.24 | deadhead | — |
+| 766 | გურამ ფანჯიკიძის ქუჩა | turn left | 0.11 | deadhead | — |
+| 767 | ტაშკენტის ქუჩა | continue | 0.15 | deadhead | — |
+| 768 | ტაშკენტის ქუჩა | continue | 0.16 | capture | — |
+| 769 | ტაშკენტის ქუჩა | turn right | 0.07 | deadhead | — |
+| 770 | ზოვრეთის ქუჩა | turn right | 0.18 | capture | — |
+| 771 | მირზა გელოვანის ქუჩა | turn right | 0.07 | deadhead | — |
+| 772 | ლვოვის ქუჩა | continue | 0.25 | deadhead | — |
+| 773 | ლვოვის ქუჩა | continue | 0.07 | capture | — |
+| 774 | ლვოვის ქუჩა | continue | 0.06 | deadhead | — |
+| 775 | ლვოვის ქუჩა | turn right | 0.07 | capture | — |
+| 776 | მიხეილ ლომონოსოვის ქუჩა | turn right | 0.14 | capture | — |
+| 777 | ვაზისუბნის ქუჩა | turn right | 0.07 | capture | — |
+| 778 | ცხინვალის ქუჩა | continue | 0.15 | capture | — |
+| 779 | ცხინვალის ქუჩა | turn right | 0.16 | deadhead | — |
+| 780 | სიმონ კანდელაკის ქუჩა | continue | 0.08 | deadhead | — |
+| 781 | სიმონ კანდელაკის ქუჩა | turn right | 0.03 | capture | — |
+| 782 | (unnamed) | turn left | 0.08 | deadhead | — |
+| 783 | ოთარ ონიაშვილის ქუჩა | turn right | 0.15 | capture | — |
+| 784 | ბუდაპეშტის ქუჩა | turn right | 0.11 | deadhead | — |
+| 785 | ლვოვის ქუჩა | U-turn | 0.10 | deadhead | — |
+| 786 | ლვოვის ქუჩა | turn left | 0.10 | capture | — |
+| 787 | ბუდაპეშტის ქუჩა | turn right | 0.02 | capture | — |
+| 788 | ავქსენტი მეგრელიძის ქუჩა | turn left | 0.46 | capture | — |
+| 789 | ვახტანგ ჩიქოვანის ქუჩა | turn right | 0.02 | deadhead | — |
+| 790 | ემანუელ აფხაიძეს ქუჩა | continue | 0.11 | capture | — |
+| 791 | ემანუელ აფხაიძეს I შესახვევი | turn left | 0.07 | deadhead | — |
+| 792 | დელისის ქუჩა | turn left | 0.35 | deadhead | — |
+| 793 | შალვა ნუცუბიძის ქუჩა | turn left | 0.26 | deadhead | — |
+| 794 | ვახტანგ ჩიქოვანის ქუჩა | continue | 0.41 | capture | — |
+| 795 | ბუდაპეშტის ქუჩა | turn right | 0.11 | capture | — |
+| 796 | ივანე ბერიტაშვილის ქუჩა | turn left | 0.04 | capture | — |
+| 797 | დავით ართმელიძის ქუჩა | turn left | 0.38 | capture | — |
+| 798 | ომარ ფურცულიანის ქუჩა | U-turn | 0.03 | capture | — |
+| 799 | ომარ ფურცულიანის ქუჩა | turn left | 0.03 | deadhead | — |
+| 800 | ომარ ფურცულიანის ქუჩა | turn left | 0.15 | capture | — |
+| 801 | ნიშრევან ჯიშკარიანის ქუჩა | turn right | 0.03 | deadhead | — |
+| 802 | ნიშრევან ჯიშკარიანის I შესახვევი | U-turn | 0.20 | capture | — |
+| 803 | ნიშრევან ჯიშკარიანის I შესახვევი | turn right | 0.20 | deadhead | — |
+| 804 | ნიშრევან ჯიშკარიანის ქუჩა | U-turn | 0.10 | deadhead | — |
+| 805 | ნიშრევან ჯიშკარიანის ქუჩა | continue | 0.23 | capture | — |
+| 806 | ივანე ბერიტაშვილის ქუჩა | turn left | 0.38 | deadhead | — |
+| 807 | ბუდაპეშტის ქუჩა | U-turn | 0.11 | deadhead | — |
+| 808 | ბუდაპეშტის ქუჩა | turn left | 0.13 | capture | — |
+| 809 | მამია ალასანიას I შესახვევი | turn right | 0.18 | capture | — |
+| 810 | მამია ალასანიას ქუჩა | turn left | 0.04 | capture | — |
+| 811 | ლვოვის II შესახვევი | U-turn | 0.05 | capture | — |
+| 812 | ლვოვის II შესახვევი | turn right | 0.05 | deadhead | — |
+| 813 | მამია ალასანიას ქუჩა | turn left | 0.04 | deadhead | — |
+| 814 | მამია ალასანიას I შესახვევი | turn right | 0.18 | deadhead | — |
+| 815 | ბუდაპეშტის ქუჩა | turn right | 0.05 | deadhead | — |
+| 816 | ბუდაპეშტის I შესახვევი | U-turn | 0.15 | capture | — |
+| 817 | ბუდაპეშტის I შესახვევი | turn right | 0.15 | deadhead | — |
+| 818 | ბუდაპეშტის ქუჩა | U-turn | 0.08 | deadhead | — |
+| 819 | ბუდაპეშტის ქუჩა | turn right | 0.11 | deadhead | — |
+| 820 | ივანე ბერიტაშვილის ქუჩა | turn left | 0.04 | deadhead | — |
+| 821 | ივანე ბერიტაშვილის ქუჩა | turn left | 0.70 | capture | — |
+| 822 | ივანე ბერიტაშვილის III შესახვევი | U-turn | 0.29 | deadhead | — |
+| 823 | ივანე ბერიტაშვილის III შესახვევი | turn left | 0.29 | capture | — |
+| 824 | ივანე ბერიტაშვილის ქუჩა | continue | 0.79 | capture | — |
+| 825 | (unnamed) | continue | 0.07 | capture | — |
+| 826 | (unnamed) | continue | 0.02 | deadhead | — |
+| 827 | მუხრან მაჭავარიანის ქუჩა | turn left | 0.30 | deadhead | — |
+| 828 | (unnamed) | turn right | 0.05 | capture | — |
+| 829 | ცაცხვების I შესახვევი | U-turn | 0.09 | capture | — |
+| 830 | ცაცხვების I შესახვევი | continue | 0.09 | deadhead | — |
+| 831 | ცაცხვების I შესახვევი | turn left | 0.10 | capture | — |
+| 832 | ივანე გვარამიძის ქუჩა | continue | 0.15 | deadhead | — |
+| 833 | მუხრან მაჭავარიანის ქუჩა | continue | 0.06 | deadhead | — |
+| 834 | (unnamed) | continue | 0.07 | capture | — |
+| 835 | ლეო კვაჭაძის ქუჩა | turn left | 0.07 | capture | — |
+| 836 | ტოგო გუდავას ქუჩა | turn right | 0.40 | capture | — |
+| 837 | ბარბარე ყიფიანის ქუჩა | turn right | 0.51 | capture | — |
+| 838 | ლეო კვაჭაძის ქუჩა | continue | 0.22 | deadhead | — |
+| 839 | ლეო კვაჭაძის ქუჩა | continue | 0.02 | capture | — |
+| 840 | (unnamed) | U-turn | 0.08 | capture | — |
+| 841 | (unnamed) | turn right | 0.06 | deadhead | — |
+| 842 | ლისის წრე | continue | 0.02 | deadhead | — |
+| 843 | (unnamed) | continue | 0.05 | deadhead | — |
+| 844 | მუხრან მაჭავარიანის ქუჩა | continue | 0.06 | deadhead | — |
+| 845 | ივანე გვარამიძის ქუჩა | turn right | 0.16 | capture | — |
+| 846 | ცაცხვების II შესახვევი | U-turn | 0.19 | capture | — |
+| 847 | ცაცხვების II შესახვევი | turn right | 0.19 | deadhead | — |
+| 848 | ივანე გვარამიძის ქუჩა | turn right | 0.07 | capture | — |
+| 849 | ცაცხვების III შესახვევი | U-turn | 0.21 | deadhead | — |
+| 850 | ცაცხვების III შესახვევი | turn right | 0.21 | capture | — |
+| 851 | ივანე გვარამიძის ქუჩა | continue | 0.01 | capture | — |
+| 852 | ცაცხვების ქუჩა | turn right | 0.07 | capture | — |
+| 853 | ცაცხვების IV შესახვევი | turn right | 0.25 | capture | — |
+| 854 | ცაცხვების V შესახვევი | U-turn | 0.15 | capture | — |
+| 855 | ცაცხვების V შესახვევი | turn right | 0.15 | deadhead | — |
+| 856 | ცაცხვების IV შესახვევი | turn right | 0.01 | capture | — |
+| 857 | ცაცხვების ქუჩა | turn right | 0.08 | capture | — |
+| 858 | ცაცხვების VII შესახვევი | U-turn | 0.13 | capture | — |
+| 859 | ცაცხვების VII შესახვევი | turn right | 0.13 | deadhead | — |
+| 860 | ცაცხვების ქუჩა | turn right | 0.14 | capture | — |
+| 861 | ცაცხვების IX შესახვევი | turn left | 0.38 | capture | — |
+| 862 | ცაცხვების IX შესახვევი | turn left | 0.21 | deadhead | — |
+| 863 | ცაცხვების ქუჩა | turn right | 0.04 | deadhead | — |
+| 864 | ცაცხვების VIII შესახვევი | continue | 0.43 | capture | — |
+| 865 | ცაცხვების IX შესახვევი | turn left | 0.25 | capture | — |
+| 866 | ცაცხვების IX შესახვევი | turn right | 0.14 | deadhead | — |
+| 867 | ცაცხვების ქუჩა | U-turn | 0.12 | capture | — |
+| 868 | ცაცხვების ქუჩა | U-turn | 0.50 | deadhead | — |
+| 869 | ცაცხვების ქუჩა | turn right | 0.16 | capture | — |
+| 870 | ცაცხვების IV შესახვევი | turn left | 0.25 | deadhead | — |
+| 871 | ცაცხვების ქუჩა | turn right | 0.07 | deadhead | — |
+| 872 | ივანე გვარამიძის ქუჩა | U-turn | 0.17 | capture | — |
+| 873 | ივანე გვარამიძის ქუჩა | turn right | 0.02 | deadhead | — |
+| 874 | მზია ერისთავის ქუჩა | turn left | 0.17 | capture | — |
+| 875 | (unnamed) | U-turn | 0.05 | capture | — |
+| 876 | (unnamed) | continue | 0.05 | deadhead | — |
+| 877 | მზია ერისთავის ქუჩა | U-turn | 0.09 | capture | — |
+| 878 | ლეო კვაჭაძის ქუჩა | continue | 0.13 | deadhead | — |
+| 879 | (unnamed) | turn right | 0.03 | capture | — |
+| 880 | ლისის წრე | turn left | 0.02 | capture | — |
+| 881 | ლისის წრე | turn left | 0.02 | deadhead | — |
+| 882 | ლისის წრე | turn right | 0.02 | capture | — |
+| 883 | (unnamed) | continue | 0.03 | capture | — |
+| 884 | ლეო კვაჭაძის ქუჩა | continue | 0.07 | deadhead | — |
+| 885 | ლეო კვაჭაძის ქუჩა | turn left | 0.44 | capture | — |
+| 886 | ლევან ჩარკვიანის ქუჩა | U-turn | 0.46 | deadhead | — |
+| 887 | ლევან ჩარკვიანის ქუჩა | turn right | 0.46 | deadhead | — |
+| 888 | ლეო კვაჭაძის ქუჩა | continue | 0.51 | deadhead | — |
+| 889 | (unnamed) | turn right | 0.03 | deadhead | — |
+| 890 | ლისის წრე | turn right | 0.02 | deadhead | — |
+| 891 | (unnamed) | U-turn | 0.05 | capture | — |
+| 892 | (unnamed) | continue | 0.02 | deadhead | — |
+| 893 | (unnamed) | turn right | 0.02 | capture | — |
+| 894 | ლისის წრე | turn right | 0.02 | deadhead | — |
+| 895 | (unnamed) | turn right | 0.01 | deadhead | — |
+| 896 | (unnamed) | turn right | 0.01 | capture | — |
+| 897 | ნიკოლოზ დგებუაძის ქუჩა | turn right | 0.24 | capture | — |
+| 898 | ივანე გვარამიძის ქუჩა | turn right | 0.25 | deadhead | — |
+| 899 | (unnamed) | U-turn | 0.05 | capture | — |
+| 900 | (unnamed) | turn right | 0.05 | deadhead | — |
+| 901 | ივანე გვარამიძის ქუჩა | continue | 0.06 | deadhead | — |
+| 902 | მუხრან მაჭავარიანის ქუჩა | continue | 0.06 | deadhead | — |
+| 903 | (unnamed) | continue | 0.02 | deadhead | — |
+| 904 | (unnamed) | turn right | 0.03 | capture | — |
+| 905 | ლისის წრე | turn left | 0.00 | deadhead | — |
+| 906 | ლისის წრე | turn left | 0.01 | capture | — |
+| 907 | ლისის წრე | continue | 0.00 | deadhead | — |
+| 908 | (unnamed) | continue | 0.05 | capture | — |
+| 909 | (unnamed) | U-turn | 0.01 | deadhead | — |
+| 910 | (unnamed) | continue | 0.02 | deadhead | — |
+| 911 | (unnamed) | continue | 0.07 | capture | — |
+| 912 | ივანე ბერიტაშვილის ქუჩა | U-turn | 0.43 | deadhead | — |
+| 913 | ივანე ბერიტაშვილის IV შესახვევი | turn left | 0.04 | capture | — |
+| 914 | ივანე ბერიტაშვილის II ჩიხი | U-turn | 0.07 | capture | — |
+| 915 | ივანე ბერიტაშვილის II ჩიხი | turn right | 0.07 | deadhead | — |
+| 916 | ივანე ბერიტაშვილის IV შესახვევი | continue | 0.04 | deadhead | — |
+| 917 | ივანე ბერიტაშვილის ქუჩა | turn right | 0.29 | deadhead | — |
+| 918 | ივანე ბერიტაშვილის IV შესახვევი | turn right | 0.16 | capture | — |
+| 919 | ივანე ბერიტაშვილის IV შესახვევი | U-turn | 0.04 | deadhead | — |
+| 920 | ივანე ბერიტაშვილის ქუჩა | continue | 0.43 | deadhead | — |
+| 921 | (unnamed) | turn right | 0.04 | deadhead | — |
+| 922 | ლისის წრე | continue | 0.01 | deadhead | — |
+| 923 | (unnamed) | continue | 0.05 | deadhead | — |
+| 924 | მუხრან მაჭავარიანის ქუჩა | turn right | 0.37 | deadhead | — |
+| 925 | (unnamed) | U-turn | 0.96 | capture | — |
+| 926 | (unnamed) | turn left | 0.37 | deadhead | — |
+| 927 | (unnamed) | turn right | 0.16 | capture | — |
+| 928 | ცხინვალის II შესახვევი | U-turn | 0.12 | capture | — |
+| 929 | ცხინვალის II შესახვევი | turn right | 0.12 | deadhead | — |
+| 930 | ცხინვალის II შესახვევი | turn right | 0.06 | capture | — |
+| 931 | ცხინვალის ქუჩა | turn right | 0.09 | capture | — |
+| 932 | ცხინვალის II ჩიხი | U-turn | 0.05 | deadhead | — |
+| 933 | ცხინვალის II ჩიხი | turn right | 0.05 | capture | — |
+| 934 | ცხინვალის ქუჩა | turn left | 0.15 | capture | — |
+| 935 | ცხინვალის I შესახვევი | U-turn | 0.15 | capture | — |
+| 936 | ცხინვალის I შესახვევი | turn left | 0.15 | deadhead | — |
+| 937 | ცხინვალის ქუჩა | turn right | 0.04 | deadhead | — |
+| 938 | ვაზისუბნის ქუჩა | U-turn | 0.12 | deadhead | — |
+| 939 | ვაზისუბნის ქუჩა | turn right | 0.05 | capture | — |
+| 940 | მიხეილ ლომონოსოვის ქუჩა | turn right | 0.14 | deadhead | — |
+| 941 | ლვოვის ქუჩა | turn right | 0.07 | capture | — |
+| 942 | ლვოვის I შესახვევი | U-turn | 0.11 | capture | — |
+| 943 | ლვოვის I შესახვევი | turn right | 0.11 | deadhead | — |
+| 944 | ლვოვის ქუჩა | continue | 0.06 | capture | — |
+| 945 | ლვოვის ქუჩა | U-turn | 0.04 | deadhead | — |
+| 946 | ლვოვის ქუჩა | turn left | 0.04 | capture | — |
+| 947 | მამია ალასანიას ქუჩა | continue | 0.04 | capture | — |
+| 948 | მამია ალასანიას ქუჩა | continue | 0.04 | deadhead | — |
+| 949 | მამია ალასანიას ქუჩა | turn right | 0.03 | capture | — |
+| 950 | ვაზისუბნის ქუჩა | U-turn | 0.12 | capture | — |
+| 951 | ვაზისუბნის ქუჩა | turn right | 0.12 | deadhead | — |
+| 952 | ზემო ვეძისის II ჩიხი | turn right | 0.02 | capture | — |
+| 953 | მამია ალასანიას ქუჩა | turn right | 0.15 | capture | — |
+| 954 | მამია ალასანიას II ჩიხი | U-turn | 0.04 | capture | — |
+| 955 | მამია ალასანიას II ჩიხი | turn right | 0.04 | deadhead | — |
+| 956 | მამია ალასანიას ქუჩა | continue | 0.11 | capture | — |
+| 957 | (unnamed) | U-turn | 0.09 | capture | — |
+| 958 | (unnamed) | continue | 0.09 | deadhead | — |
+| 959 | მამია ალასანიას ქუჩა | turn right | 0.26 | deadhead | — |
+| 960 | ზემო ვეძისის II ჩიხი | U-turn | 0.22 | capture | — |
+| 961 | ზემო ვეძისის II ჩიხი | turn right | 0.24 | deadhead | — |
+| 962 | მამია ალასანიას ქუჩა | turn right | 0.03 | deadhead | — |
+| 963 | მამია ალასანიას I შესახვევი | turn left | 0.18 | deadhead | — |
+| 964 | ბუდაპეშტის ქუჩა | continue | 0.06 | capture | — |
+| 965 | ბუდაპეშტის ქუჩა | continue | 0.02 | deadhead | — |
+| 966 | ბუდაპეშტის ქუჩა | U-turn | 0.22 | capture | — |
+| 967 | შალვა ნუცუბიძის ქუჩა | continue | 0.08 | capture | — |
+| 968 | შალვა ნუცუბიძის ქუჩა | continue | 0.51 | deadhead | — |
+| 969 | შალვა ნუცუბიძის ქუჩა | continue | 0.13 | capture | — |
+| 970 | შალვა ნუცუბიძის ქუჩა | turn right | 1.53 | deadhead | — |
+| 971 | რამაზ ჩხიკვაძის ქუჩა | continue | 1.31 | deadhead | — |
 
-*947 instructions folded from 3,789 arc traversals. Generated by `efficientroute stage5`; every arc is from the base network.*
+*971 instructions folded from 3,789 arc traversals. Generated by `efficientroute stage5`; every arc is from the base network.*

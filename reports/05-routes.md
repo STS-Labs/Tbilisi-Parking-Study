@@ -206,8 +206,8 @@ right.
 | `reports/05-routes/day-NN.md` | 47 | turn-by-turn sheet, straight runs folded into one line |
 | `data/derived/05-routes.gpkg` | 113,013 | every manoeuvre, in order, with its mode and lane instruction |
 
-**Lane instructions (invariant I8).** 5,329 arc-days need two same-direction
-passes, and 7,892 traversals carry an explicit lane group. SPEC §2.3: without
+**Lane instructions (invariant I8).** 974 arc-days need two same-direction
+passes, and 2,787 traversals carry an explicit lane group. SPEC §2.3: without
 it the driver repeats the same lane and the second pass is wasted footage. Georgia
 drives on the right, so pass 1 takes the kerb side and pass 2 the offside.
 

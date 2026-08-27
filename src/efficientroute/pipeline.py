@@ -1170,6 +1170,37 @@ def run_stage4c() -> dict:
     return payload
 
 
+def run_stage7() -> dict:
+    """Stage 7 — build the playback data for every solved day."""
+    from . import dashboard, timemodel
+
+    started = time.time()
+    for required in (C.ROUTES_GPKG, C.NETWORK_GPKG):
+        if not required.exists():
+            raise FileNotFoundError(f"{required} missing — Stage 7 consumes Stage 5")
+
+    manoeuvres = gpd.read_file(C.ROUTES_GPKG, layer=C.ROUTES_LAYER)
+    arcs = gpd.read_file(C.NETWORK_GPKG, layer=C.NETWORK_LAYER)
+    model = timemodel.load_model()
+    _log(f"{len(manoeuvres):,} manoeuvres over {manoeuvres['day'].nunique()} days")
+
+    summaries = dashboard.build_days(manoeuvres, arcs, model)
+    _log(f"wrote {len(summaries)} day files to {C.PLAYBACK_DATA_DIR}")
+
+    scoped = scenarios.apply_variant(arcs, C.SCOPE_VARIANT)
+    routable = scoped[(~scoped["excluded"]) & (scoped["in_largest_scc"])]
+    network = dashboard.build_network(routable)
+    _log(f"network context: {network['lines']:,} lines, "
+         f"{network['vertices']:,} vertices, {network['bytes'] / 1e6:.1f} MB")
+
+    dashboard.build_index(summaries, network)
+    total = sum(p.stat().st_size for p in C.PLAYBACK_DATA_DIR.glob("*.json"))
+    _log(f"playback total {total / 1e6:.1f} MB — open {C.PLAYBACK_INDEX}")
+    _log(f"done in {time.time() - started:.0f}s")
+    return {"days": summaries, "network": network,
+            "bytes": total, "meta": {"runtime_s": round(time.time() - started, 1)}}
+
+
 def run_stage6(day: int, trace_path, date: str | None = None,
                replan: bool = False, replay: bool = False) -> dict:
     """Stage 6 — ingest a day's trace, recompute what is left, re-plan the rest.
@@ -1854,6 +1885,13 @@ def run_stage5() -> dict:
     length_m = rows["length_m"].to_numpy(dtype="float64")
     zone_graph = zoning.build(graph, keep, capture_s, length_m)
     oriented = orientation.orient(graph.arc_index, keep=keep)
+    # Stage 6's remainder, applied *here* rather than to the labels downstream: the
+    # zone solves below read `oriented.lower`, so reducing anything later would
+    # relabel a plan that had already been routed over the full requirement.
+    _reduced, scope_note = _outstanding_passes(graph.arc_index, oriented.lower)
+    if not np.array_equal(_reduced, oriented.lower):
+        oriented = dataclasses.replace(oriented, lower=_reduced)
+    _log(f"  {scope_note}")
 
     depot_node, depot_arc, depot_offset = depotlegs.find_depot_node(frame, graph)
     arrays = depotlegs.manoeuvre_arrays(graph)
@@ -1992,12 +2030,15 @@ def _write_stage5_outputs(
     lengths = dict(zip(frame["arc_id"].astype(str), frame["length_m"].astype(float)))
     speeds = dict(zip(frame["arc_id"].astype(str), frame["capture_speed_kmh"].astype(float)))
     exit_s = lowerbound.min_exit_s(graph)
-    required_passes = oriented.lower[: star.n_arc_nodes]
-    required_passes, scope_note = _outstanding_passes(
-        graph.arc_index.iloc[: star.n_arc_nodes], required_passes
-    )
-    _log(f"  {scope_note}")
-
+    # NOT `oriented.lower`. That is the *campaign's* requirement; what a given day
+    # captures is its own zone's share of it, which is what `tourcheck.tour_time_s`
+    # prices against. Using the global figure labelled 35% of capture manoeuvres as
+    # capture on arcs belonging to other days' zones — arcs this day merely
+    # repositions across, and which Stage 5 costed as uncapped deadhead. The
+    # GeoPackage and the turn sheets then told the driver to hold 40 km/h on legs the
+    # plan had funded at deadhead speed, which is about an hour a day the schedule
+    # never allowed for. Each route carries the lower bound it was actually solved
+    # against; use that.
     # The same depot legs Stage 4 sizes with — cheapest in and out, minimised over
     # the zone's segments — so that the overhead measured below is on exactly the
     # footing Stage 4's cost model puts it on.
@@ -2008,6 +2049,7 @@ def _write_stage5_outputs(
     for route in day_routes:
         day = route.to_dict()
         day.update(_day_legs(zone_graph, labels, route.zone, leg_out_s, leg_back_s))
+        required_passes = route.lower[: star.n_arc_nodes]
         steps = routeio.annotate(route.tour, star, graph, required_passes)
         day["lane_instructions"] = sum(1 for s in steps if s["lane_instruction"])
         day["multi_pass_arcs"] = int(

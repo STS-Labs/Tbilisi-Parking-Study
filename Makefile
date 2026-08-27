@@ -7,7 +7,7 @@
 # with PYTHONPATH, which does not consult the editable install at all.
 RUN = PYTHONPATH=src uv run python -m efficientroute
 
-.PHONY: setup stage0 stage0b stage1 stage2 stage3 stage4 stage4b stage4c stage5 stage6 test gate gate1 gate2 gate3 gate4 gate4b gate4c gate5 gate6 all clean-derived
+.PHONY: setup stage0 stage0b stage1 stage2 stage3 stage4 stage4b stage4c stage5 stage6 stage7 stage7-embed test gate gate1 gate2 gate3 gate4 gate4b gate4c gate5 gate6 gate7 all clean-derived
 
 setup:
 	uv sync
@@ -38,6 +38,13 @@ stage5: setup
 
 stage4c: setup
 	$(RUN) stage4c
+
+stage7: setup
+	$(RUN) stage7
+
+# make stage7-embed DAY=1
+stage7-embed: setup
+	$(RUN) stage7-embed --day $(DAY)
 
 # Stage 6 takes a day and a trace:  make stage6 DAY=1 TRACE=reports/05-routes/day-01.gpx
 stage6: setup
@@ -72,6 +79,9 @@ gate5: setup
 
 gate6: setup
 	uv run pytest -q -m gate6
+
+gate7: setup
+	uv run pytest -q -m gate7
 
 all: stage0 gate stage1 gate1 stage0b stage2 gate2 stage3 gate3 stage4 gate4 stage4b gate4b stage5 gate5
 

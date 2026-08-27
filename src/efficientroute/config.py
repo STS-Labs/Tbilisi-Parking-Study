@@ -678,6 +678,29 @@ RECHECK_JSON = DERIVED / "04b-recheck.json"
 RECHECK_REPORT_MD = REPORTS / "04b-recheck.md"
 
 
+# ============================================ Stage 7 — animated playback
+
+PLAYBACK_DIR = REPORTS / "07-playback"
+PLAYBACK_DATA_DIR = PLAYBACK_DIR / "data"
+PLAYBACK_INDEX = PLAYBACK_DIR / "index.html"
+
+#: Douglas-Peucker tolerance for the driven route, in metres. The renderer draws
+#: at roughly 1 m per pixel when fully zoomed in, so 2 m is already below what can
+#: be seen — and the gate asserts the actual deviation rather than trusting this.
+PLAYBACK_SIMPLIFY_M = 2.0
+
+#: The same, for the context network. Drawn as thin grey lines behind everything at
+#: whole-city zoom, where a metre is far under a pixel, so it can be cut much harder.
+NETWORK_SIMPLIFY_M = 8.0
+
+#: Coordinates are rounded to this many decimal places. Five is about 1 m at
+#: Tbilisi's latitude, and halves the file size against the full float.
+PLAYBACK_COORD_DP = 5
+
+#: The playback clock starts here, matching SPEC §5's shift window.
+PLAYBACK_START_S = 9 * 3600
+
+
 # ============================================ Stage 6 — coverage tracker
 
 #: SPEC §10.3's ±T. A traversal counts only if the matched heading agrees with the

@@ -14,7 +14,7 @@ before the next stage starts.
 | 4c | Re-zone on measured overhead | 5 | **done** |
 | 5 | Route solve + GPX | 4 | after Stage 4 |
 | 6 | Coverage tracker & re-planner | 5 | **done** |
-| 7 | Dashboard | 6 | after Stage 6 |
+| 7 | Animated route playback | 5, 6 | **done** |
 
 Stages 2–7 are deliberately unwritten. Their prompts depend on real measured
 values — network size, tagging completeness, zone counts — that Stage 0 and

@@ -16,6 +16,8 @@ make stage4b    # re-test variant D, dispose of the trapped mainlines
 make stage4c    # compare the re-zoned plan against the committed one
 make stage5     # solve one route per driving day -> GPX + turn sheets
 make stage6 DAY=1 TRACE=... # ingest a day's trace, recompute coverage, re-plan
+make stage7     # build the animated route playback
+make stage7-embed DAY=3     # one day as a single shareable file
 make test       # unit tests
 make gate       # Stage 0 gate assertions
 make gate1      # Stage 1 gate assertions
@@ -26,6 +28,7 @@ make gate4b     # Stage 4b gate assertions
 make gate4c     # Stage 4c gate assertions
 make gate5      # Stage 5 gate assertions
 make gate6      # Stage 6 gate assertions
+make gate7      # Stage 7 gate assertions
 ```
 
 Outputs:
@@ -74,6 +77,9 @@ Outputs:
 | `data/derived/06-outstanding.json` | what the campaign still owes — Stages 4 and 5 read it |
 | `data/derived/06-exceptions.csv` | the exceptions register — hand-edited by the driver |
 | `reports/06-day-NN.md` | the Stage 6 day report |
+| `reports/07-playback/index.html` | the animated route playback |
+| `reports/07-playback/data/` | one JSON per day, plus the network basemap |
+| `reports/07-playback/day-NN-embed.html` | one day, self-contained, works offline |
 
 Re-running is cheap: the PBF read is cached, so only the arc table, report and
 map are rebuilt. `make stage0` after `rm data/derived/00-extract.pkl.gz`, or
@@ -162,3 +168,28 @@ Three things the stage will tell you that are worth acting on:
 
 No real trace has been ingested yet, so `data/derived/06-*` does not exist. The
 stage is built and gated against synthetic replays of solved days.
+
+## Stage 7 — watching the plan
+
+`make stage7`, then open `reports/07-playback/index.html` (through any static
+server — the browser will not `fetch` from `file://`). `make stage7-embed DAY=n`
+inlines one day into a single file that opens straight off disk with no server and
+no network at all.
+
+No libraries: plain canvas 2D, a hand-rolled Web Mercator projection, and the
+street network drawn as thin grey lines *as* the basemap. That is what keeps the
+page free of tiles, fonts and CDNs, and what lets the embed be sent to someone.
+
+**It is a verification tool, not a presentation.** 947 tests prove the plan is
+legal; nothing proves it is sensible. Two things were visible within a minute of
+watching that no report had made obvious:
+
+- On day 3 the car drives **52 km of depot legs against 84 km of capture** — it
+  crosses the whole city, works a patch at the eastern edge, and crosses back. The
+  depot on the western edge (SPEC §7.1) costs 1,288 km and 27.6 h over the
+  campaign, 8.6% of all driving.
+- Those legs run over streets the campaign has to capture anyway: **265 km of
+  distinct arcs are crossed before the day that captures them**. Capturing en route
+  would save the wasted deadhead traversal, about **6.0 h** — below the ~12 h Stage
+  5 estimated, because the legs share corridors and the double-count is smaller
+  than it looks.

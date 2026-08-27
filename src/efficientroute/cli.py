@@ -26,6 +26,10 @@ def main(argv: list[str] | None = None) -> int:
         help="re-render reports/05-routes.md from the existing artifact",
     )
     sub.add_parser("stage4b", help="re-test variant D, dispose of the trapped mainlines")
+    sub.add_parser("stage7", help="build the animated route playback")
+    embed = sub.add_parser("stage7-embed", help="one day as a single self-contained file")
+    embed.add_argument("--day", type=int, required=True)
+    embed.add_argument("--out", default=None)
     stage6 = sub.add_parser("stage6", help="ingest a day's trace and re-plan the rest")
     stage6.add_argument("--day", type=int, required=True, help="campaign day number")
     stage6.add_argument("--trace", required=True, help="the day's GPS trace")
@@ -97,6 +101,17 @@ def main(argv: list[str] | None = None) -> int:
         )
         if t["days_over_window"]:
             print(f"  {t['days_over_window']} days exceed their window")
+        return 0
+    if args.command == "stage7":
+        payload = pipeline.run_stage7()
+        print(f"  {len(payload['days'])} days, {payload['bytes'] / 1e6:.1f} MB → "
+              f"open {__import__('efficientroute.config', fromlist=['x']).PLAYBACK_INDEX}")
+        return 0
+    if args.command == "stage7-embed":
+        from efficientroute import config as _C, dashboard
+        out = args.out or (_C.PLAYBACK_DIR / f"day-{args.day:02d}-embed.html")
+        path = dashboard.embed(args.day, out)
+        print(f"  wrote {path} ({path.stat().st_size / 1e6:.1f} MB, self-contained)")
         return 0
     if args.command == "stage6":
         payload = pipeline.run_stage6(args.day, args.trace, args.date, args.replan,
