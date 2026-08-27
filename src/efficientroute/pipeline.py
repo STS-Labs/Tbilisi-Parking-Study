@@ -144,7 +144,8 @@ def rebuild_arc_table():
     """
     extract = X.load_extract(C.EXTRACT_PATH)
     sampler, _ = ensure_dem(extract.clip.bounds)
-    table = network.build_arc_table(extract, sampler=sampler)
+    table = network.build_arc_table(extract, sampler=sampler,
+                                    required_boundary=C.REQUIRED_BOUNDARY_PATH)
     if C.TIME_MODEL_JSON.exists():
         table = timemodel.augment(table, timemodel.load_model())
     return table
@@ -159,7 +160,8 @@ def run(force_extract: bool = False) -> dict:
     sampler, tiles = ensure_dem(clip.bounds)
 
     _log("building the directed arc table")
-    table = network.build_arc_table(extract, sampler=sampler)
+    table = network.build_arc_table(extract, sampler=sampler,
+                                    required_boundary=C.REQUIRED_BOUNDARY_PATH)
     _log(f"{len(table):,} directed arcs")
 
     network.write_gpkg(table, C.NETWORK_GPKG)

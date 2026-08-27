@@ -41,7 +41,7 @@ COLUMNS: tuple[str, ...] = (
 )
 
 
-def _columns() -> tuple[str, ...]:
+def _columns(required_boundary=None) -> tuple[str, ...]:
     """The column order this run writes.
 
     `in_required_area` is appended **only** when a required-area boundary is
@@ -50,13 +50,14 @@ def _columns() -> tuple[str, ...]:
     a column nobody asked for is still a different file. Where required is the whole
     clip the flag carries no information anyway.
     """
-    if C.REQUIRED_BOUNDARY_PATH is None:
+    if required_boundary is None:
         return COLUMNS
     return COLUMNS[:-1] + ("in_required_area", "geometry")
 
 
 def build_arc_table(
-    extract: X.Extract, sampler: D.BilinearSampler | None = None
+    extract: X.Extract, sampler: D.BilinearSampler | None = None,
+    required_boundary=None,
 ) -> gpd.GeoDataFrame:
     """Turn an `Extract` into the canonical directed-arc table."""
     way_nodes = {way_id: way.node_ids for way_id, way in extract.ways.items()}
@@ -159,15 +160,15 @@ def build_arc_table(
 
     frame = _attach_gradient(frame, sampler)
     frame = _attach_components(frame)
-    frame = _attach_required_area(frame)
+    frame = _attach_required_area(frame, required_boundary)
 
     gdf = gpd.GeoDataFrame(
         frame.drop(columns="_geometry"), geometry=frame["_geometry"].tolist(), crs="EPSG:4326"
     )
-    return gdf[list(_columns())]
+    return gdf[list(_columns(required_boundary))]
 
 
-def _attach_required_area(frame: pd.DataFrame) -> pd.DataFrame:
+def _attach_required_area(frame: pd.DataFrame, boundary) -> pd.DataFrame:
     """Split *required* from *routable* — SPEC's Rural Postman case, finally used.
 
     With no required boundary configured every included arc is required, which is
@@ -181,20 +182,24 @@ def _attach_required_area(frame: pd.DataFrame) -> pd.DataFrame:
     leaves the deadhead edge alone — which is exactly the structure wanted, and it
     means orientation, the LP bound, the flow and the Euler tour all need no change.
 
+    Taken as an argument rather than read from `config` because this is otherwise a
+    pure function of the extract, and a module-level default would make a toy arc
+    table built in a unit test depend on which campaign's environment happened to be
+    set. The pipeline passes `config.REQUIRED_BOUNDARY_PATH`; everything else gets
+    the Chinese Postman behaviour it had before.
+
     Midpoint rather than any-intersection because a rule has to be decidable and
     stable: an arc straddling the line belongs to exactly one side either way, and
     the length sitting close enough to the line for the choice to be arguable is
     measured and reported rather than argued about.
     """
     frame["in_required_area"] = True
-    if C.REQUIRED_BOUNDARY_PATH is None:
+    if boundary is None:
         return frame
-    if not Path(C.REQUIRED_BOUNDARY_PATH).exists():
-        raise FileNotFoundError(
-            f"{C.REQUIRED_BOUNDARY_PATH} missing — required-area boundary not built"
-        )
+    if not Path(boundary).exists():
+        raise FileNotFoundError(f"{boundary} missing — required-area boundary not built")
 
-    zone = gpd.read_file(C.REQUIRED_BOUNDARY_PATH).to_crs("EPSG:4326").union_all()
+    zone = gpd.read_file(boundary).to_crs("EPSG:4326").union_all()
     midpoints = gpd.GeoSeries(
         [g.interpolate(0.5, normalized=True) for g in frame["_geometry"]],
         crs="EPSG:4326",

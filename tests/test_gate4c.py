@@ -36,6 +36,17 @@ def _quantile(values: list[float], p: float) -> float:
     return ordered[low] + (ordered[high] - ordered[low]) * (index - low)
 
 
+@pytest.fixture(scope="module", autouse=True)
+def _requires_stage_4c():
+    """Stage 4c is a re-zoning *comparison*; a campaign that never ran it has
+    nothing to compare. Its baselines are the marker that it did."""
+    if not (C.BASELINE_ZONES_JSON.exists() and C.BASELINE_ROUTES_JSON.exists()):
+        pytest.skip(
+            "no Stage 4c baseline for this campaign — the sizing was never re-derived "
+            "here, so there is no calibrated-overhead claim to check"
+        )
+
+
 @pytest.fixture(scope="module")
 def zoning_payload() -> dict:
     if not C.ZONES_JSON.exists():

@@ -165,7 +165,7 @@ def write_summary(data: dict, verification: dict, path: Path | None = None) -> P
         f">\n"
         f"> **{_h(z5['route_h'])} h** of driving — {_h(z5['capture_h'])} h capture,\n"
         f"> {_h(z5['deadhead_h'])} h deadhead, {_h(z5['turn_h'])} h turns — to cover\n"
-        f"> **{_h(zc)} km** of required traversal inside a {ra['included_km'] / 1000:.1f}k km\n"
+        f"> **{_h(zc)} km** of required traversal inside a {_h(ra['included_km'])} km\n"
         f"> drivable clip. No day exceeds its window.\n"
         f">\n"
         f"> **{_h(rec['customer']['unmatched_km'])} km of the customer's own streets are\n"
