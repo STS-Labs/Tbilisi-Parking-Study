@@ -63,6 +63,8 @@ def main(argv: list[str] | None = None) -> int:
     zone.add_argument("--shapefile", required=True)
     zone.add_argument("--name", default=None, help="value of the name column to select")
     zone.add_argument("--out", default=None)
+    sub.add_parser("custom-report",
+                   help="render the reconciliation and campaign summary")
     sub.add_parser("stage7", help="build the animated route playback")
     embed = sub.add_parser("stage7-embed", help="one day as a single self-contained file")
     embed.add_argument("--day", type=int, required=True)
@@ -146,6 +148,16 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {k:>16}: {v}")
         for k, v in customzone.depot_check(info["path"]).items():
             print(f"  depot {k:>10}: {v}")
+        return 0
+    if args.command == "custom-report":
+        import json as _json
+
+        from efficientroute import config as _C
+        from efficientroute import reportcustom as R
+        data = R.gather()
+        print(f"  wrote {R.write_reconciliation(data)}")
+        verification = _json.loads((_C.DERIVED / "CUSTOM-verification.json").read_text())
+        print(f"  wrote {R.write_summary(data, verification)}")
         return 0
     if args.command == "stage7":
         payload = pipeline.run_stage7()
