@@ -41,6 +41,20 @@ COLUMNS: tuple[str, ...] = (
 )
 
 
+def _columns() -> tuple[str, ...]:
+    """The column order this run writes.
+
+    `in_required_area` is appended **only** when a required-area boundary is
+    configured. Adding it unconditionally would change the Tbilisi `arcs` layer and
+    that plan is committed: its GeoPackage has to keep rebuilding byte for byte, and
+    a column nobody asked for is still a different file. Where required is the whole
+    clip the flag carries no information anyway.
+    """
+    if C.REQUIRED_BOUNDARY_PATH is None:
+        return COLUMNS
+    return COLUMNS[:-1] + ("in_required_area", "geometry")
+
+
 def build_arc_table(
     extract: X.Extract, sampler: D.BilinearSampler | None = None
 ) -> gpd.GeoDataFrame:
@@ -145,11 +159,56 @@ def build_arc_table(
 
     frame = _attach_gradient(frame, sampler)
     frame = _attach_components(frame)
+    frame = _attach_required_area(frame)
 
     gdf = gpd.GeoDataFrame(
         frame.drop(columns="_geometry"), geometry=frame["_geometry"].tolist(), crs="EPSG:4326"
     )
-    return gdf[list(COLUMNS)]
+    return gdf[list(_columns())]
+
+
+def _attach_required_area(frame: pd.DataFrame) -> pd.DataFrame:
+    """Split *required* from *routable* — SPEC's Rural Postman case, finally used.
+
+    With no required boundary configured every included arc is required, which is
+    what Tbilisi did and what quietly reduced the problem to a Chinese Postman. Give
+    it a polygon and an arc is required only if its **midpoint** falls inside; the
+    rest of the clip stays perfectly legal to drive and simply never needs filming.
+
+    The mechanism is `min_passes = 0`, not a new flag the solver has to learn.
+    `lstar` gives each arc a capture edge with `lower = upper = min_passes` and a
+    separate uncapped deadhead edge, so zeroing it pins the capture edge shut and
+    leaves the deadhead edge alone — which is exactly the structure wanted, and it
+    means orientation, the LP bound, the flow and the Euler tour all need no change.
+
+    Midpoint rather than any-intersection because a rule has to be decidable and
+    stable: an arc straddling the line belongs to exactly one side either way, and
+    the length sitting close enough to the line for the choice to be arguable is
+    measured and reported rather than argued about.
+    """
+    frame["in_required_area"] = True
+    if C.REQUIRED_BOUNDARY_PATH is None:
+        return frame
+    if not Path(C.REQUIRED_BOUNDARY_PATH).exists():
+        raise FileNotFoundError(
+            f"{C.REQUIRED_BOUNDARY_PATH} missing — required-area boundary not built"
+        )
+
+    zone = gpd.read_file(C.REQUIRED_BOUNDARY_PATH).to_crs("EPSG:4326").union_all()
+    midpoints = gpd.GeoSeries(
+        [g.interpolate(0.5, normalized=True) for g in frame["_geometry"]],
+        crs="EPSG:4326",
+    )
+    inside = midpoints.within(zone).to_numpy()
+    frame["in_required_area"] = inside
+
+    # Requirement is carried by `min_passes` and, for a narrow pair, by
+    # `pair_requirement` on the representative. Both have to go, or the pair rule
+    # re-introduces the arc through its twin.
+    frame.loc[~inside, "min_passes"] = 0
+    frame.loc[~inside, "pair_requirement"] = 0
+    frame.loc[~inside, "min_passes_basis"] = "outside_required_area"
+    return frame
 
 
 def _f(value) -> float:

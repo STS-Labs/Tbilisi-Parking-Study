@@ -8,18 +8,56 @@ constant implements.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 # --------------------------------------------------------------------------- paths
 
 ROOT = Path(__file__).resolve().parents[2]
+
+#: Where this run writes. One codebase, several campaigns: set
+#: `EFFICIENTROUTE_OUTPUT_ROOT` (or `--output-root`) and every derived artifact,
+#: report and survey moves with it, while the code and the downloaded sources stay
+#: put.
+#:
+#: Read from the environment at *import* rather than rebound later, because a
+#: dozen `write(..., path=C.SOMETHING)` signatures bind their default argument when
+#: the module is first imported. Rebinding afterwards would redirect most of the
+#: pipeline and silently leave those writing into the wrong campaign.
+OUTPUT_ROOT = Path(os.environ.get("EFFICIENTROUTE_OUTPUT_ROOT", ROOT)).resolve()
+
+#: `data/raw/` is deliberately *not* under `OUTPUT_ROOT`. The PBF is 97 MB and the
+#: DEM tiles more; every campaign in the same country reads the same ones, and a
+#: second run has no business re-downloading or rewriting them.
 RAW = ROOT / "data" / "raw"
-DERIVED = ROOT / "data" / "derived"
-REPORTS = ROOT / "reports"
+
+DERIVED = OUTPUT_ROOT / "data" / "derived"
+REPORTS = OUTPUT_ROOT / "reports"
 
 PBF_URL = "https://download.geofabrik.de/europe/georgia-latest.osm.pbf"
 PBF_PATH = RAW / "georgia-latest.osm.pbf"
-BOUNDARY_PATH = RAW / "tbilisi-boundary.geojson"
+#: The clip boundary. The default stays in `data/raw/` where the Tbilisi run cached
+#: it — moving it would make Stage 0 re-derive the relation from the PBF and write a
+#: different manifest, so the committed plan would stop regenerating byte-identically.
+#: Overridable so a customer polygon can replace the OSM administrative relation.
+BOUNDARY_PATH = Path(
+    os.environ.get("EFFICIENTROUTE_BOUNDARY", RAW / "tbilisi-boundary.geojson")
+)
+
+#: The polygon that defines the **required** set, when it is narrower than the clip.
+#:
+#: Unset — the Tbilisi case — means required is everything in the clip, which
+#: quietly reduces the problem to a Chinese Postman. Set it and an arc is required
+#: only if its midpoint falls inside, while everything else in the clip stays
+#: legal to drive: a genuine Rural Postman instance.
+REQUIRED_BOUNDARY_PATH = (
+    Path(os.environ["EFFICIENTROUTE_REQUIRED_BOUNDARY"])
+    if os.environ.get("EFFICIENTROUTE_REQUIRED_BOUNDARY") else None
+)
+
+#: How close to the required boundary an arc has to be for the midpoint rule to be
+#: arguable. Reported, never acted on — it is where a customer dispute lands.
+REQUIRED_BOUNDARY_MARGIN_M = 50.0
 DEM_DIR = RAW / "dem"
 
 EXTRACT_PATH = DERIVED / "00-extract.pkl.gz"
@@ -247,7 +285,7 @@ TURN_REPORT_MD = REPORTS / "01-turn-audit.md"
 TURN_REPORT_HTML = REPORTS / "01-turn-graph.html"
 #: Hand-authored human verification — the one non-regenerable input in the repo,
 #: which is why it lives outside `reports/` (see CLAUDE.md on regenerable dirs).
-SURVEYS = ROOT / "surveys"
+SURVEYS = OUTPUT_ROOT / "surveys"
 SPOTCHECK_PATH = SURVEYS / "01-junction-spotchecks.json"
 
 

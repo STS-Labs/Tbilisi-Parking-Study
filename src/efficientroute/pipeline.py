@@ -186,6 +186,15 @@ def run(force_extract: bool = False) -> dict:
     )
 
     summary = stats.compute(table, extract, meta)
+    if C.REQUIRED_BOUNDARY_PATH is not None:
+        summary["required_area"] = _required_area_split(table)
+        split = summary["required_area"]
+        _log(f"  required {split['required_km']:,.1f} km of "
+             f"{split['included_km']:,.1f} km included "
+             f"({split['required_share_pct']:.1f}%)")
+        _log(f"  {split['near_boundary_km']:,.2f} km sits within "
+             f"{C.REQUIRED_BOUNDARY_MARGIN_M:.0f} m of the zone edge, where the "
+             "midpoint rule is arguable")
     if C.SERVICE_SCENARIOS_JSON.exists():
         summary["service_scenarios"] = json.loads(C.SERVICE_SCENARIOS_JSON.read_text())
     C.STATS_JSON.parent.mkdir(parents=True, exist_ok=True)
@@ -199,6 +208,44 @@ def run(force_extract: bool = False) -> dict:
 
     _log(f"done in {time.time() - started:.0f}s")
     return summary
+
+
+def _required_area_split(table) -> dict:
+    """How much of the clip must actually be filmed, and how arguable the edge is.
+
+    The near-boundary figure is the honest part. An arc is required on its midpoint,
+    so one lying along the zone edge lands on one side for a reason nobody outside
+    this code would predict — and that is precisely where a customer looks when they
+    ask why a street they paid for was not driven. Measuring it does not make the
+    rule less arbitrary; it makes the size of the arbitrariness known.
+    """
+    import geopandas as gpd
+
+    metric = table.to_crs(C.METRIC_CRS)
+    included = ~table["excluded"].to_numpy()
+    required = table["in_required_area"].to_numpy() & included
+    length_km = metric.length.to_numpy() / 1000.0
+
+    zone = gpd.read_file(C.REQUIRED_BOUNDARY_PATH).to_crs(C.METRIC_CRS).union_all()
+    edge = zone.exterior if hasattr(zone, "exterior") else zone.boundary
+    near = metric.distance(edge).to_numpy() <= C.REQUIRED_BOUNDARY_MARGIN_M
+
+    return {
+        "boundary": str(C.REQUIRED_BOUNDARY_PATH),
+        "margin_m": C.REQUIRED_BOUNDARY_MARGIN_M,
+        "included_arcs": int(included.sum()),
+        "required_arcs": int(required.sum()),
+        "buffer_only_arcs": int((included & ~table["in_required_area"].to_numpy()).sum()),
+        "included_km": round(float(length_km[included].sum()), 3),
+        "required_km": round(float(length_km[required].sum()), 3),
+        "buffer_only_km": round(float(length_km[included & ~required].sum()), 3),
+        "required_share_pct": round(
+            100.0 * length_km[required].sum() / max(length_km[included].sum(), 1e-9), 2
+        ),
+        "near_boundary_km": round(float(length_km[near & included].sum()), 3),
+        "near_boundary_arcs": int((near & included).sum()),
+        "near_boundary_required_km": round(float(length_km[near & required].sum()), 3),
+    }
 
 
 def _invalidate_stage2() -> None:

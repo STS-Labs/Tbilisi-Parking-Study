@@ -7,7 +7,39 @@ import argparse
 from . import pipeline
 
 
+from pathlib import Path
+
+
+def _apply_output_root(argv):
+    """Honour `--output-root` before anything imports `config`.
+
+    `config` reads the environment when it is first imported, because a dozen
+    `write(..., path=C.SOMETHING)` signatures bind their default argument at import
+    time. By the time `main()` runs it is far too late to change where the run
+    writes, so this re-executes the process with the variable set — which costs one
+    interpreter start and makes the flag mean exactly what the environment variable
+    means, rather than almost.
+    """
+    import os
+    import sys
+
+    if "--output-root" not in argv:
+        return argv
+    index = argv.index("--output-root")
+    if index + 1 >= len(argv):
+        raise SystemExit("--output-root needs a path")
+    root = str(Path(argv[index + 1]).expanduser().resolve())
+    rest = argv[:index] + argv[index + 2:]
+    if os.environ.get("EFFICIENTROUTE_OUTPUT_ROOT") == root:
+        return rest
+    os.environ["EFFICIENTROUTE_OUTPUT_ROOT"] = root
+    os.execv(sys.executable, [sys.executable, "-m", "efficientroute", *rest])
+
+
 def main(argv: list[str] | None = None) -> int:
+    import sys
+
+    argv = _apply_output_root(list(sys.argv[1:] if argv is None else argv))
     parser = argparse.ArgumentParser(prog="efficientroute")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -26,6 +58,11 @@ def main(argv: list[str] | None = None) -> int:
         help="re-render reports/05-routes.md from the existing artifact",
     )
     sub.add_parser("stage4b", help="re-test variant D, dispose of the trapped mainlines")
+    zone = sub.add_parser("prepare-zone",
+                          help="write a customer polygon as the Stage 0 boundary")
+    zone.add_argument("--shapefile", required=True)
+    zone.add_argument("--name", default=None, help="value of the name column to select")
+    zone.add_argument("--out", default=None)
     sub.add_parser("stage7", help="build the animated route playback")
     embed = sub.add_parser("stage7-embed", help="one day as a single self-contained file")
     embed.add_argument("--day", type=int, required=True)
@@ -101,6 +138,14 @@ def main(argv: list[str] | None = None) -> int:
         )
         if t["days_over_window"]:
             print(f"  {t['days_over_window']} days exceed their window")
+        return 0
+    if args.command == "prepare-zone":
+        from efficientroute import customzone
+        info = customzone.prepare(args.shapefile, args.name, args.out)
+        for k, v in info.items():
+            print(f"  {k:>16}: {v}")
+        for k, v in customzone.depot_check(info["path"]).items():
+            print(f"  depot {k:>10}: {v}")
         return 0
     if args.command == "stage7":
         payload = pipeline.run_stage7()

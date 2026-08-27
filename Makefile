@@ -5,7 +5,12 @@
 #
 # Rather than race it, every target below runs the package straight from source
 # with PYTHONPATH, which does not consult the editable install at all.
-RUN = PYTHONPATH=src uv run python -m efficientroute
+# A second campaign writes elsewhere without a second checkout:
+#   make stage0 OUTPUT_ROOT=CUSTOM-OUTPUT
+# `data/raw/` stays shared and read-only whatever this is set to.
+OUTPUT_ROOT ?=
+ENV = $(if $(OUTPUT_ROOT),EFFICIENTROUTE_OUTPUT_ROOT=$(abspath $(OUTPUT_ROOT)),)
+RUN = PYTHONPATH=src $(ENV) uv run python -m efficientroute
 
 .PHONY: setup stage0 stage0b stage1 stage2 stage3 stage4 stage4b stage4c stage5 stage6 stage7 stage7-embed test gate gate1 gate2 gate3 gate4 gate4b gate4c gate5 gate6 gate7 all clean-derived
 
