@@ -30,6 +30,25 @@ Every ambiguous case resolves toward more coverage, not less. See SPEC.md §1.1.
 I1–I8 are defined in SPEC.md §8. Every stage that produces or transforms a route
 runs the full invariant suite. A failing invariant is a hard stop.
 
+## Calibration constants are pinned, not fed back
+
+Some constants are read by an early stage and measured by a later one
+(`ZONE_OVERHEAD_MEASURED` is the live example: Stage 4 reads it, Stage 5 writes it).
+**Such a loop does not converge** — re-running the early stage on the later stage's
+last output produces a different plan, not a better one, and the partition can be
+knife-edge sensitive to the value.
+
+Rules:
+
+1. Pin the value explicitly in `config`, at full precision, with a comment naming
+   where it came from and when.
+2. Changing it is a deliberate, reviewed act with a measured justification — never
+   an automatic refresh.
+3. When a constant is derived, check that the derived quantity is the one the cost
+   model actually wants. Stage 4c's defect was not a stale number but a *wrong
+   quantity*: `route_h / capture_h` already contains depot legs, which the cost
+   model then added again.
+
 ## Repository layout
 
 ```

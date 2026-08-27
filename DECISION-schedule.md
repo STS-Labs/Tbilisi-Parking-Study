@@ -160,3 +160,47 @@ Treat the 17 days as contingency, not slack. Do not plan to spend it.
 It is dated from 25 August. Margin decays one-for-one with every day the car is
 not driving. Stages 6 and 7 do not need to be finished first — Stage 6 is *better*
 built against a real day-1 trace than against a synthetic one.
+
+---
+
+## Stage 4c actuals — the committed plan
+
+**47 driving days, 2026-08-25 → 2026-10-13, 321.9 h.** Margin to the 30 Oct
+daylight limit: **+20 days**. Every earlier figure in this file (38 days / 1 Oct,
+50 days / 13 Oct) is superseded and retained only for provenance.
+
+Capture is unchanged at 139.3 h, as it must be — the same streets are filmed
+either way. Only the driving between them moved: deadhead −4.9 h, turns −0.5 h.
+
+### Root cause, corrected
+
+The Stage 4c brief assumed zone sizing "had never been run with the correct
+numbers". Wrong — 2.55 *was* recorded from Stage 5. The actual defect was that
+2.55 is **the wrong quantity**: it came from `route_h / capture_h`, which already
+includes depot legs, while `zoning.zone_durations` adds legs as a separate term.
+Every zone paid for its depot legs twice.
+
+### Why 3 days and not the ten the slack implied
+
+Achieved intra-zone overhead runs from **1.70 to 3.16** — a long tail. A single
+global constant cannot serve both ends: size for the median and the tail zones
+overrun (each split turning one oversized zone into two undersized ones), size for
+the tail and every well-behaved zone starves. The remaining slack is not in the
+constant. It is in the partitioner not knowing which zones are intrinsically
+expensive *before* it cuts them.
+
+That is the shape of any future gain here: **predict per-zone overhead from local
+topology** (dead-end density, junction density, one-way share) rather than applying
+one number citywide. Not worth doing for this campaign.
+
+### A standing rule — the sizing constant is pinned, not fed back
+
+`ZONE_OVERHEAD_MEASURED` is read by Stage 4 and written by Stage 5. **This loop
+does not converge**: the adopted plan was sized on 2.2598 and its own p75 is
+2.2030. There is no fixed point, and the partition is knife-edge sensitive —
+rounding the constant moved it from 43 zones to 44.
+
+Therefore: treat it as a **pinned calibration constant with recorded provenance**,
+reviewed deliberately, never as an automatic feedback path. Do not re-run Stage 4
+against whatever Stage 5 last wrote and assume the result is more correct. It is
+merely different.
