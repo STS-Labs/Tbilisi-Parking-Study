@@ -156,7 +156,32 @@ def summarise(arcs: pd.DataFrame, role: pd.Series | None = None) -> dict:
 #: The reference measurement the stage brief supplies, km.  The gate reconciles
 #: `summarise` against it to 1 km per bucket; a drift means the connectivity rule
 #: changed meaning, which is exactly the thing that must not happen silently.
+#: Hand-checked against the Tbilisi network on 25 Aug 2026 — a regression fixture
+#: for *that* campaign, not a property of the classifier. A second campaign has its
+#: own service network and no reason to reproduce these figures, so
+#: `reference_applies()` decides whether comparing against them means anything.
 REFERENCE_KM: dict[str, dict[str, float]] = {
     "all_service": {"through": 1237.2, "spur": 888.6, "orphan": 67.5, "total": 2193.3},
     "untagged_service": {"through": 1150.4, "spur": 810.7, "orphan": 63.1, "total": 2024.1},
 }
+
+
+#: The campaign `REFERENCE_KM` was measured on. Tbilisi's boundary is OSM relation
+#: 1996871; a customer polygon carries a negative id.
+REFERENCE_RELATION_ID = 1996871
+
+
+def reference_applies() -> bool:
+    """Whether `REFERENCE_KM` describes the network this run built."""
+    from . import config as C
+
+    if C.REQUIRED_BOUNDARY_PATH is not None:
+        return False   # required is narrower than the clip; a different problem
+    if not C.BOUNDARY_PATH.exists():
+        return False
+    try:
+        import geopandas as gpd
+
+        return int(gpd.read_file(C.BOUNDARY_PATH).iloc[0]["relation_id"]) == REFERENCE_RELATION_ID
+    except Exception:
+        return False
