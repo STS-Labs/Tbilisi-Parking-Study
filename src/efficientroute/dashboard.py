@@ -238,7 +238,8 @@ def embed(day: int, out_path: Path, data_dir: Path | None = None,
     in, because the point is a file small enough to send someone.
     """
     data_dir = data_dir or C.PLAYBACK_DATA_DIR
-    template = template or C.PLAYBACK_INDEX
+    template = template or (C.PLAYBACK_INDEX if C.PLAYBACK_INDEX.exists()
+                            else C.PLAYBACK_TEMPLATE)
     name = f"day-{int(day):02d}.json"
     if not (data_dir / name).exists():
         raise FileNotFoundError(f"{data_dir / name} missing — run `make stage7` first")

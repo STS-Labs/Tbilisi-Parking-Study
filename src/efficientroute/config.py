@@ -476,7 +476,13 @@ DEPOT_DISTANCE_BANDS_KM: tuple[float, ...] = (5.0, 10.0, 15.0, 20.0, 25.0)
 #: Both dates are declared here rather than read from the clock: CLAUDE.md rule 5
 #: puts no wall-clock behaviour in the pipeline, and a campaign-length check that
 #: silently changes answer tomorrow is not a check.
-CAMPAIGN_START_DATE = "2026-08-25"   # SPEC v0.3, 25 Aug 2026
+#: First driving day. Per-campaign, and always a literal: CLAUDE.md rule 5 forbids
+#: wall-clock in the pipeline, so "the day after the run" is resolved once by
+#: whoever launches it and pinned here or in the environment — never computed at
+#: run time, which would give a different plan tomorrow from the same inputs.
+CAMPAIGN_START_DATE = os.environ.get(
+    "EFFICIENTROUTE_CAMPAIGN_START", "2026-08-25"   # SPEC v0.3, 25 Aug 2026
+)
 DAYLIGHT_BINDING_DATE = "2026-11-01"  # SPEC §7.3
 WORKING_DAYS_PER_WEEK = 7             # SPEC §5
 
@@ -721,6 +727,12 @@ RECHECK_REPORT_MD = REPORTS / "04b-recheck.md"
 PLAYBACK_DIR = REPORTS / "07-playback"
 PLAYBACK_DATA_DIR = PLAYBACK_DIR / "data"
 PLAYBACK_INDEX = PLAYBACK_DIR / "index.html"
+
+#: The renderer itself is source, not output. It used to sit in `reports/`, which
+#: worked only because the Tbilisi campaign wrote there — a second campaign got a
+#: data directory with nothing to open it. Shipping it in the package and copying it
+#: out per campaign is what makes the playback portable.
+PLAYBACK_TEMPLATE = Path(__file__).resolve().parent / "templates" / "playback.html"
 
 #: Douglas-Peucker tolerance for the driven route, in metres. The renderer draws
 #: at roughly 1 m per pixel when fully zoomed in, so 2 m is already below what can

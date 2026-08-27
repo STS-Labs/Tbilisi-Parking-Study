@@ -423,36 +423,65 @@ def _passes(runs, position, lines, arc_ids, from_node, to_node, trace) -> list["
     return out
 
 
-def _infer_skipped(runs, lines, arc_ids, from_node, to_node) -> list["Pass"]:
-    """Credit a short arc the car must have crossed between two matched ones.
+#: Longest chain of unmatched arcs that may be inferred between two matched ones.
+#:
+#: One is not enough. Streets are split at every junction, so a short link is
+#: routinely two or three arcs of the same way — Zone B has a 12.0 m arc followed by
+#: a 2.6 m one, together shorter than the gap between two GPS fixes, and bridging
+#: only single arcs left both uncovered for ever. The safety property is not the
+#: length of the chain but its **uniqueness**.
+MAX_INFERRED_CHAIN = 3
 
-    Only when the connecting arc is the *unique* legal way from one to the other and
-    is shorter than `MAX_INFERRED_ARC_M`. Uniqueness is what keeps this honest: if
-    two roads could have joined those arcs, which one was driven is unknown, and an
-    unknown leaves the street required.
+
+def _infer_skipped(runs, lines, arc_ids, from_node, to_node) -> list["Pass"]:
+    """Credit short arcs the car must have crossed between two matched ones.
+
+    Only when the connecting path is the *unique* legal way from one to the other,
+    every arc on it is shorter than `MAX_INFERRED_ARC_M`, and it is no longer than
+    `MAX_INFERRED_CHAIN`. Uniqueness is what keeps this honest: if two routes could
+    have joined those arcs, which one was driven is unknown, and an unknown leaves
+    the street required. Inventing coverage is the one failure this stage exists to
+    prevent, so the search stops the moment a second path appears.
     """
     outgoing: dict[int, list[int]] = {}
     for index in range(len(arc_ids)):
         outgoing.setdefault(int(from_node[index]), []).append(index)
 
-    found: list[Pass] = []
+    def unique_path(start_node: int, end_node: int) -> list[int] | None:
+        """The one short path from node to node, or None if there is not exactly one."""
+        found: list[list[int]] = []
+        stack = [(start_node, [])]
+        while stack:
+            node, path = stack.pop()
+            if len(path) >= MAX_INFERRED_CHAIN:
+                continue
+            for index in outgoing.get(node, []):
+                if index in path or lines[index].length > MAX_INFERRED_ARC_M:
+                    continue
+                step = path + [index]
+                if to_node[index] == end_node:
+                    found.append(step)
+                    if len(found) > 1:
+                        return None   # ambiguous; stop looking
+                else:
+                    stack.append((int(to_node[index]), step))
+        return found[0] if len(found) == 1 else None
+
+    inferred: list[Pass] = []
     for before, after in zip(runs, runs[1:]):
         a, b = before.arc_index, after.arc_index
         if to_node[a] == from_node[b]:
             continue  # they already meet; nothing was skipped
-        bridges = [
-            index for index in outgoing.get(int(to_node[a]), [])
-            if to_node[index] == from_node[b] and lines[index].length <= MAX_INFERRED_ARC_M
-        ]
-        if len(bridges) != 1:
-            continue  # ambiguous or impossible — leave the street required
-        index = bridges[0]
-        found.append(Pass(
-            arc_id=str(arc_ids[index]), arc_index=index,
-            first_fix=before.last_fix, last_fix=after.first_fix,
-            fraction=1.0, through=True, inferred=True,
-            max_speed_kmh=before.max_speed_kmh,
-            speed_quantile_kmh=before.speed_quantile_kmh,
-            max_heading_delta_deg=0.0,
-        ))
-    return found
+        path = unique_path(int(to_node[a]), int(from_node[b]))
+        if not path:
+            continue
+        for index in path:
+            inferred.append(Pass(
+                arc_id=str(arc_ids[index]), arc_index=index,
+                first_fix=before.last_fix, last_fix=after.first_fix,
+                fraction=1.0, through=True, inferred=True,
+                max_speed_kmh=before.max_speed_kmh,
+                speed_quantile_kmh=before.speed_quantile_kmh,
+                max_heading_delta_deg=0.0,
+            ))
+    return inferred

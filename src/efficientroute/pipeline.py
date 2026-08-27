@@ -1241,6 +1241,9 @@ def run_stage7() -> dict:
          f"{network['vertices']:,} vertices, {network['bytes'] / 1e6:.1f} MB")
 
     dashboard.build_index(summaries, network)
+    C.PLAYBACK_INDEX.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(C.PLAYBACK_TEMPLATE, C.PLAYBACK_INDEX)
+    _log(f"wrote {C.PLAYBACK_INDEX}")
     total = sum(p.stat().st_size for p in C.PLAYBACK_DATA_DIR.glob("*.json"))
     _log(f"playback total {total / 1e6:.1f} MB — open {C.PLAYBACK_INDEX}")
     _log(f"done in {time.time() - started:.0f}s")
