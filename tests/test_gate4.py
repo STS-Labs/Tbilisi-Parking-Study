@@ -10,6 +10,7 @@ import numpy as np
 import pytest
 
 from efficientroute import config as C
+from efficientroute import scenarios
 from efficientroute import zoning
 
 pytestmark = pytest.mark.gate4
@@ -98,11 +99,23 @@ def test_no_required_element_of_the_chosen_scope_is_missing(rebuilt):
     assert (zone_graph.segment_of_node[required] >= 0).all()
 
 
-def test_the_gpkg_carries_no_service_road(rebuilt, payload):
-    """Variant C is the decided scope; the artifact must actually be that scope."""
+def test_the_gpkg_carries_exactly_the_chosen_scope(rebuilt, payload):
+    """The artifact must be the scope the run was configured for — whichever it is.
+
+    This asserted `highway_class != "service"` outright, which is the right check
+    for variant C and a false one for any other. It was Tbilisi's scope decision
+    written down as an invariant, and a campaign configured for variant A failed it
+    for being configured correctly.
+
+    The invariant underneath is stronger and campaign-relative: whatever the
+    variant, the arcs in the tour scope are exactly the arcs that variant keeps.
+    Under C that still forbids every service road; under A it forbids nothing and
+    instead catches an arc dropped by a filter nobody declared.
+    """
     assert payload["variant"] == C.SCOPE_VARIANT
     in_scope = rebuilt["zones_gpkg"]
-    assert (in_scope[in_scope["in_tour_scope"]]["highway_class"] != "service").all()
+    kept = scenarios.variant_mask(in_scope, C.SCOPE_VARIANT)
+    assert (~kept & in_scope["in_tour_scope"].to_numpy()).sum() == 0
 
 
 def test_service_role_survived_as_a_column_for_phase_two(rebuilt):

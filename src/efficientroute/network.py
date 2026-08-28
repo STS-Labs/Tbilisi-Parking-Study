@@ -41,23 +41,37 @@ COLUMNS: tuple[str, ...] = (
 )
 
 
-def _columns(required_boundary=None) -> tuple[str, ...]:
+def _columns(required_boundary=None, required_network=None) -> tuple[str, ...]:
     """The column order this run writes.
 
-    `in_required_area` is appended **only** when a required-area boundary is
-    configured. Adding it unconditionally would change the Tbilisi `arcs` layer and
-    that plan is committed: its GeoPackage has to keep rebuilding byte for byte, and
-    a column nobody asked for is still a different file. Where required is the whole
-    clip the flag carries no information anyway.
+    `in_required_area` is appended **only** when the required set is narrower than
+    the clip — a required-area boundary or a required network. Adding it
+    unconditionally would change the Tbilisi `arcs` layer and that plan is
+    committed: its GeoPackage has to keep rebuilding byte for byte, and a column
+    nobody asked for is still a different file. Where required is the whole clip the
+    flag carries no information anyway.
+
+    `attributes_unverified` rides along only with a required *network*, because it
+    only ever means one thing: this arc came from the customer's layer and not from
+    the PBF, so its class, `oneway`, lanes and width are assumptions rather than
+    tags. No other campaign has such an arc and no other campaign should carry a
+    column asserting it does not.
     """
-    if required_boundary is None:
+    if required_boundary is None and required_network is None:
         return COLUMNS
-    return COLUMNS[:-1] + ("in_required_area", "geometry")
+    extra = ("in_required_area",)
+    if required_network is not None:
+        # `required_coverage` is the required-network analogue of the polygon
+        # rule's near-boundary measure: the share of the arc the customer's
+        # linework actually covers, kept so the report can say how much length
+        # sits near the 50% line where the verdict is arguable.
+        extra += ("required_coverage", "attributes_unverified")
+    return COLUMNS[:-1] + extra + ("geometry",)
 
 
 def build_arc_table(
     extract: X.Extract, sampler: D.BilinearSampler | None = None,
-    required_boundary=None,
+    required_boundary=None, required_network=None,
 ) -> gpd.GeoDataFrame:
     """Turn an `Extract` into the canonical directed-arc table."""
     way_nodes = {way_id: way.node_ids for way_id, way in extract.ways.items()}
@@ -90,6 +104,12 @@ def build_arc_table(
         )
         tagged_incline = T.parse_incline(tags)
         quality = P.capture_quality(highway_class)
+        # An arc injected from the customer's street layer carries no OSM tags at
+        # all — its class, `oneway`, lanes and width are the defaults `custnet`
+        # assumed. The flag rides on the arc rather than on a side table so that
+        # every stage that touches the arc, up to the driver's turn sheet, can see
+        # that it is driving on an assumption.
+        unverified = str(tags.get("efficientroute:unverified", "")).lower() == "yes"
 
         narrow, narrow_basis = (
             P.is_narrow_pair(total_lanes, total_width, highway_class)
@@ -149,6 +169,7 @@ def build_arc_table(
                         "excluded": reason is not None,
                         "exclusion_reason": reason or "",
                         "is_pair_representative": arc.direction == "F",
+                        "attributes_unverified": unverified,
                         "_geometry": geometry,
                     }
                 )
@@ -161,11 +182,12 @@ def build_arc_table(
     frame = _attach_gradient(frame, sampler)
     frame = _attach_components(frame)
     frame = _attach_required_area(frame, required_boundary)
+    frame = _attach_required_network(frame, required_network)
 
     gdf = gpd.GeoDataFrame(
         frame.drop(columns="_geometry"), geometry=frame["_geometry"].tolist(), crs="EPSG:4326"
     )
-    return gdf[list(_columns(required_boundary))]
+    return gdf[list(_columns(required_boundary, required_network))]
 
 
 def _attach_required_area(frame: pd.DataFrame, boundary) -> pd.DataFrame:
@@ -213,6 +235,46 @@ def _attach_required_area(frame: pd.DataFrame, boundary) -> pd.DataFrame:
     frame.loc[~inside, "min_passes"] = 0
     frame.loc[~inside, "pair_requirement"] = 0
     frame.loc[~inside, "min_passes_basis"] = "outside_required_area"
+    return frame
+
+
+def _attach_required_network(frame: pd.DataFrame, required_network) -> pd.DataFrame:
+    """Required is the customer's own street layer, not a polygon.
+
+    The zone-polygon rule above answers "is this arc *inside* the area we were
+    asked for". This one answers a strictly narrower question — "is this arc one of
+    the streets we were asked for" — and the two are not the same job. Zone B holds
+    674 km of OSM traversal under variant A and 391 km under variant C; the
+    customer's layer names 347 km. Requiring the zone and requiring the layer differ
+    by roughly 2x, which is the whole reason this run exists.
+
+    The mechanism is identical, and deliberately so: `min_passes = 0` on everything
+    the customer did not ask for. Those arcs stay perfectly legal to drive — SPEC's
+    Rural Postman routable set — they simply never need filming. Nothing in the
+    orientation heuristic, the LP bound, the flow or the Euler tour changes.
+
+    An arc counts as asked-for when at least `custnet.COVERAGE_MIN` of its length
+    lies within `custnet.MATCH_TOLERANCE_M` of the customer's linework. Coverage
+    rather than the midpoint test the polygon rule uses, because a street layer is
+    not a cut across an arc: the whole arc is evidence about whether the customer
+    drew that street, and half of it is the decidable place to draw the line.
+    """
+    if required_network is None:
+        return frame
+    from . import custnet
+
+    if not Path(required_network).exists():
+        raise FileNotFoundError(
+            f"{required_network} missing — required network not built; "
+            "run `efficientroute prepare-network` first"
+        )
+    required, fraction = custnet.required_arc_mask(frame["_geometry"].tolist(),
+                                                   required_network)
+    frame["in_required_area"] = required
+    frame["required_coverage"] = np.round(fraction, 4)
+    frame.loc[~required, "min_passes"] = 0
+    frame.loc[~required, "pair_requirement"] = 0
+    frame.loc[~required, "min_passes_basis"] = "not_in_required_network"
     return frame
 
 

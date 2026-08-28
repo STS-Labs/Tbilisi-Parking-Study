@@ -58,9 +58,31 @@ REQUIRED_BOUNDARY_PATH = (
 #: How close to the required boundary an arc has to be for the midpoint rule to be
 #: arguable. Reported, never acted on — it is where a customer dispute lands.
 REQUIRED_BOUNDARY_MARGIN_M = 50.0
+
+#: The **required network** — a customer's own street layer, noded and written by
+#: `efficientroute prepare-network`, standing in for the required-area polygon.
+#:
+#: A polygon says "cover this area"; a street layer says "cover these streets", and
+#: in Zone B those differ by roughly 2x. Set this and an arc is required only where
+#: the customer's linework covers it, while everything else in the clip stays legal
+#: to drive. Mutually exclusive with `REQUIRED_BOUNDARY_PATH` in practice — the
+#: layer already lies inside the zone, so applying both would only re-answer a
+#: question the layer has already answered.
+REQUIRED_NETWORK_PATH = (
+    Path(os.environ["EFFICIENTROUTE_REQUIRED_NETWORK"])
+    if os.environ.get("EFFICIENTROUTE_REQUIRED_NETWORK") else None
+)
 DEM_DIR = RAW / "dem"
 
 EXTRACT_PATH = DERIVED / "00-extract.pkl.gz"
+#: The extract **plus** the customer streets OSM has not got. Held under its own
+#: name rather than overwriting the cache: a `--force-extract` that silently
+#: reverted the network to plain OSM would drop those streets out of the plan with
+#: nothing to show it had happened.
+EXTRACT_CUSTNET_PATH = DERIVED / "00-extract-custnet.pkl.gz"
+CUSTNET_JSON = DERIVED / "00-custnet.json"
+CUSTNET_NETWORK_GEOJSON = DERIVED / "00-custnet-network.geojson"
+CUSTNET_INJECTED_GEOJSON = DERIVED / "00-custnet-injected.geojson"
 NETWORK_GPKG = DERIVED / "network.gpkg"
 NETWORK_LAYER = "arcs"
 DROPPED_WAYS_CSV = DERIVED / "00-dropped-ways.csv"
@@ -287,6 +309,10 @@ TURN_REPORT_HTML = REPORTS / "01-turn-graph.html"
 #: which is why it lives outside `reports/` (see CLAUDE.md on regenerable dirs).
 SURVEYS = OUTPUT_ROOT / "surveys"
 SPOTCHECK_PATH = SURVEYS / "01-junction-spotchecks.json"
+#: The other survey a person has to walk: streets the plan drives on synthesised
+#: attributes because OSM has no record of them.  Written by Stage 0 whenever a
+#: required network is configured.
+UNVERIFIED_SURVEY_MD = SURVEYS / "unverified-streets.md"
 
 
 # ================================================== Stage 0b — service scope
@@ -531,7 +557,18 @@ TOUR_GPX_VARIANT = "A"
 #: SPEC §2.1.1 defers `through` service to phase 2, and says re-including it must
 #: be a configuration change rather than a rebuild.  That is what this constant is
 #: for: set it to "D" and re-run Stages 4–5.  Nothing downstream hard-codes "C".
-SCOPE_VARIANT = "C"
+#:
+#: Environment-overridable for the same reason `OUTPUT_ROOT` is: one campaign wants
+#: variant A (everything OSM has, service roads included) and another wants C, and
+#: they must be able to run from one checkout without editing a tracked constant
+#: between them.  Unset, it stays "C" — the adopted Tbilisi decision — so nothing
+#: about the committed plan moves.
+SCOPE_VARIANT = os.environ.get("EFFICIENTROUTE_SCOPE_VARIANT", "C").strip().upper()
+if SCOPE_VARIANT not in STAGE2_SCOPE_VARIANTS:
+    raise ValueError(
+        f"EFFICIENTROUTE_SCOPE_VARIANT={SCOPE_VARIANT!r} is not one of "
+        f"{STAGE2_SCOPE_VARIANTS}"
+    )
 
 #: Sunset is computed for the middle of the municipality rather than the depot.
 #: The spread across Tbilisi's 0.5° of longitude is under two minutes, which is

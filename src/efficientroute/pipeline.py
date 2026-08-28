@@ -17,11 +17,12 @@ import urllib.request
 from pathlib import Path
 
 import geopandas as gpd
+import numpy as np
 
 from . import config as C
 from . import dem as D
 from . import extract as X
-from . import campaign, mapviz, mapviz01, network, report, report01, report02, report03
+from . import campaign, custnet, mapviz, mapviz01, network, report, report01, report02, report03
 from . import restrictions, scenarios, servicerole, stats, timemodel, turnaudit, turngraph
 from . import zoning
 from .congestion import CongestionModel, sensitivity_levels
@@ -128,6 +129,26 @@ def build_extract(pbf_path: Path, force: bool = False) -> X.Extract:
     return extract
 
 
+def pipeline_extract(force: bool = False) -> X.Extract:
+    """The extract the stages actually build on.
+
+    With a required network configured that is the *augmented* one — OSM plus the
+    customer streets OSM has not got — and it has to already exist. Falling back to
+    plain OSM here would drop those streets out of the plan with nothing to show it
+    had happened, which is the exact failure CLAUDE.md rule 4 exists to prevent.
+    """
+    if C.REQUIRED_NETWORK_PATH is None:
+        return build_extract(C.PBF_PATH, force=force)
+    if not C.EXTRACT_CUSTNET_PATH.exists():
+        raise FileNotFoundError(
+            f"{C.EXTRACT_CUSTNET_PATH} missing — a required network is configured "
+            "but the customer streets have not been stitched in. Run "
+            "`efficientroute prepare-network --shapefile <Streets.shp>` first."
+        )
+    _log(f"reusing the customer-augmented extract {C.EXTRACT_CUSTNET_PATH}")
+    return X.load_extract(C.EXTRACT_CUSTNET_PATH)
+
+
 def rebuild_arc_table():
     """Rebuild the arc table from cached inputs, exactly as the pipeline would.
 
@@ -142,10 +163,13 @@ def rebuild_arc_table():
     being checked against.  It also means a Stage 6 refit propagates by rerunning
     Stage 2, not by editing code.
     """
-    extract = X.load_extract(C.EXTRACT_PATH)
+    extract = X.load_extract(
+        C.EXTRACT_CUSTNET_PATH if C.REQUIRED_NETWORK_PATH is not None else C.EXTRACT_PATH
+    )
     sampler, _ = ensure_dem(extract.clip.bounds)
     table = network.build_arc_table(extract, sampler=sampler,
-                                    required_boundary=C.REQUIRED_BOUNDARY_PATH)
+                                    required_boundary=C.REQUIRED_BOUNDARY_PATH,
+                                    required_network=C.REQUIRED_NETWORK_PATH)
     if C.TIME_MODEL_JSON.exists():
         table = timemodel.augment(table, timemodel.load_model())
     return table
@@ -153,15 +177,16 @@ def rebuild_arc_table():
 
 def run(force_extract: bool = False) -> dict:
     started = time.time()
-    pbf_path = ensure_pbf()
-    extract = build_extract(pbf_path, force=force_extract)
+    ensure_pbf()
+    extract = pipeline_extract(force=force_extract)
 
     clip = extract.clip
     sampler, tiles = ensure_dem(clip.bounds)
 
     _log("building the directed arc table")
     table = network.build_arc_table(extract, sampler=sampler,
-                                    required_boundary=C.REQUIRED_BOUNDARY_PATH)
+                                    required_boundary=C.REQUIRED_BOUNDARY_PATH,
+                                    required_network=C.REQUIRED_NETWORK_PATH)
     _log(f"{len(table):,} directed arcs")
 
     network.write_gpkg(table, C.NETWORK_GPKG)
@@ -188,7 +213,19 @@ def run(force_extract: bool = False) -> dict:
     )
 
     summary = stats.compute(table, extract, meta)
-    if C.REQUIRED_BOUNDARY_PATH is not None:
+    if C.REQUIRED_NETWORK_PATH is not None:
+        summary["required_area"] = _required_network_split(table)
+        summary["custnet"] = json.loads(C.CUSTNET_JSON.read_text())
+        split = summary["required_area"]
+        _log(f"  required {split['required_km']:,.1f} km of "
+             f"{split['included_km']:,.1f} km included "
+             f"({split['required_share_pct']:.1f}%)")
+        _log(f"  {split['arguable_km']:,.2f} km sits between "
+             f"{split['arguable_band'][0]:.0%} and {split['arguable_band'][1]:.0%} covered, "
+             "where the requirement verdict is arguable")
+        _log(f"  {split['unverified_km']:,.2f} km over {split['unverified_arcs']:,} arcs "
+             "is customer geometry OSM has not got — attributes unverified")
+    elif C.REQUIRED_BOUNDARY_PATH is not None:
         summary["required_area"] = _required_area_split(table)
         split = summary["required_area"]
         _log(f"  required {split['required_km']:,.1f} km of "
@@ -248,6 +285,234 @@ def _required_area_split(table) -> dict:
         "near_boundary_arcs": int((near & included).sum()),
         "near_boundary_required_km": round(float(length_km[near & required].sum()), 3),
     }
+
+
+def _required_network_split(table) -> dict:
+    """How much of the clip the customer actually asked for, and how arguable it is.
+
+    The required-area version of this measures length near the *zone edge*, because
+    that is where a polygon rule is arbitrary. A street-layer rule is arbitrary
+    somewhere else entirely: at arcs the customer's linework half covers, where the
+    50% coverage threshold decides. So that is what is measured here — length whose
+    coverage sits in the band around the threshold, plus the length the customer
+    supplied that OSM has no record of, which is the other place a dispute lands.
+    """
+    metric = table.to_crs(C.METRIC_CRS)
+    included = ~table["excluded"].to_numpy()
+    required = table["in_required_area"].to_numpy() & included
+    unverified = table["attributes_unverified"].to_numpy() & included
+    coverage = table["required_coverage"].to_numpy()
+    length_km = metric.length.to_numpy() / 1000.0
+    band = (0.25, 0.75)
+    arguable = included & (coverage >= band[0]) & (coverage <= band[1])
+
+    return {
+        "network": str(C.REQUIRED_NETWORK_PATH),
+        "tolerance_m": custnet.MATCH_TOLERANCE_M,
+        "coverage_min": custnet.COVERAGE_MIN,
+        "included_arcs": int(included.sum()),
+        "required_arcs": int(required.sum()),
+        "buffer_only_arcs": int((included & ~table["in_required_area"].to_numpy()).sum()),
+        "included_km": round(float(length_km[included].sum()), 3),
+        "required_km": round(float(length_km[required].sum()), 3),
+        "buffer_only_km": round(float(length_km[included & ~required].sum()), 3),
+        "required_share_pct": round(
+            100.0 * length_km[required].sum() / max(length_km[included].sum(), 1e-9), 2
+        ),
+        "arguable_band": list(band),
+        "arguable_km": round(float(length_km[arguable].sum()), 3),
+        "arguable_arcs": int(arguable.sum()),
+        "unverified_km": round(float(length_km[unverified].sum()), 3),
+        "unverified_arcs": int(unverified.sum()),
+        "unverified_in_largest_scc": int(
+            (unverified & table["in_largest_scc"].to_numpy()).sum()
+        ),
+    }
+
+
+def _match_basis(pieces, table) -> dict:
+    """The same match measured against five different OSM sets, because it matters.
+
+    "97.0% of the customer's layer is in OSM" is not one number, it is five, and the
+    previous campaign quoted the narrowest. Measured against the variant-C network
+    inside Zone B — the set that campaign actually planned to drive — 10.3 km of the
+    customer's streets have no counterpart. Measured against every drivable arc in
+    the clip, service roads and the 2 km buffer included, the figure is 4.7 km. And
+    measured against the whole arc table, excluded arcs and all, it is zero.
+
+    All three are true and they answer different questions. The one this run needs
+    is the middle one: *can the routing network carry this street*, which is asked
+    of the drivable arcs and no others.
+    """
+    import geopandas as gpd
+
+    from . import reconcile
+
+    metric = pieces.to_crs(C.METRIC_CRS)
+    total = float(metric.geometry.length.sum())
+    zone = None
+    if C.BOUNDARY_PATH.exists():
+        zone = gpd.read_file(C.BOUNDARY_PATH).to_crs(C.METRIC_CRS).union_all()
+
+    included = table[~table["excluded"]]
+    service = (included["highway_class"] == "service").to_numpy()
+    in_zone = np.ones(len(included), dtype=bool)
+    if zone is not None:
+        midpoints = gpd.GeoSeries(
+            [g.interpolate(0.5, normalized=True)
+             for g in included.to_crs(C.METRIC_CRS).geometry],
+            crs=C.METRIC_CRS,
+        )
+        in_zone = midpoints.within(zone).to_numpy()
+
+    bases = {
+        "zone_no_service": included[in_zone & ~service],
+        "zone_with_service": included[in_zone],
+        "clip_no_service": included[~service],
+        "clip_with_service": included,
+        "everything_including_undrivable": table,
+    }
+    out = {}
+    for label, subset in bases.items():
+        _, _, inside = custnet.coverage_fractions(pieces, subset, drivable_only=False)
+        out[label] = {
+            "covered_km": round(float(inside.sum()) / 1000.0, 3),
+            "uncovered_km": round((total - float(inside.sum())) / 1000.0, 3),
+            "covered_pct": round(100.0 * float(inside.sum()) / max(total, 1e-9), 2),
+        }
+    out["basis_used"] = "clip_with_service"
+    out["customer_total_km"] = round(total / 1000.0, 3)
+    return out
+
+
+def run_prepare_network(shapefile: Path) -> dict:
+    """Build the customer's street layer into a required set the pipeline can use.
+
+    Four things happen here and each is reported rather than assumed:
+
+    1. the layer is reprojected and **noded**, so it is a graph rather than 3,368
+       loose polylines;
+    2. every noded piece is measured against the OSM arc table, which says which
+       streets OSM is already carrying — and therefore which OSM arcs the customer
+       asked for;
+    3. the pieces OSM has not got are **stitched in** as synthetic ways, their
+       endpoints snapped onto existing OSM nodes where one is close enough;
+    4. an augmented extract is written, and with it the survey listing every street
+       the plan will now drive on attributes nobody has verified.
+
+    This runs *before* Stage 0 rather than inside it because the matching needs an
+    arc table and Stage 0 is the stage that builds one. Doing it here costs a
+    throwaway arc table and keeps Stage 0's determinism gate looking at exactly one
+    thing.
+    """
+    started = time.time()
+    ensure_pbf()
+    extract = build_extract(C.PBF_PATH)
+
+    _log(f"noding {shapefile}")
+    noded = custnet.node_layer(shapefile)
+    pieces, noding = noded["pieces"], noded["report"]
+    _log(f"  {noding['parts_in']:,} parts -> {noding['pieces_out']:,} noded pieces")
+    census = noding["endpoints"]
+    _log(f"  endpoints: {census['attached_shared_vertex']:,} already shared, "
+         f"{census['attached_on_interior']:,} lying on another street (noded), "
+         f"{census['snapped']:,} closed by snapping, "
+         f"{census['unattached']:,} attached to nothing")
+
+    _log("building a throwaway arc table to match against")
+    table = network.build_arc_table(extract)
+
+    fraction, total_m, inside_m = custnet.coverage_fractions(pieces, table)
+    matched = fraction >= custnet.COVERAGE_MIN
+    _log(f"  {matched.sum():,} of {len(pieces):,} pieces matched in OSM "
+         f"({inside_m.sum() / 1000.0:,.1f} km of {total_m.sum() / 1000.0:,.1f} km "
+         f"of length inside {custnet.MATCH_TOLERANCE_M:.0f} m)")
+
+    unmatched = pieces[~matched].reset_index(drop=True)
+    _log(f"stitching in {len(unmatched):,} pieces OSM has no record of "
+         f"({unmatched.to_crs(C.METRIC_CRS).geometry.length.sum() / 1000.0:.2f} km)")
+    synthesised = custnet.synthesise_ways(unmatched, extract)
+    stitching = synthesised["report"]
+    _log(f"  {stitching['endpoints_snapped_to_osm']:,} of "
+         f"{stitching['distinct_endpoints']:,} endpoints landed on an OSM node "
+         f"(max move {stitching['snap_distance_m']['max']} m); "
+         f"{stitching['endpoints_not_snapped']:,} did not")
+
+    # The required network is written *after* stitching, so the injected arcs lie
+    # exactly on it and come out required by their own coverage rather than by a
+    # special case.
+    import pandas as _pd
+
+    injected_metric = synthesised["geometry"].to_crs(C.METRIC_CRS)
+    final = gpd.GeoDataFrame(
+        _pd.concat(
+            [pieces[matched].reset_index(drop=True)[["geometry"]],
+             injected_metric[["geometry"]]],
+            ignore_index=True,
+        ),
+        geometry="geometry", crs=C.METRIC_CRS,
+    )
+    custnet.write_network(final, C.CUSTNET_NETWORK_GEOJSON)
+
+    # Why each injected street is injected. Not decoration: "OSM says building
+    # site" and "OSM has never heard of it" send the driver to do different things.
+    injected = custnet.osm_evidence(synthesised["geometry"], table)
+    if C.CUSTNET_INJECTED_GEOJSON.exists():
+        C.CUSTNET_INJECTED_GEOJSON.unlink()
+    injected.to_file(C.CUSTNET_INJECTED_GEOJSON, driver="GeoJSON")
+    custnet.write_survey(injected, stitching, C.UNVERIFIED_SURVEY_MD)
+    evidence = (
+        injected.assign(k=injected["osm_class"] + "/" + injected["osm_exclusion"])
+        .groupby("k").size().sort_values(ascending=False).to_dict()
+        if len(injected) else {}
+    )
+
+    custnet.augment(extract, synthesised)
+    X.save_extract(extract, C.EXTRACT_CUSTNET_PATH)
+
+    payload = {
+        "noding": noding,
+        "matching": {
+            "tolerance_m": custnet.MATCH_TOLERANCE_M,
+            "coverage_min": custnet.COVERAGE_MIN,
+            "pieces": int(len(pieces)),
+            "matched_pieces": int(matched.sum()),
+            "unmatched_pieces": int((~matched).sum()),
+            "total_km": round(float(total_m.sum()) / 1000.0, 3),
+            "length_inside_osm_km": round(float(inside_m.sum()) / 1000.0, 3),
+            "length_outside_osm_km": round(float((total_m - inside_m).sum()) / 1000.0, 3),
+            "matched_pct": round(100.0 * inside_m.sum() / max(total_m.sum(), 1e-9), 2),
+            "unmatched_piece_km": round(float(total_m[~matched].sum()) / 1000.0, 3),
+        },
+        "stitching": stitching,
+        "why_unmatched": {
+            "note": (
+                "Every unmatched piece has an OSM way within the tolerance — the arc "
+                "was excluded by the drivability filter, not absent from OSM. The key "
+                "is `highway_class/exclusion_reason` of the nearest excluded arc."
+            ),
+            "counts": {str(k).strip("/"): int(v) for k, v in evidence.items()},
+        },
+        "match_basis": _match_basis(pieces, table),
+        "coverage_threshold_sensitivity": [
+            {
+                "coverage_min": round(float(t), 2),
+                "pieces_injected": int((fraction < t).sum()),
+                "km_injected": round(float(total_m[fraction < t].sum()) / 1000.0, 3),
+            }
+            for t in (0.25, 0.5, 0.75, 0.99)
+        ],
+        "outputs": {
+            "required_network": str(C.CUSTNET_NETWORK_GEOJSON),
+            "injected": str(C.CUSTNET_INJECTED_GEOJSON),
+            "augmented_extract": str(C.EXTRACT_CUSTNET_PATH),
+            "survey": str(C.UNVERIFIED_SURVEY_MD),
+        },
+        "runtime_s": round(time.time() - started, 1),
+    }
+    custnet.write_json(payload, C.CUSTNET_JSON)
+    _log(f"wrote {C.CUSTNET_JSON}")
+    return payload
 
 
 def _invalidate_stage2() -> None:
@@ -2081,6 +2346,13 @@ def _write_stage5_outputs(
     names = dict(zip(frame["arc_id"].astype(str), frame["name"].fillna("")))
     lengths = dict(zip(frame["arc_id"].astype(str), frame["length_m"].astype(float)))
     speeds = dict(zip(frame["arc_id"].astype(str), frame["capture_speed_kmh"].astype(float)))
+    # Carried to the driver's sheet, not just to the artifact: an arc whose
+    # attributes nobody has verified is a thing the person behind the wheel has to
+    # know about while they are on it.
+    unverified = (
+        set(frame.loc[frame["attributes_unverified"], "arc_id"].astype(str))
+        if "attributes_unverified" in frame.columns else set()
+    )
     exit_s = lowerbound.min_exit_s(graph)
     # NOT `oriented.lower`. That is the *campaign's* requirement; what a given day
     # captures is its own zone's share of it, which is what `tourcheck.tour_time_s`
@@ -2142,7 +2414,8 @@ def _write_stage5_outputs(
         )
         day["gpx_points"] = len(points)
         routeio.write_day_sheet(
-            C.ROUTES_DIR / f"{stem}.md", day, steps, names, lengths, speeds
+            C.ROUTES_DIR / f"{stem}.md", day, steps, names, lengths, speeds,
+            unverified=unverified,
         )
 
         for step in steps:

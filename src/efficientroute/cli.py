@@ -63,6 +63,12 @@ def main(argv: list[str] | None = None) -> int:
     zone.add_argument("--shapefile", required=True)
     zone.add_argument("--name", default=None, help="value of the name column to select")
     zone.add_argument("--out", default=None)
+    net = sub.add_parser(
+        "prepare-network",
+        help="node a customer street layer into the required set and stitch in "
+             "the streets OSM has not got",
+    )
+    net.add_argument("--shapefile", required=True)
     sub.add_parser("custom-report",
                    help="render the reconciliation and campaign summary")
     sub.add_parser("stage7", help="build the animated route playback")
@@ -105,6 +111,19 @@ def main(argv: list[str] | None = None) -> int:
         summary = pipeline.run(force_extract=args.force_extract)
         headline = summary["headline"]["required_traversal_km"]
         print(f"\nRequired traversal: {headline:,.1f} km")
+        return 0
+    if args.command == "prepare-network":
+        payload = pipeline.run_prepare_network(Path(args.shapefile))
+        match = payload["matching"]
+        stitch = payload["stitching"]
+        print(f"\n  {match['matched_pieces']:,} of {match['pieces']:,} noded pieces "
+              f"matched in OSM — {match['matched_pct']:.1f}% of "
+              f"{match['total_km']:,.1f} km by length")
+        print(f"  stitched in {stitch['pieces']:,} pieces "
+              f"({stitch['length_km']:.2f} km) OSM has no record of")
+        print(f"  {stitch['endpoints_snapped_to_osm']:,} endpoints snapped to an OSM "
+              f"node, {stitch['endpoints_not_snapped']:,} did not")
+        print(f"  survey: {payload['outputs']['survey']}")
         return 0
     if args.command == "stage0b":
         payload = pipeline.run_stage0b()

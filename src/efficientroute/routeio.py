@@ -126,15 +126,38 @@ TURN_WORDS = {
 }
 
 
+def _unverified_notice(steps: list[dict], unverified: set) -> str:
+    """The warning at the head of a sheet that contains an unverified street."""
+    hits = {step["arc_id"] for step in steps if step["arc_id"] in unverified}
+    if not hits:
+        return ""
+    return (
+        f"\n> **{len(hits)} arcs on this route are marked [UNVERIFIED].** They come "
+        "from the customer's street layer and not from OpenStreetMap, so their "
+        "direction, width and junction rules are assumptions, not tags. Treat them "
+        "as two-way residential, obey what the signs actually say, and note any "
+        "one-way, gate or building site you find — see "
+        "`surveys/unverified-streets.md`.\n"
+    )
+
+
 def write_day_sheet(
     path: Path, day: dict, steps: list[dict], names: dict, lengths: dict,
-    speeds: dict,
+    speeds: dict, unverified: set | None = None,
 ) -> Path:
     """A turn-by-turn sheet a driver can follow without the map.
 
     Consecutive steps along the same named street are folded into one line —
     a sheet with 1,500 rows saying "continue" is not usable, and the driver only
     needs an instruction where something changes.
+
+    `unverified` names the arcs whose class, direction and width are assumptions
+    rather than tags — streets taken from a customer layer that the OSM network
+    could not carry. The flag has to reach *this* document or it is worthless: the
+    driver is the instrument that settles them, and a warning that stops at a JSON
+    artifact never reaches the windscreen. A run of steps breaks at the flag as well
+    as at the street name, so an unverified street is never folded into a verified
+    one's instruction.
     """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -149,21 +172,25 @@ def write_day_sheet(
         "\nStart and finish at the depot. **Capture** rows are required footage: "
         "keep to 40 km/h or below unless the row says *reduced*. **Deadhead** rows "
         "are repositioning — drive them normally, the camera is not counted.\n",
+        _unverified_notice(steps, unverified),
         "\n| # | Street | Instruction | km | Mode | Lane |",
         "| ---: | --- | --- | ---: | --- | --- |",
     ]
 
-    def described(step: dict) -> tuple[str, str, str]:
+    unverified = unverified or set()
+
+    def described(step: dict) -> tuple[str, str, str, bool]:
         return (
             names.get(step["arc_id"], "") or "(unnamed)",
             "capture" if step["is_capture"] else "deadhead",
             step["lane_instruction"],
+            step["arc_id"] in unverified,
         )
 
     row = 0
     index = 0
     while index < len(steps):
-        name, mode, lane = described(steps[index])
+        name, mode, lane, flagged = described(steps[index])
         distance = lengths.get(steps[index]["arc_id"], 0.0)
         # Fold a run along the same street into one instruction. OSM splits a
         # street at every junction it touches, so an unfolded sheet gives the
@@ -180,8 +207,9 @@ def write_day_sheet(
             distance += lengths.get(steps[index]["arc_id"], 0.0)
         step = steps[index]
         row += 1
+        label = f"{name} **[UNVERIFIED]**" if flagged else name
         lines.append(
-            f"| {row} | {name} | {TURN_WORDS.get(step['turn'], step['turn'])} | "
+            f"| {row} | {label} | {TURN_WORDS.get(step['turn'], step['turn'])} | "
             f"{distance / 1000.0:.2f} | {mode} | {lane or '—'} |"
         )
         index += 1
