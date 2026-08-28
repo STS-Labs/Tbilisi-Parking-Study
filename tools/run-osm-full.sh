@@ -21,6 +21,9 @@ export EFFICIENTROUTE_SCOPE_VARIANT=A
 # The day after the run, resolved once and written down rather than computed —
 # CLAUDE.md rule 5 keeps wall-clock out of the pipeline.
 export EFFICIENTROUTE_CAMPAIGN_START=2026-08-29
+# Zone A was requested and is not in the data. Stamped under the title of every
+# report this run writes, so a Zone B number is never read as an A+B number.
+export EFFICIENTROUTE_CAMPAIGN_CAVEAT='**Zone A was requested and is not in the data.** `data/custom/B Zone_Streets/AB_zones.shp` holds one polygon, `Name = "Zone B"`, despite the layer being called `AB_zones`; its `FolderPath` names `Tbilisi Possible parking zones.kmz` as the source, so Zone A presumably exists there and was never exported. **This run covers Zone B only.** Nothing in it is an A+B result, and no Zone A boundary has been inferred or approximated.'
 
 STAGES=${*:-"stage0 stage1 stage0b stage2 stage3 stage4 stage5 stage7"}
 

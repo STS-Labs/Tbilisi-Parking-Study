@@ -172,12 +172,19 @@ def write_day_sheet(
         "\nStart and finish at the depot. **Capture** rows are required footage: "
         "keep to 40 km/h or below unless the row says *reduced*. **Deadhead** rows "
         "are repositioning — drive them normally, the camera is not counted.\n",
-        _unverified_notice(steps, unverified),
+    ]
+    unverified = unverified or set()
+    # Inserted only when there is something to warn about. An empty notice would
+    # still cost a blank line, and every campaign that has no unverified street —
+    # Tbilisi included — has a committed sheet that must keep rebuilding byte for
+    # byte.
+    notice = _unverified_notice(steps, unverified)
+    if notice:
+        lines.append(notice)
+    lines += [
         "\n| # | Street | Instruction | km | Mode | Lane |",
         "| ---: | --- | --- | ---: | --- | --- |",
     ]
-
-    unverified = unverified or set()
 
     def described(step: dict) -> tuple[str, str, str, bool]:
         return (

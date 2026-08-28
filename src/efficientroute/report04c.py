@@ -12,6 +12,7 @@ import json
 import math
 from pathlib import Path
 
+from . import caveat
 from . import config as C
 from .report import _table
 from .report02 import _block, _f, _h, _n
@@ -84,7 +85,7 @@ def write(a: dict, path: Path = C.REZONE_REPORT_MD) -> Path:
     parts.append(_verdict(a))
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(_block(*parts))
+    caveat.write(path, _block(*parts))
     return path
 
 

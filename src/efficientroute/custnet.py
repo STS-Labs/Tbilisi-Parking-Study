@@ -242,6 +242,42 @@ def node_layer(shapefile: Path, snap_tolerance_m: float = SNAP_TOLERANCE_M) -> d
 # ------------------------------------------------------------------- matching
 
 
+def _covered_length(geometries, buffers, crs):
+    """Length of each geometry lying inside a union of buffers, without the union.
+
+    The obvious implementation dissolves every buffer into one polygon and
+    intersects each geometry against it. That is correct and, at Zone B's scale,
+    unusably slow: 130,000 arcs against a single dissolved polygon with a quarter of
+    a million vertices is several minutes, and the determinism gate rebuilds the arc
+    table on every run.
+
+    An STRtree makes it local. Each geometry is intersected against the union of
+    only the buffers whose envelope it touches — a handful, not all of them — which
+    is the same set operation restricted to the only buffers that can contribute.
+    Identical answers, two orders of magnitude less work.
+    """
+    import geopandas as gpd
+    from shapely.ops import unary_union
+    from shapely.strtree import STRtree
+
+    geometries = list(geometries)
+    buffers = list(buffers)
+    out = np.zeros(len(geometries))
+    if not buffers:
+        return out
+
+    tree = STRtree(buffers)
+    left, right = tree.query(gpd.GeoSeries(geometries, crs=crs).geometry.to_numpy(),
+                             predicate="intersects")
+    for i in np.unique(left):
+        local = right[left == i]
+        patch = buffers[int(local[0])] if len(local) == 1 else unary_union(
+            [buffers[int(j)] for j in local]
+        )
+        out[int(i)] = geometries[int(i)].intersection(patch).length
+    return out
+
+
 def coverage_fractions(pieces, osm_arcs, tolerance_m: float = MATCH_TOLERANCE_M,
                        drivable_only: bool = True):
     """For each piece, the share of its length lying within `tolerance_m` of OSM.
@@ -267,13 +303,12 @@ def coverage_fractions(pieces, osm_arcs, tolerance_m: float = MATCH_TOLERANCE_M,
     if drivable_only and "excluded" in osm_arcs.columns:
         osm_arcs = osm_arcs[~osm_arcs["excluded"]]
     osm = reconcile._undirected(osm_arcs).to_crs(C.METRIC_CRS)
-    osm_zone = gpd.GeoSeries(
-        osm.geometry.buffer(tolerance_m), crs=C.METRIC_CRS
-    ).union_all()
 
     pieces = pieces.to_crs(C.METRIC_CRS)
     total = pieces.geometry.length.to_numpy()
-    inside = pieces.geometry.intersection(osm_zone).length.to_numpy()
+    inside = _covered_length(
+        pieces.geometry, list(osm.geometry.buffer(tolerance_m)), C.METRIC_CRS
+    )
     with np.errstate(invalid="ignore", divide="ignore"):
         fraction = np.where(total > 0, inside / total, 0.0)
     return fraction, total, inside
@@ -295,13 +330,11 @@ def required_arc_mask(arc_geometries, required_network,
     import geopandas as gpd
 
     network = gpd.read_file(required_network).to_crs(C.METRIC_CRS)
-    zone = gpd.GeoSeries(
-        network.geometry.buffer(tolerance_m), crs=C.METRIC_CRS
-    ).union_all()
-
     arcs = gpd.GeoSeries(arc_geometries, crs="EPSG:4326").to_crs(C.METRIC_CRS)
     total = arcs.length.to_numpy()
-    inside = arcs.intersection(zone).length.to_numpy()
+    inside = _covered_length(
+        arcs.geometry, list(network.geometry.buffer(tolerance_m)), C.METRIC_CRS
+    )
     with np.errstate(invalid="ignore", divide="ignore"):
         fraction = np.where(total > 0, inside / total, 0.0)
     return fraction >= coverage_min, fraction

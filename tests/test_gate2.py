@@ -250,7 +250,19 @@ def test_variant_d_drops_exactly_the_spur_and_orphan_kilometres(arcs, payload):
     scoped = arcs
     if "in_required_area" in arcs.columns:
         scoped = arcs[arcs["in_required_area"].astype(bool)]
-    summary = SR.summarise(scoped)["all_service"]
+    # Pass the *stored* roles rather than letting `summarise` re-derive them from
+    # the subset. `service_role` is a connectivity property of the whole network —
+    # a service road is `through` because it links two streets — so re-classifying
+    # a subset asks a different question and gets a different answer. Where the
+    # required set is a contiguous zone the two nearly agree and the tolerance hid
+    # it; where it is a customer's list of individual streets, 1,322 `through` arcs
+    # re-classify as spurs because the street at their far end is not on the list,
+    # and the reconciliation misses by 9.3 km.
+    #
+    # `variant_mask` reads the stored column, so the stored column is the one this
+    # has to reconcile against. That is also the stronger assertion: D must drop
+    # exactly what the column D consults says it should.
+    summary = SR.summarise(scoped, role=scoped["service_role"])["all_service"]
     dropped = sum(
         r["centerline_km"] for r in summary["rows"] if r["service_role"] != "through"
     )

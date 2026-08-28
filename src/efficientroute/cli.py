@@ -69,6 +69,11 @@ def main(argv: list[str] | None = None) -> int:
              "the streets OSM has not got",
     )
     net.add_argument("--shapefile", required=True)
+    sub.add_parser(
+        "stamp-reports",
+        help="insert EFFICIENTROUTE_CAMPAIGN_CAVEAT under the title of every "
+             "report already on disk (stages write it themselves)",
+    )
     sub.add_parser("custom-report",
                    help="render the reconciliation and campaign summary")
     sub.add_parser("stage7", help="build the animated route playback")
@@ -111,6 +116,14 @@ def main(argv: list[str] | None = None) -> int:
         summary = pipeline.run(force_extract=args.force_extract)
         headline = summary["headline"]["required_traversal_km"]
         print(f"\nRequired traversal: {headline:,.1f} km")
+        return 0
+    if args.command == "stamp-reports":
+        from . import caveat
+
+        touched = caveat.stamp_existing()
+        print(f"stamped {len(touched)} report(s)")
+        for path in touched:
+            print(f"  {path}")
         return 0
     if args.command == "prepare-network":
         payload = pipeline.run_prepare_network(Path(args.shapefile))

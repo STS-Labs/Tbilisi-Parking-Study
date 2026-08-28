@@ -509,6 +509,13 @@ DEPOT_DISTANCE_BANDS_KM: tuple[float, ...] = (5.0, 10.0, 15.0, 20.0, 25.0)
 CAMPAIGN_START_DATE = os.environ.get(
     "EFFICIENTROUTE_CAMPAIGN_START", "2026-08-25"   # SPEC v0.3, 25 Aug 2026
 )
+#: A condition of the run that every report has to carry, not a finding one report
+#: mentions. Stamped under the title of each Markdown report by `caveat.write`.
+#: Zone A is the live case: it was requested, `AB_zones.shp` does not contain it,
+#: and a Zone B result read as an A+B result is wrong by whatever Zone A turns out
+#: to be. Unset, every existing campaign's reports come out byte for byte as before.
+CAMPAIGN_CAVEAT = os.environ.get("EFFICIENTROUTE_CAMPAIGN_CAVEAT", "")
+
 DAYLIGHT_BINDING_DATE = "2026-11-01"  # SPEC §7.3
 WORKING_DAYS_PER_WEEK = 7             # SPEC §5
 

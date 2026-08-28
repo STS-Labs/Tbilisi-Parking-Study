@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from . import caveat
 from . import config as C
 from .report import _table
 from .report02 import _block, _f, _h, _n
@@ -119,7 +120,7 @@ def write_reconciliation(data: dict, path: Path | None = None) -> Path:
         "between the two surveys and not an artefact of how this was counted.",
     ))
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(_block(*parts))
+    caveat.write(path, _block(*parts))
     return path
 
 
@@ -295,5 +296,5 @@ def write_summary(data: dict, verification: dict, path: Path | None = None) -> P
         verification["tbilisi"],
     ))
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(_block(*parts))
+    caveat.write(path, _block(*parts))
     return path

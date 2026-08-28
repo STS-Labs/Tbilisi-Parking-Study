@@ -16,6 +16,9 @@ shift
 export PYTHONPATH=src
 export EFFICIENTROUTE_CAMPAIGN_START=2026-08-29
 export EFFICIENTROUTE_SCOPE_VARIANT=A
+# Zone A was requested and is not in the data. Stamped under the title of every
+# report this run writes, so a Zone B number is never read as an A+B number.
+export EFFICIENTROUTE_CAMPAIGN_CAVEAT='**Zone A was requested and is not in the data.** `data/custom/B Zone_Streets/AB_zones.shp` holds one polygon, `Name = "Zone B"`, despite the layer being called `AB_zones`; its `FolderPath` names `Tbilisi Possible parking zones.kmz` as the source, so Zone A presumably exists there and was never exported. **This run covers Zone B only.** Nothing in it is an A+B result, and no Zone A boundary has been inferred or approximated.'
 
 case "$WHICH" in
     osm-full)
@@ -29,6 +32,9 @@ case "$WHICH" in
         export EFFICIENTROUTE_REQUIRED_NETWORK="$EFFICIENTROUTE_OUTPUT_ROOT/data/derived/00-custnet-network.geojson"
         ;;
     zone-b)
+        # The committed Zone B campaign predates the caveat and has to keep
+        # regenerating byte for byte, so it does not get one.
+        unset EFFICIENTROUTE_CAMPAIGN_CAVEAT
         export EFFICIENTROUTE_OUTPUT_ROOT="$ROOT/CUSTOM-OUTPUT"
         export EFFICIENTROUTE_BOUNDARY="$EFFICIENTROUTE_OUTPUT_ROOT/data/derived/00-custom-boundary.geojson"
         export EFFICIENTROUTE_REQUIRED_BOUNDARY="$EFFICIENTROUTE_BOUNDARY"
@@ -38,6 +44,7 @@ case "$WHICH" in
     tbilisi)
         unset EFFICIENTROUTE_SCOPE_VARIANT
         unset EFFICIENTROUTE_CAMPAIGN_START
+        unset EFFICIENTROUTE_CAMPAIGN_CAVEAT
         ;;
     *)
         echo "usage: $0 {osm-full|customer-net|zone-b|tbilisi} command..." >&2

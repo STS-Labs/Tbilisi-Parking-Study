@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from . import caveat
 from . import config as C
 from .report import _table, _km, _pct
 
@@ -424,7 +425,7 @@ def write(a: dict, path: Path = C.TURN_REPORT_MD) -> Path:
     )
     text = "\n".join(parts) + "\n"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(text)
+    caveat.write(path, text)
     return path
 
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from . import caveat
 from . import config as C
 from .report import _km, _pct, _table
 from .report02 import _block, _f, _h, _n
@@ -31,7 +32,7 @@ def write(a: dict, path: Path = C.RECHECK_REPORT_MD) -> Path:
     parts.append(_gate(a))
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(_block(*parts))
+    caveat.write(path, _block(*parts))
     return path
 
 

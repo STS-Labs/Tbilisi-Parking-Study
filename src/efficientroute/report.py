@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from . import caveat
 from . import config as C
 
 
@@ -739,5 +740,5 @@ def write(s: dict, path: Path = C.REPORT_MD) -> Path:
 
     text = "\n".join(parts) + "\n"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(text)
+    caveat.write(path, text)
     return path
