@@ -76,6 +76,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     sub.add_parser("custom-report",
                    help="render the reconciliation and campaign summary")
+    stage8 = sub.add_parser(
+        "stage8",
+        help="let coverage credit cross day boundaries and re-solve on it",
+    )
+    stage8.add_argument("--report-only", action="store_true",
+                        help="re-render reports/08-optimisation.md from the artifact")
+    stage8.add_argument("--tier", type=int, default=1,
+                        help="0 incumbent, 1 passive credit, 2 active detour, 3 joint LNS")
     sub.add_parser("stage7", help="build the animated route playback")
     standalone = sub.add_parser(
         "stage7-standalone",
@@ -122,6 +130,23 @@ def main(argv: list[str] | None = None) -> int:
         summary = pipeline.run(force_extract=args.force_extract)
         headline = summary["headline"]["required_traversal_km"]
         print(f"\nRequired traversal: {headline:,.1f} km")
+        return 0
+    if args.command == "stage8":
+        if args.report_only:
+            pipeline.rewrite_stage8_report()
+            return 0
+        payload = pipeline.run_stage8(tier=args.tier)
+        base = payload["baseline"]
+        print(f"\n  tier 0 (incumbent): {base['days']:>3} days  {base['route_h']:7.2f} h")
+        for name, tier in sorted(payload["tiers"].items()):
+            if name == "0":
+                continue
+            print(f"  tier {name}:            {tier['days']:>3} days  "
+                  f"{tier['route_h']:7.2f} h   "
+                  f"({tier['vs_baseline']['route_h']:+.2f} h, "
+                  f"{tier['vs_baseline']['days']:+d} days, "
+                  f"{tier['vs_baseline']['route_pct']:+.1f}%)")
+        print(f"  adopted: tier {payload['adopted']}")
         return 0
     if args.command == "stage7-standalone":
         import shutil

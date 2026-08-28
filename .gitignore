@@ -38,3 +38,6 @@ RUN-OSM-FULL/reports/*.html
 RUN-CUSTOMER-NET/data/derived/*.gpkg
 RUN-CUSTOMER-NET/data/derived/*.pkl
 RUN-CUSTOMER-NET/reports/*.html
+
+# Per-campaign Stage 8 run logs; the artifacts are the record.
+.stage8-logs/

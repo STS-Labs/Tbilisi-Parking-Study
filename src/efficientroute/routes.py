@@ -123,7 +123,24 @@ def solve_zone(
     position: int,
     date: str,
 ) -> DayRoute:
-    """Balance, connect, Euler, rotate — a legal closed day route."""
+    """Balance, connect, Euler, rotate — a legal closed day route.
+
+    Stage 8 uses this unchanged. It was briefly given knobs to make filming an
+    out-of-zone arc *permitted* rather than required, so that a day's own flow could
+    choose to film what it was passing. They are gone, for two reasons that are worth
+    recording because they look like they should have worked.
+
+    They could not help: `lstar.build` enforces `capture >= deadhead`, since the
+    capture cap can only slow the car down (SPEC §6), so a capture edge is never
+    cheaper than the deadhead edge over the same arc and a min-cost flow will not take
+    one voluntarily. The whole reason to film an arc early is a saving on a *later*
+    day, which a single day's objective cannot see.
+
+    And they did harm: the spare capacity changed which degenerate optimum the flow
+    landed on, and `dcpp._force_entries` then failed to force a connecting path
+    through an edge it had already saturated. Capacity that cannot be used for gain
+    can still be used for harm.
+    """
     lower = zone_lower_bounds(
         star_template.n_arc_nodes, star_template.n_edges, zone_nodes, depot_node,
         oriented_lower,

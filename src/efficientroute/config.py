@@ -716,6 +716,15 @@ METIS_SEEDS: tuple[int, ...] = (20260825, 20260826, 20260827, 20260828)
 #: here so the gate asserts a number the report also prints.
 DAY_BALANCE_STDEV_MAX_H = 1.0
 
+#: How many candidate day orders Stage 8 tier 2 tries.
+#:
+#: Which day runs first decides where coverage credit lands, and Stage 4's
+#: far-zones-first sequence was chosen to shorten depot legs by a rule that predates
+#: crediting. The list is fixed and named rather than random so that the same
+#: campaign gives the same plan every time (CLAUDE.md rule 5); raising this costs one
+#: full forward pass per extra candidate.
+STAGE8_ORDER_CANDIDATES = 8
+
 ZONES_GPKG = DERIVED / "04-zones.gpkg"
 ZONES_LAYER = "arcs"
 ZONES_JSON = DERIVED / "04-zones.json"
@@ -908,3 +917,7 @@ ROUTES_LAYER = "manoeuvres"
 ROUTES_JSON = DERIVED / "05-routes.json"
 ROUTES_REPORT_MD = REPORTS / "05-routes.md"
 ROUTES_DIR = REPORTS / "05-routes"
+#: Stage 8's day documents. Beside Stage 5's rather than over them: the incumbent
+#: plan stays on disk and readable, because a plan you cannot go back to is not a
+#: plan you can compare against.
+ROUTES8_DIR = REPORTS / "08-routes"
