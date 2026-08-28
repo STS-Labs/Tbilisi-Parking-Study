@@ -55,13 +55,18 @@ chosen to shorten depot legs by a rule that predates crediting entirely.
 | Run 1 — OSM full | smallest-zone-first |
 | Run 2 — customer net | smallest-zone-first |
 
-**3 of 4 campaigns are won by a principled order and the
-rest by a seeded shuffle.** That is the honest reading: on the small zone
-campaigns the intuition that big zones should go first is doing real work, but on
-the 47-zone city no rule of thumb is special and the search is simply finding a
-better arrangement than any rule proposes. **That is the signal that the full
-Large Neighbourhood Search of §2 would pay** — the gain is there to be had and a
-fixed candidate list is a poor way to reach it.
+**3 different orders win across 4 campaigns, and no rule
+predicts which.** One campaign wants its largest zone first, two want their
+smallest, and the city wants an order no principle proposed at all. The obvious
+intuition — that the biggest zone should lead, because it has the most to give
+away — holds on exactly one of the four.
+
+That is the honest reading, and more useful than a rule would have been:
+**the gain is real and its location is not predictable**, which is precisely
+the case for the Large Neighbourhood Search of §2. Four hunches plus four
+shuffles is a poor instrument for finding it; a search that moves individual
+days between assignments is the right one, and this says it would have
+something to find.
 
 
 ## Where the days come from

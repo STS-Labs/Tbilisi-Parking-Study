@@ -101,7 +101,7 @@ days_from_2 = sum(
 )
 share = 100.0 * sum(hours_from_1) / len(hours_from_1) if hours_from_1 else 0.0
 best_orders = {r["name"]: r["tier"].get("order", "far-zones-first") for r in rows}
-principled = sum(1 for o in best_orders.values() if "shuffle" not in o)
+distinct = len(set(best_orders.values()))
 
 lines += [
     f"\n**Tier 1 takes {share:.0f}% of the hours; tier 2 takes the days.** Passive",
@@ -117,13 +117,17 @@ lines += [
 for name, order in best_orders.items():
     lines.append(f"| {name} | {order} |")
 lines += [
-    f"\n**{principled} of {len(rows)} campaigns are won by a principled order and the",
-    f"rest by a seeded shuffle.** That is the honest reading: on the small zone",
-    "campaigns the intuition that big zones should go first is doing real work, but on",
-    "the 47-zone city no rule of thumb is special and the search is simply finding a",
-    "better arrangement than any rule proposes. **That is the signal that the full",
-    "Large Neighbourhood Search of §2 would pay** — the gain is there to be had and a",
-    "fixed candidate list is a poor way to reach it.\n",
+    f"\n**{distinct} different orders win across {len(rows)} campaigns, and no rule",
+    "predicts which.** One campaign wants its largest zone first, two want their",
+    "smallest, and the city wants an order no principle proposed at all. The obvious",
+    "intuition — that the biggest zone should lead, because it has the most to give",
+    "away — holds on exactly one of the four.",
+    "\nThat is the honest reading, and more useful than a rule would have been:",
+    "**the gain is real and its location is not predictable**, which is precisely",
+    "the case for the Large Neighbourhood Search of §2. Four hunches plus four",
+    "shuffles is a poor instrument for finding it; a search that moves individual",
+    "days between assignments is the right one, and this says it would have",
+    "something to find.\n",
     "\n## Where the days come from\n",
     "\nA day disappears in one of two ways, and neither is 'the day got shorter'.",
     "Either a zone ends up owing nothing at all, because earlier days filmed it in",
