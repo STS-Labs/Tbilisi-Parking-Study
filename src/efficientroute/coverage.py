@@ -43,6 +43,61 @@ REASONS = (
 )
 
 
+@dataclass(frozen=True)
+class Pass:
+    """One traversal of one arc, from wherever it came.
+
+    A GPS run and a planned traversal are the same thing to the credit rule, and
+    that is the point: Stage 6 decides what a driven pass discharges, Stage 8 needs
+    to decide what a *planned* pass would discharge, and if those two answers are
+    computed by two pieces of code they will drift. When they drift, the plan banks
+    coverage the driver does not deliver — which is the precise failure Stage 6
+    exists to catch, arriving a stage earlier and harder to see.
+
+    A planned pass is `through` with `fraction=1.0` and `heading_ok=True` by
+    construction: the plan traverses a directed arc end to end, the right way round,
+    because an illegal manoeuvre would not be in `L*`. What the plan does *not* get
+    for free is `speed_kmh` — that is the decision Stage 8 is making.
+    """
+
+    arc_id: str
+    speed_kmh: float
+    fraction: float = 1.0
+    through: bool = True
+    heading_ok: bool = True
+    has_time: bool = True
+
+
+def qualifies(candidate: Pass, quality: str, *,
+              recording_checked: bool = False, recording_on: bool = True) -> str:
+    """Whether this traversal discharges a requirement, and if not, why not.
+
+    SPEC §10.3's conditions and nothing else. Returns a member of `REASONS`; the
+    two state-dependent outcomes — `retired` and `satisfied` — are not decided here,
+    because they are properties of the requirement's history rather than of the
+    pass.
+
+    The `reduced` exemption is the load-bearing clause. SPEC §3.2 captures motorway
+    and trunk at prevailing speed with degraded stereo, so the 40 km/h rule cannot
+    apply to them; on those arcs a fast pass counts, which is why crediting a
+    motorway deadhead is free and crediting a residential one is not.
+    """
+    if not candidate.heading_ok:
+        return "heading"
+    if not candidate.through and candidate.fraction < C.MATCH_MIN_ARC_FRACTION:
+        return "partial"
+    if quality != "reduced":
+        # No timestamps means no speed, and speed is a condition of counting. An
+        # untestable condition is not a satisfied one.
+        if not candidate.has_time:
+            return "no-time"
+        if candidate.speed_kmh > C.COVERAGE_SPEED_MAX_KMH:
+            return "speed"
+    if recording_checked and not recording_on:
+        return "not-recording"
+    return "counted"
+
+
 def requirement_key(arc_id: str, pair_id, pair_requirement) -> str:
     """The key a traversal of this arc discharges.
 
@@ -279,19 +334,19 @@ def ingest(trace, arcs, state: CoverageState | None = None, date: str | None = N
         if key is None:
             continue  # not a required arc: deadhead, or out of scope
         quality = state.quality.get(run.arc_id, "full")
-        reason = "counted"
-
-        if not run.through and run.fraction < C.MATCH_MIN_ARC_FRACTION:
-            reason = "partial"
-        elif quality != "reduced" and not getattr(trace, "has_time", True):
-            # No timestamps means no speed, and SPEC §10.3 makes speed a condition of
-            # counting. An untestable condition is not a satisfied one.
-            reason = "no-time"
-        elif quality != "reduced" and run.speed_quantile_kmh > C.COVERAGE_SPEED_MAX_KMH:
-            reason = "speed"
-        elif evidence == "checked" and not recording(trace.t[run.first_fix],
-                                                     trace.t[run.last_fix]):
-            reason = "not-recording"
+        reason = qualifies(
+            Pass(arc_id=run.arc_id, speed_kmh=run.speed_quantile_kmh,
+                 fraction=run.fraction, through=run.through,
+                 has_time=bool(getattr(trace, "has_time", True))),
+            quality,
+            recording_checked=evidence == "checked",
+            recording_on=(
+                recording(trace.t[run.first_fix], trace.t[run.last_fix])
+                if evidence == "checked" else True
+            ),
+        )
+        if reason != "counted":
+            pass
         elif state.retired_passes.get(key, 0) and not state.remaining.get(key, 0):
             reason = "retired"
         elif state.remaining.get(key, 0) <= 0:

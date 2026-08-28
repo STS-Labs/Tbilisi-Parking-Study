@@ -1525,6 +1525,325 @@ def run_stage7() -> dict:
             "bytes": total, "meta": {"runtime_s": round(time.time() - started, 1)}}
 
 
+def _stage8_pass(ctx, priority: dict, tier: int, log: bool = True) -> dict:
+    """One forward pass: solve the days in `priority` order, crediting as it goes.
+
+    The order is the whole of what tier 2 varies. Credit accrues to whichever days
+    happen to run first, so which zone leads decides how much later work disappears —
+    and Stage 4's far-zones-first sequence was chosen to shorten depot legs, with no
+    idea that crediting existed.
+
+    A zone split mid-pass inherits its parent's rank, so the candidate order survives
+    splitting instead of being re-derived from the depot field half way through.
+    """
+    import numpy as np
+
+    from . import routes, sequential, zoning
+
+    star = ctx.star_template
+    n = star.n_arc_nodes
+    capture_cost, deadhead_cost = sequential.edge_costs(star)
+    marginal = sequential.marginal_cost_s(capture_cost, deadhead_cost)
+    oriented_lower = np.asarray(ctx.oriented.lower[:n], dtype="int64")
+    carrier = sequential.requirement_carrier(oriented_lower, star.partner)
+    arc_ids = np.asarray(star.arc_id[:n])
+    capture_speed = ctx.rows["capture_speed_kmh"].to_numpy(dtype="float64")
+    quality = ctx.rows["capture_quality"].astype(str).to_numpy()
+    length_m = ctx.length_m[:n]
+
+    labels = np.asarray(ctx.labels).copy()
+    remaining = oriented_lower.copy()
+    rank = dict(priority)
+    break_s = C.BREAK_HOURS * 3600.0
+    window_s = ctx.window_h * 3600.0
+
+    days: list[dict] = []
+    i9_failures: list[dict] = []
+    i10_ok = True
+    skipped: list[int] = []
+    splits: list[dict] = []
+    done: set[int] = set()
+    next_label = int(labels.max()) + 1
+    pending = sorted(rank, key=lambda z: (rank[z], z))
+    guard = 0
+    cap = C.ROUTE_SPLIT_MAX_ROUNDS * max(len(pending), 1) * 4
+
+    while pending and guard <= cap:
+        guard += 1
+        zone = pending.pop(0)
+        nodes = np.asarray(_zone_nodes(ctx.zone_graph, labels, zone))
+        owed = nodes[remaining[nodes] > 0] if nodes.size else nodes
+        if owed.size == 0:
+            # Earlier days already filmed everything this zone owed. The day is not
+            # shortened, it is gone — and this is where a whole day of the campaign
+            # goes.
+            done.add(int(zone))
+            skipped.append(int(zone))
+            if log:
+                _log(f"  zone {zone}: nothing left to film — day dropped")
+            continue
+
+        optional = None
+        if tier >= 2:
+            # Filming an arc this day does not owe is *permitted* rather than
+            # required, so the solver may take it when the routing already goes
+            # there. It is never made cheaper than passing: `lstar` enforces
+            # capture >= deadhead, so a per-day flow can only ever be indifferent.
+            # The credit is taken after the route is known, where the future value
+            # of having filmed it is actually knowable.
+            optional = np.zeros(n, dtype="int64")
+            outside = remaining.copy()
+            outside[owed] = 0
+            optional[outside > 0] = outside[outside > 0]
+
+        route = routes.solve_zone(
+            ctx.graph, star, ctx.capture_s, ctx.deadhead_s, owed, ctx.depot_node,
+            remaining, ctx.keep, zone, len(days), "",
+            optional_capture=optional,
+        )
+        # I4 still binds. A zone that will not fit has to be split before anything is
+        # credited to it: crediting into a day that already overruns banks a saving
+        # nobody can drive.
+        if route.day_hours() > ctx.window_h + 1e-9 and len(splits) < cap:
+            labels, ok = zoning.split_zone(ctx.zone_graph, labels, zone, next_label)
+            if log:
+                _log(f"  zone {zone}: {route.day_hours():.2f} h in a "
+                     f"{ctx.window_h:.2f} h window — {'split' if ok else 'CANNOT SPLIT'}")
+            if ok:
+                splits.append({"zone": int(zone), "into": [int(zone), int(next_label)]})
+                rank[next_label] = rank.get(zone, 0.0) + 1e-6
+                next_label += 1
+                pending = sorted(
+                    [z for z in rank if int(z) not in done],
+                    key=lambda z: (rank[z], z),
+                )
+                continue
+
+        counts = np.asarray(route.visit_counts, dtype="int64")[:n]
+        own, bonus, _ = sequential.take_credit(counts, remaining, route.lower[:n], carrier)
+        # Cost the day from its own traversals and true prices, not from the star's
+        # objective — under tier 2 the star's upper bounds differ from Stage 5's, and
+        # a saving read off a modified objective would not be a saving.
+        base_s = float((own * capture_cost).sum()) \
+            + float(((counts - own) * deadhead_cost).sum()) + route.turn_s
+        budget_s = window_s - break_s - base_s
+        kept, charged_s = sequential.fit_bonus(bonus, marginal, budget_s)
+        i10_ok &= sequential.check_i10(kept, marginal, charged_s)["ok"]
+
+        credited = own + kept
+        i9_failures.extend(
+            sequential.check_i9(credited, arc_ids, capture_speed, quality))
+        _o, _b, left = sequential.take_credit(
+            np.minimum(counts, credited), remaining, route.lower[:n], carrier)
+        remaining = left
+
+        capture_s = float((credited * capture_cost).sum())
+        deadhead_s = float(((counts - credited) * deadhead_cost).sum())
+        route_s = capture_s + deadhead_s + route.turn_s
+        days.append({
+            "day": len(days) + 1,
+            "zone": int(zone),
+            "arc_traversals": int(len(route.tour)),
+            "capture_h": capture_s / 3600.0,
+            "deadhead_h": deadhead_s / 3600.0,
+            "turn_h": route.turn_s / 3600.0,
+            "route_h": route_s / 3600.0,
+            "day_h": route_s / 3600.0 + C.BREAK_HOURS,
+            "slowing_h": charged_s / 3600.0,
+            "bonus_passes": int(kept.sum()),
+            "bonus_km": float((kept * length_m).sum()) / 1000.0,
+            "bonus_offered": int(bonus.sum()),
+            "over_window": bool(route_s / 3600.0 + C.BREAK_HOURS > ctx.window_h + 1e-9),
+        })
+        done.add(int(zone))
+        if log:
+            _log(f"  day {len(days):>2} (zone {zone:>3}): {route_s / 3600.0:5.2f} h"
+                 f"  +{int(kept.sum()):>4} credited ({float((kept * length_m).sum()) / 1000.0:5.1f} km)"
+                 f"  slowing {charged_s / 60.0:5.1f} min"
+                 f"  {int(remaining.sum()):>6,} passes left")
+
+    return {"days": days, "splits": splits, "skipped": skipped,
+            "undischarged_passes": int(remaining.sum()),
+            "i9_failures": i9_failures, "i10_ok": bool(i10_ok)}
+
+
+def _stage8_orders(ctx) -> list[tuple[str, dict]]:
+    """Deterministic candidate day orders for tier 2.
+
+    Not a random search: a fixed, named list, so the same campaign produces the same
+    plan every time (CLAUDE.md rule 5). Each candidate is a hypothesis about where
+    credit is best harvested — far zones first hands the early days long depot legs
+    that cross the whole city, largest-first gives the biggest zones the emptiest
+    remainder to draw on, and the seeded shuffles are there to say whether the two
+    principled orders were actually doing anything.
+    """
+    import numpy as np
+
+    from . import sequential
+
+    assert sequential  # imported for symmetry with the caller's expectations
+    far_first = list(_sequence_zones(ctx.zone_graph, ctx.labels, ctx.field))
+    labels = np.asarray(ctx.labels)
+    load = {int(z): float((labels == z).sum()) for z in far_first}
+
+    orders = [
+        ("far-zones-first (Stage 4's order)", far_first),
+        ("near-zones-first", list(reversed(far_first))),
+        ("largest-zone-first", sorted(far_first, key=lambda z: (-load[int(z)], z))),
+        ("smallest-zone-first", sorted(far_first, key=lambda z: (load[int(z)], z))),
+    ]
+    for seed in C.METIS_SEEDS[: max(0, C.STAGE8_ORDER_CANDIDATES - len(orders))]:
+        shuffled = list(far_first)
+        np.random.default_rng(seed).shuffle(shuffled)
+        orders.append((f"seeded shuffle {seed}", shuffled))
+    return [(name, {int(z): i for i, z in enumerate(order)})
+            for name, order in orders[: C.STAGE8_ORDER_CANDIDATES]]
+
+
+def rewrite_stage8_report() -> dict:
+    """Re-render `reports/08-optimisation.md` from the artifact, without re-solving.
+
+    Same reason Stages 3, 4 and 5 have one: a 47-day campaign takes nine minutes to
+    re-solve and the report is a pure function of the artifact it already wrote.
+    """
+    from . import report08
+
+    path = C.DERIVED / "08-sequential.json"
+    if not path.exists():
+        raise FileNotFoundError(f"{path} missing — run `efficientroute stage8` first")
+    payload = json.loads(path.read_text())
+    report08.write(payload)
+    _log(f"wrote {C.REPORTS / '08-optimisation.md'}")
+    return payload
+
+
+def run_stage8(tier: int = 1) -> dict:
+    """Stage 8 — let coverage credit cross day boundaries, and re-solve on it.
+
+    **Tier 0** is Stage 5's plan, read back as the control.
+
+    **Tier 1, passive credit.** Walk the days in the order Stage 4 sequenced them,
+    solve each over the work it still owes, and bank every qualifying pass the tour
+    already drives — including passes over arcs a later day was going to come back
+    for. Those passes are slowed to filming speed and charged for it, and refused if
+    the day cannot afford them. A later day then has less to do, and a day with
+    nothing left to do disappears. Tier 1 cannot lose: each day gets a subset of the
+    work Stage 5 gave it, and any credit that would break the window is not taken.
+
+    **Tier 2, order search.** Which day runs first decides where credit lands, and
+    Stage 4's far-zones-first order was chosen to shorten depot legs by a rule that
+    predates crediting entirely. Tier 2 runs the tier 1 pass under a fixed list of
+    candidate orders and keeps the best.
+
+    Tier 2 is deliberately *not* the brief's "active detour". That would need the day
+    solver to prefer filming an arc it is passing, and it cannot: `lstar.build`
+    enforces `capture >= deadhead` because the capture cap can only slow the car
+    down (SPEC §6), so filming is never cheaper than passing inside a single day's
+    objective. The reason to film is a saving on a *later* day, which a per-day flow
+    cannot see, and expressing it needs a negative-cost reward the flow forbids.
+    Crediting after the route is known — tier 1 — is the workaround, not a shortcut.
+    """
+    import datetime as dt
+
+    from . import sequential
+
+    started = time.time()
+    for required_file in (C.NETWORK_GPKG, C.ZONES_GPKG, C.ZONES_JSON, C.ROUTES_JSON):
+        if not required_file.exists():
+            raise FileNotFoundError(
+                f"{required_file} missing — Stage 8 re-solves the Stage 5 plan, so "
+                "that plan has to exist first"
+            )
+
+    baseline_payload = json.loads(C.ROUTES_JSON.read_text())
+    bt = baseline_payload["totals"]
+    baseline = {"days": int(bt["days"]), "route_h": float(bt["route_h"]),
+                "capture_h": float(bt["capture_h"]), "deadhead_h": float(bt["deadhead_h"]),
+                "turn_h": float(bt["turn_h"]), "start_date": bt["start_date"],
+                "finish_date": bt["finish_date"]}
+    _log(f"tier 0 (incumbent): {baseline['days']} days, {baseline['route_h']:.2f} h")
+    if tier == 0:
+        return {"tiers": {"0": baseline}, "adopted": "0", "baseline": baseline}
+
+    ctx = solver_context()
+    tiers: dict[str, dict] = {"0": baseline}
+    attempts: list[dict] = []
+    best_days = None
+    best_result = None
+    best_label = ""
+
+    candidates = ([("far-zones-first (Stage 4's order)",
+                    {int(z): i for i, z in enumerate(
+                        _sequence_zones(ctx.zone_graph, ctx.labels, ctx.field))})]
+                  if tier == 1 else _stage8_orders(ctx))
+
+    for index, (label, priority) in enumerate(candidates):
+        if len(candidates) > 1:
+            _log(f"order {index + 1}/{len(candidates)}: {label}")
+        outcome = _stage8_pass(ctx, priority, tier, log=len(candidates) == 1)
+        result = sequential.summarise(outcome["days"], baseline)
+        result.update({
+            "tier": tier, "order": label,
+            "undischarged_passes": outcome["undischarged_passes"],
+            "days_dropped": outcome["skipped"], "splits": outcome["splits"],
+            "i9_failures": outcome["i9_failures"], "i10_ok": outcome["i10_ok"],
+        })
+        attempts.append({"order": label, "days": result["days"],
+                         "route_h": result["route_h"]})
+        if index == 0:
+            # Candidate 0 is always Stage 4's own order, which is exactly tier 1.
+            # Recording it keeps the tier table honest about what the order search
+            # added on top of plain crediting — §3 asks for that separation because
+            # "tier 1 got most of it" is the more useful finding.
+            tier1 = dict(result)
+            tier1["tier"] = 1
+            tiers["1"] = tier1
+        if len(candidates) > 1:
+            _log(f"    {result['days']} days, {result['route_h']:.2f} h")
+        if best_result is None or sequential.better(result, best_result):
+            best_result, best_days, best_label = result, outcome["days"], label
+
+    days = best_days
+    start_date = dt.date.fromisoformat(C.CAMPAIGN_START_DATE)
+    for day in days:
+        day["date"] = (start_date + dt.timedelta(days=day["day"] - 1)).isoformat()
+    best_result["start_date"] = days[0]["date"] if days else ""
+    best_result["finish_date"] = days[-1]["date"] if days else ""
+    tiers[str(tier)] = best_result
+
+    _log(f"tier {tier}: {best_result['days']} days, {best_result['route_h']:.2f} h "
+         f"({best_result['vs_baseline']['route_h']:+.2f} h, "
+         f"{best_result['vs_baseline']['days']:+d} days) via {best_label}")
+    if best_result["undischarged_passes"]:
+        _log(f"  WARNING {best_result['undischarged_passes']:,} passes never discharged")
+
+    payload = {
+        "baseline": baseline,
+        "baseline_splits": len(baseline_payload.get("splits", [])),
+        "tiers": tiers,
+        "days": days,
+        "attempts": attempts,
+        "adopted": str(tier) if sequential.better(best_result, baseline) else "0",
+        "credit_rule": {
+            "speed_max_kmh": C.COVERAGE_SPEED_MAX_KMH,
+            "reduced_exempt": True,
+            "shared_with": "coverage.qualifies — the Stage 6 rule",
+            "pair_either_direction": True,
+        },
+        "meta": {"runtime_s": round(time.time() - started, 1),
+                 "arcs_sha256": X.file_digest(C.NETWORK_GPKG)},
+    }
+    out = C.DERIVED / "08-sequential.json"
+    out.write_text(json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False))
+    _log(f"wrote {out}")
+    from . import report08
+
+    report08.write(payload)
+    _log(f"wrote {C.REPORTS / '08-optimisation.md'}")
+    _log(f"done in {time.time() - started:.0f}s")
+    return payload
+
+
 def run_stage6(day: int, trace_path, date: str | None = None,
                replan: bool = False, replay: bool = False) -> dict:
     """Stage 6 — ingest a day's trace, recompute what is left, re-plan the rest.
@@ -2175,22 +2494,48 @@ def _decision_inputs(runs: dict) -> dict:
 # ================================================== Stage 5 — route solve
 
 
-def run_stage5() -> dict:
-    """Solve one legal, closed, depot-to-depot route for every driving day."""
+@dataclasses.dataclass
+class SolverContext:
+    """Everything a day solve needs, built once.
+
+    Stage 5 and Stage 8 route over the identical graph, costs, orientation, zoning
+    and depot field — they differ only in *when* a requirement may be discharged.
+    Building this twice would be two chances to diverge, and a Stage 8 that quietly
+    routed over a slightly different `L*` than Stage 5 would produce a saving that
+    is an artefact of the difference rather than of the credit rule.
+    """
+
+    arcs: object
+    frame: object
+    model: object
+    graph: object
+    keep: object
+    arc_ids: object
+    rows: object
+    capture_s: object
+    deadhead_s: object
+    length_m: object
+    zone_graph: object
+    oriented: object
+    depot_node: int
+    depot_arc: int
+    depot_offset: float
+    arrays: object
+    field: object
+    star_template: object
+    labels: object
+    window_h: float
+    start_date: object
+    scope_note: str
+
+
+def solver_context() -> "SolverContext":
+    """Build the day-solving context Stages 5 and 8 share."""
     import datetime as dt
 
     import numpy as np
 
-    from . import depotlegs, lstar, orientation, report05, routeio, routes, schedule
-    from . import tourcheck as TC
-    from . import zoning
-
-    started = time.time()
-    for required_file in (C.NETWORK_GPKG, C.ZONES_GPKG, C.ZONES_JSON):
-        if not required_file.exists():
-            raise FileNotFoundError(
-                f"{required_file} missing — Stage 5 depends on the Stage 4 gate having passed"
-            )
+    from . import depotlegs, lstar, orientation, zoning
 
     _log(f"scope variant {C.SCOPE_VARIANT}, window {C.DEFAULT_SHIFT_WINDOW}")
     arcs = gpd.read_file(C.NETWORK_GPKG, layer=C.NETWORK_LAYER)
@@ -2227,6 +2572,40 @@ def run_stage5() -> dict:
     shift_start, shift_end = C.SHIFT_WINDOWS[C.DEFAULT_SHIFT_WINDOW]
     window_h = shift_end - shift_start
     start_date = dt.date.fromisoformat(C.CAMPAIGN_START_DATE)
+    return SolverContext(
+        arcs=arcs, frame=frame, model=model, graph=graph, keep=keep, arc_ids=arc_ids,
+        rows=rows, capture_s=capture_s, deadhead_s=deadhead_s, length_m=length_m,
+        zone_graph=zone_graph, oriented=oriented, depot_node=depot_node,
+        depot_arc=depot_arc, depot_offset=depot_offset, arrays=arrays, field=field,
+        star_template=star_template, labels=labels, window_h=window_h,
+        start_date=start_date, scope_note=scope_note,
+    )
+
+
+def run_stage5() -> dict:
+    """Solve one legal, closed, depot-to-depot route for every driving day."""
+    import datetime as dt
+
+    import numpy as np
+
+    from . import depotlegs, lstar, orientation, report05, routeio, routes, schedule
+    from . import tourcheck as TC
+    from . import zoning
+
+    started = time.time()
+    for required_file in (C.NETWORK_GPKG, C.ZONES_GPKG, C.ZONES_JSON):
+        if not required_file.exists():
+            raise FileNotFoundError(
+                f"{required_file} missing — Stage 5 depends on the Stage 4 gate having passed"
+            )
+
+    ctx = solver_context()
+    arcs, frame, graph, keep = ctx.arcs, ctx.frame, ctx.graph, ctx.keep
+    capture_s, deadhead_s = ctx.capture_s, ctx.deadhead_s
+    zone_graph, oriented = ctx.zone_graph, ctx.oriented
+    depot_node, depot_arc, depot_offset = ctx.depot_node, ctx.depot_arc, ctx.depot_offset
+    arrays, field, star_template = ctx.arrays, ctx.field, ctx.star_template
+    labels, window_h, start_date = ctx.labels, ctx.window_h, ctx.start_date
 
     solved: dict[int, routes.DayRoute] = {}
     splits = []

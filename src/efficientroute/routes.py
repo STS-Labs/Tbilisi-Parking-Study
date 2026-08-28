@@ -122,14 +122,39 @@ def solve_zone(
     zone: int,
     position: int,
     date: str,
+    optional_capture: np.ndarray | None = None,
+    deadhead_override: np.ndarray | None = None,
 ) -> DayRoute:
-    """Balance, connect, Euler, rotate — a legal closed day route."""
+    """Balance, connect, Euler, rotate — a legal closed day route.
+
+    `optional_capture` and `deadhead_override` are Stage 8's only entry points into
+    the day solver, and both default to `None` so Stage 5 routes exactly as before.
+
+    `optional_capture` raises the *upper* bound on a capture edge without raising its
+    lower bound, which makes filming that arc permitted rather than required — the
+    solver may take it if the routing works out and skip it otherwise. Stage 5 has no
+    use for that: every arc it films is one it was told to film.
+
+    `deadhead_override` re-prices deadheading an arc the campaign still owes, so that
+    passing one without filming it carries the cost of the return trip some later day
+    would have to make. Without it the day solver has no way to see that a pass it is
+    making anyway is worth something to a day it knows nothing about.
+    """
     lower = zone_lower_bounds(
         star_template.n_arc_nodes, star_template.n_edges, zone_nodes, depot_node,
         oriented_lower,
     )
     n = star_template.n_arc_nodes
-    star = lstar.build(graph, capture_s, deadhead_s, lower[:n], keep=keep)
+    star = lstar.build(
+        graph, capture_s,
+        deadhead_s if deadhead_override is None else deadhead_override,
+        lower[:n], keep=keep,
+    )
+    if optional_capture is not None:
+        extra = np.asarray(optional_capture, dtype="int64")
+        upper = star.upper.copy()
+        upper[:n] = np.maximum(upper[:n], lower[:n] + extra)
+        star = dataclasses.replace(star, upper=upper)
     # `lstar.build` takes per-node *capture* lower bounds; the depot anchor sits on
     # a deadhead edge, which it has no way to express, so it is applied here. The
     # capture block is identical either way, so the equal lower/upper bound that
