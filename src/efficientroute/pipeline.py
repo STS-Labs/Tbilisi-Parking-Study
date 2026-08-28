@@ -1558,6 +1558,7 @@ def _stage8_pass(ctx, priority: dict, tier: int, log: bool = True) -> dict:
     window_s = ctx.window_h * 3600.0
 
     days: list[dict] = []
+    artefacts: list[dict] = []
     i9_failures: list[dict] = []
     i10_ok = True
     skipped: list[int] = []
@@ -1638,12 +1639,14 @@ def _stage8_pass(ctx, priority: dict, tier: int, log: bool = True) -> dict:
             "turn_h": route.turn_s / 3600.0,
             "route_h": route_s / 3600.0,
             "day_h": route_s / 3600.0 + C.BREAK_HOURS,
+            "break_h": C.BREAK_HOURS,
             "slowing_h": charged_s / 3600.0,
             "bonus_passes": int(kept.sum()),
             "bonus_km": float((kept * length_m).sum()) / 1000.0,
             "bonus_offered": int(bonus.sum()),
             "over_window": bool(route_s / 3600.0 + C.BREAK_HOURS > ctx.window_h + 1e-9),
         })
+        artefacts.append({"tour": route.tour, "credited": credited, "kept": kept})
         done.add(int(zone))
         if log:
             _log(f"  day {len(days):>2} (zone {zone:>3}): {route_s / 3600.0:5.2f} h"
@@ -1651,9 +1654,68 @@ def _stage8_pass(ctx, priority: dict, tier: int, log: bool = True) -> dict:
                  f"  slowing {charged_s / 60.0:5.1f} min"
                  f"  {int(remaining.sum()):>6,} passes left")
 
-    return {"days": days, "splits": splits, "skipped": skipped,
+    return {"days": days, "artefacts": artefacts, "splits": splits, "skipped": skipped,
             "undischarged_passes": int(remaining.sum()),
             "i9_failures": i9_failures, "i10_ok": bool(i10_ok)}
+
+
+def _write_stage8_days(ctx, days: list[dict], artefacts: list[dict]) -> dict:
+    """A GPX track and a turn sheet per day, into `reports/08-routes/`.
+
+    Beside Stage 5's documents rather than over them, so the incumbent plan stays
+    readable and comparable.
+
+    The one thing these say that Stage 5's cannot: which passes are **credited**.
+    A credited pass is a street the route would have driven past at full speed and
+    is now filming instead, and the whole saving rests on the car actually being
+    slowed for it. Driven fast, the footage is unusable, the street quietly returns
+    to the required set, and nobody discovers it until review — so the driver is
+    told on the row and at the head of the sheet.
+    """
+    import numpy as np
+
+    from . import routeio
+
+    frame = ctx.frame
+    geometry = {str(a): list(g.coords) for a, g in zip(frame["arc_id"], frame.geometry)}
+    names = dict(zip(frame["arc_id"].astype(str), frame["name"].fillna("")))
+    lengths = dict(zip(frame["arc_id"].astype(str), frame["length_m"].astype(float)))
+    speeds = dict(zip(frame["arc_id"].astype(str),
+                      frame["capture_speed_kmh"].astype(float)))
+    unverified = (
+        set(frame.loc[frame["attributes_unverified"], "arc_id"].astype(str))
+        if "attributes_unverified" in frame.columns else set()
+    )
+    star = ctx.star_template
+    arc_ids = np.asarray(star.arc_id[: star.n_arc_nodes])
+
+    C.ROUTES8_DIR.mkdir(parents=True, exist_ok=True)
+    hold_total = 0
+    for day, art in zip(days, artefacts):
+        stem = f"day-{day['day']:02d}"
+        # `annotate` calls the first `required` visits of an arc capture, so handing
+        # it the *credited* counts is what makes a credited pass read as filming
+        # rather than as repositioning.
+        steps = routeio.annotate(art["tour"], star, ctx.graph, art["credited"])
+        hold = {str(arc_ids[i]) for i in np.flatnonzero(art["kept"])}
+        hold_total += len(hold)
+        points = routeio.route_coordinates(art["tour"], star, geometry)
+        routeio.write_gpx(
+            C.ROUTES8_DIR / f"{stem}.gpx", points,
+            name=f"EfficientRoute day {day['day']:02d} — {day['date']} "
+                 f"(zone {day['zone']}, Stage 8)",
+            description=(
+                f"{day['arc_traversals']:,} arc traversals, {day['route_h']:.2f} h. "
+                f"{len(hold):,} streets are filmed on a pass that would otherwise "
+                "have been repositioning — hold to the capture speed on those. "
+                "Starts and ends at the depot."
+            ),
+        )
+        routeio.write_day_sheet(
+            C.ROUTES8_DIR / f"{stem}.md", day, steps, names, lengths, speeds,
+            unverified=unverified, hold_speed=hold,
+        )
+    return {"days": len(days), "hold_arcs": hold_total, "dir": str(C.ROUTES8_DIR)}
 
 
 def _stage8_orders(ctx) -> list[tuple[str, dict]]:
@@ -1760,6 +1822,7 @@ def run_stage8(tier: int = 1) -> dict:
     best_days = None
     best_result = None
     best_label = ""
+    best_artefacts: list[dict] = []
 
     candidates = ([("far-zones-first (Stage 4's order)",
                     {int(z): i for i, z in enumerate(
@@ -1791,6 +1854,7 @@ def run_stage8(tier: int = 1) -> dict:
             _log(f"    {result['days']} days, {result['route_h']:.2f} h")
         if best_result is None or sequential.better(result, best_result):
             best_result, best_days, best_label = result, outcome["days"], label
+            best_artefacts = outcome["artefacts"]
 
     days = best_days
     start_date = dt.date.fromisoformat(C.CAMPAIGN_START_DATE)
@@ -1822,6 +1886,12 @@ def run_stage8(tier: int = 1) -> dict:
         "meta": {"runtime_s": round(time.time() - started, 1),
                  "arcs_sha256": X.file_digest(C.NETWORK_GPKG)},
     }
+    if payload["adopted"] != "0":
+        written = _write_stage8_days(ctx, days, best_artefacts)
+        payload["route_documents"] = written
+        _log(f"wrote {written['days']} day sheets and GPX tracks to {C.ROUTES8_DIR}"
+             f" ({written['hold_arcs']:,} arcs marked hold-40)")
+
     out = C.DERIVED / "08-sequential.json"
     out.write_text(json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False))
     _log(f"wrote {out}")

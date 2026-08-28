@@ -126,6 +126,26 @@ TURN_WORDS = {
 }
 
 
+def _hold_notice(steps: list[dict], hold_speed: set) -> str:
+    """The warning at the head of a sheet containing credited passes.
+
+    These are streets the route would have driven past at full speed. Filming them on
+    the way is what removes a return trip later in the campaign, and it only works if
+    the car is actually slowed. There is no way to recover it afterwards: the footage
+    is either usable or it is not, and the street comes back onto the list.
+    """
+    hits = {step["arc_id"] for step in steps if step["arc_id"] in hold_speed}
+    if not hits:
+        return ""
+    return (
+        f"\n> **{len(hits)} streets on this route are marked [HOLD 40 — still owed].** "
+        "You would otherwise have driven past them; filming them today is what saves a "
+        "return trip later in the campaign. Hold to the capture speed on those rows. "
+        "If you cannot — traffic, a closure, anything — say so, because the street then "
+        "goes back on the list and the plan needs to know.\n"
+    )
+
+
 def _unverified_notice(steps: list[dict], unverified: set) -> str:
     """The warning at the head of a sheet that contains an unverified street."""
     hits = {step["arc_id"] for step in steps if step["arc_id"] in unverified}
@@ -144,6 +164,7 @@ def _unverified_notice(steps: list[dict], unverified: set) -> str:
 def write_day_sheet(
     path: Path, day: dict, steps: list[dict], names: dict, lengths: dict,
     speeds: dict, unverified: set | None = None,
+    hold_speed: set | None = None,
 ) -> Path:
     """A turn-by-turn sheet a driver can follow without the map.
 
@@ -174,6 +195,11 @@ def write_day_sheet(
         "are repositioning — drive them normally, the camera is not counted.\n",
     ]
     unverified = unverified or set()
+    # Stage 8 credits some passes the day would otherwise have driven at full speed.
+    # They are filmed instead, which only works if the car is actually held to the
+    # capture speed — a credited pass driven at 60 km/h silently un-covers the street
+    # and nobody finds out until footage review. So the driver is told, on the row.
+    hold_speed = hold_speed or set()
     # Inserted only when there is something to warn about. An empty notice would
     # still cost a blank line, and every campaign that has no unverified street —
     # Tbilisi included — has a committed sheet that must keep rebuilding byte for
@@ -181,23 +207,27 @@ def write_day_sheet(
     notice = _unverified_notice(steps, unverified)
     if notice:
         lines.append(notice)
+    held = _hold_notice(steps, hold_speed)
+    if held:
+        lines.append(held)
     lines += [
         "\n| # | Street | Instruction | km | Mode | Lane |",
         "| ---: | --- | --- | ---: | --- | --- |",
     ]
 
-    def described(step: dict) -> tuple[str, str, str, bool]:
+    def described(step: dict) -> tuple[str, str, str, bool, bool]:
         return (
             names.get(step["arc_id"], "") or "(unnamed)",
             "capture" if step["is_capture"] else "deadhead",
             step["lane_instruction"],
             step["arc_id"] in unverified,
+            step["arc_id"] in hold_speed,
         )
 
     row = 0
     index = 0
     while index < len(steps):
-        name, mode, lane, flagged = described(steps[index])
+        name, mode, lane, flagged, hold = described(steps[index])
         distance = lengths.get(steps[index]["arc_id"], 0.0)
         # Fold a run along the same street into one instruction. OSM splits a
         # street at every junction it touches, so an unfolded sheet gives the
@@ -215,6 +245,8 @@ def write_day_sheet(
         step = steps[index]
         row += 1
         label = f"{name} **[UNVERIFIED]**" if flagged else name
+        if hold:
+            label += " **[HOLD 40 — still owed]**"
         lines.append(
             f"| {row} | {label} | {TURN_WORDS.get(step['turn'], step['turn'])} | "
             f"{distance / 1000.0:.2f} | {mode} | {lane or '—'} |"

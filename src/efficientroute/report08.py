@@ -156,9 +156,16 @@ def _orders(a: dict) -> str:
         "decides how much later work disappears — and Stage 4's far-zones-first order "
         "was chosen to shorten depot legs by a rule that predates crediting entirely. "
         "It is not the best order once credit exists.\n\n"
-        "The seeded shuffles are the control. If they matched the principled orders "
-        "the search would be finding noise; that they do not is what says the "
-        "principle is real.\n"
+        + (
+            "The seeded shuffles are the control, and here a **shuffle wins**. No rule "
+            "of thumb is special on a campaign with this many zones — the search is "
+            "finding a better arrangement than any principle proposes, which is "
+            "precisely the signal that a real neighbourhood search would pay.\n"
+            if "shuffle" in best["order"] else
+            "The seeded shuffles are the control, and here a **principled order wins**: "
+            f"`{best['order']}` beats every shuffle. The intuition is doing real work "
+            "rather than the search finding noise.\n"
+        )
     )
 
 

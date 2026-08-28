@@ -917,3 +917,7 @@ ROUTES_LAYER = "manoeuvres"
 ROUTES_JSON = DERIVED / "05-routes.json"
 ROUTES_REPORT_MD = REPORTS / "05-routes.md"
 ROUTES_DIR = REPORTS / "05-routes"
+#: Stage 8's day documents. Beside Stage 5's rather than over them: the incumbent
+#: plan stays on disk and readable, because a plan you cannot go back to is not a
+#: plan you can compare against.
+ROUTES8_DIR = REPORTS / "08-routes"
