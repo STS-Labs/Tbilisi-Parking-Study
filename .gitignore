@@ -41,3 +41,8 @@ RUN-CUSTOMER-NET/reports/*.html
 
 # Per-campaign Stage 8 run logs; the artifacts are the record.
 .stage8-logs/
+
+# Worktrees live inside the repo, so a `git add -A` from the root sweeps an entire
+# second copy of it into a commit — 589 files and a 47 MB GeoPackage, once. The
+# worktree is a checkout, never content.
+.claude/worktrees/
