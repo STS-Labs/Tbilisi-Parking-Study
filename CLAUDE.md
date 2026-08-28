@@ -30,6 +30,38 @@ Every ambiguous case resolves toward more coverage, not less. See SPEC.md §1.1.
 I1–I8 are defined in SPEC.md §8. Every stage that produces or transforms a route
 runs the full invariant suite. A failing invariant is a hard stop.
 
+## Reports compute their conclusions; they never hard-code them
+
+A sentence of interpretation written by hand into a generated report is a lie
+waiting for the next run. Stage 8's first `08-SUMMARY.md` asserted "Tbilisi saves
+hours and no days" — true of tier 1, falsified by tier 2 an hour later. Rewriting it
+to derive its conclusions from the artifacts immediately caught a *second* stale
+claim in the same file.
+
+If a report states a finding, it must compute that finding from the data it is
+reporting on. Prose that cannot be re-derived does not go in a generated file.
+
+## `git add -A` from the repo root reaches into worktrees
+
+Commit `f071fcd` intended two small edits and swept in 589 files / 1.22M lines —
+an entire second checkout under `.claude/worktrees/`, including a 47 MB `.gpkg` and
+a 14 MB `.pkl`. Worktrees live inside the repo, so a blanket add finds them.
+
+- `.claude/` is now in `.gitignore`. Keep it there.
+- Check `git status --short` before any blanket add. Blind `git add -A` in a repo
+  that contains generated geodata is how 107 MB enters history permanently.
+
+## History rewrites: before the first push, never after, never without a bundle
+
+This repository has **no remote**. It is the only copy of the work. A history
+rewrite on a sole copy, to reclaim disk, is a bad trade at any size. The rule:
+
+1. `git bundle create <path> --all`, and verify it by cloning from it.
+2. Rewrite only when the bloat has a real cost — i.e. immediately before adding a
+   remote and pushing for the first time, when the objects would otherwise be
+   published forever.
+3. Never rewrite history that has been pushed.
+
 ## A run that cannot fail is not a run that passed
 
 Twice now this project has produced a confident green result over broken work:
