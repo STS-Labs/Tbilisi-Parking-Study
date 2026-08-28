@@ -307,11 +307,25 @@ The base is **fixed**. Three solver-side mitigations, in order of value:
    found the binding constraint is not the detour but the day budget: a zone sized
    to fill its shift has no room for a longer leg. Reserving that room reclaims ~3x
    as much and cuts 9.3 h of total driving, at the cost of one extra day.
-2. **Far zones early — a hard scheduling rule.** Early in the campaign the
-   connecting corridors are still uncovered, so long legs absorb productive work.
-   Late in the campaign those corridors are done and the same legs become pure
-   deadhead. **Distant zones must therefore be sequenced first.** This is
-   counter-intuitive and easy to get backwards; it is worth real driving days.
+2. ~~**Far zones early — a hard scheduling rule.**~~ **SUPERSEDED by Stage 8
+   (28 Aug 2026) — do not reinstate as a rule.**
+
+   The original reasoning: early in the campaign the connecting corridors are still
+   uncovered, so long legs absorb productive work; late on they become pure
+   deadhead, so distant zones should be sequenced first.
+
+   That reasoning was a **crude approximation of coverage crediting**. It tried to
+   capture value from cross-day passes by ordering the days, because the planner
+   could not credit those passes directly. Stage 8's credit rule captures that value
+   properly and on every pass, not just depot legs — so the approximation is now
+   redundant, and on Zone B it is actively worse: largest-zone-first beat
+   far-zones-first outright (5 days vs 6).
+
+   **The replacement is not another rule.** Baking in largest-zone-first would
+   repeat the same mistake with a different heuristic. Zone order is now a **search**
+   (Stage 8 tier 2), seeded with both heuristics and free to pick per campaign.
+   Tbilisi's western depot and distant eastern zones may still favour far-first;
+   that is for the search to determine, not for this document to assert.
 3. **Zone sizing on net productive time.** Eastern zones carry less capture work
    so the day still closes on schedule. Prevents overruns rather than saving time.
 

@@ -30,6 +30,27 @@ Every ambiguous case resolves toward more coverage, not less. See SPEC.md §1.1.
 I1–I8 are defined in SPEC.md §8. Every stage that produces or transforms a route
 runs the full invariant suite. A failing invariant is a hard stop.
 
+## A run that cannot fail is not a run that passed
+
+Twice now this project has produced a confident green result over broken work:
+
+1. Hierholzer returning an **open walk** on an unbalanced graph without complaining
+   — a convincing-looking non-tour (caught by `tourcheck.py`, written first).
+2. A sweep runner piping each campaign into `tail`, so the shell saw **tail's** exit
+   status. Two of four campaigns crashed; all four reported success.
+
+The second is the worse defect, because the first was a wrong answer and the second
+was a wrong answer that suppressed the evidence.
+
+Rules:
+
+- **Never pipe a step whose exit status matters.** Capture output to a per-step log,
+  check the status explicitly, and propagate a non-zero exit.
+- A multi-item runner reports **per item**, not in aggregate. "All four succeeded"
+  must mean four checked statuses.
+- Where a result is a claim about correctness, the check must be capable of
+  **failing on real data** — not just on a fixture built by the same code path.
+
 ## Calibration constants are pinned, not fed back
 
 Some constants are read by an early stage and measured by a later one

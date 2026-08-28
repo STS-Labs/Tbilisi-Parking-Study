@@ -1,0 +1,43 @@
+# Regenerable, large, or environment-specific. Everything here is reproducible
+# from source + the pinned OSM extract hash recorded in reports/00-network-stats.md.
+
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+
+# Downloaded sources — 97 MB PBF + DEM tiles. Provenance (URL + SHA-256) is
+# recorded in reports/00-network-stats.md, so these are re-fetchable, not lost.
+data/raw/
+
+# Derived geodata — 352 MB, rebuilt deterministically by the pipeline.
+data/derived/*.gpkg
+data/derived/*.pkl
+
+# Large rendered maps. The .md reports beside them are tracked.
+reports/*.html
+
+# Keep the small machine-readable artifacts — these ARE the record of each
+# stage's numbers and they are what the reports are asserted against.
+!data/derived/*.json
+!data/derived/*.csv
+
+# The same policy for a second and third campaign. `.gitignore` patterns with a
+# slash are anchored, so the rules above cover only the Tbilisi tree; without
+# these, two runs add 237 MB of GeoPackages and pickles the pipeline rebuilds
+# deterministically from the committed run scripts in one command.
+#
+# What stays: every JSON, CSV, GeoJSON, Markdown report, GPX track, NPZ tour and
+# the whole `07-playback/` tree — the record of what each run measured and every
+# document a person reads or a driver carries.
+RUN-OSM-FULL/data/derived/*.gpkg
+RUN-OSM-FULL/data/derived/*.pkl
+RUN-OSM-FULL/reports/*.html
+RUN-CUSTOMER-NET/data/derived/*.gpkg
+RUN-CUSTOMER-NET/data/derived/*.pkl
+RUN-CUSTOMER-NET/reports/*.html
+
+# Per-campaign Stage 8 run logs; the artifacts are the record.
+.stage8-logs/

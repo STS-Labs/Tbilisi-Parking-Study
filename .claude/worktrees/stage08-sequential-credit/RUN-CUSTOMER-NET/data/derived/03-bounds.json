@@ -1,0 +1,372 @@
+{
+  "day": {
+    "break_hours": 0.75,
+    "extended_productive_hours": 9.25,
+    "extended_shift_hours": 10.0,
+    "productive_hours": 8.25,
+    "shift_hours": 9.0
+  },
+  "meta": {
+    "arcs_sha256": "67267c507b198ce8ef4c5984e66a77ace0ab03ff7655d5035026d2a787d3d692",
+    "runtime_s": 41.1
+  },
+  "spec_note": "SPEC v0.3 §4 labelled the fixed-orientation DCPP result 'Stage A — Lower bound' and I5 asserted total driving was at or above it. Fixing an orientation adds a constraint, so that result can only bound the optimum from ABOVE. SPEC v0.4 corrects both: §4 Stage A now brackets the optimum with a constructive upper bound and an LP lower bound, and I5 asserts total driving lies within that bracket. Stage 3 implements the corrected form; the bracket below is what I5 refers to.",
+  "stage2": {
+    "campaign_start": "2026-08-29",
+    "capture_hours_free_flow": 16.91648690259696,
+    "daylight_binding_date": "2026-11-01",
+    "daylight_window_days": 64,
+    "deadhead_headroom": {
+      "A": 14.626364192105887,
+      "C": 19.465182077105187,
+      "D": 17.786554374853946
+    },
+    "turn_hours_estimate": 13.6303688652986,
+    "turn_hours_floor": 6.483672703876773,
+    "variants": {
+      "A": {
+        "capture_hours": 18.492668045366294,
+        "days": 4.095642416444605,
+        "turn_hours": 13.6303688652986,
+        "work_hours": 32.123036910664894
+      },
+      "C": {
+        "capture_hours": 15.477310809014302,
+        "days": 3.1272626727126993,
+        "turn_hours": 9.013761979447107,
+        "work_hours": 24.49107278846141
+      },
+      "D": {
+        "capture_hours": 16.657925948601065,
+        "days": 3.4066917606596796,
+        "turn_hours": 10.03699259369219,
+        "work_hours": 26.694918542293255
+      }
+    }
+  },
+  "variants": [
+    {
+      "arc_traversals": 29148,
+      "capture_h": 16.608978327436088,
+      "days": 7.637395296376864,
+      "days_extended_shift": 6.811730940011798,
+      "deadhead_h": 22.260366201006377,
+      "deadhead_pct_of_capture": 134.0261017996204,
+      "deadhead_pct_of_total": 35.32914169654953,
+      "driven_km": 957.9862298163683,
+      "flow": {
+        "balance_cost_s": 225544.579,
+        "components_initial": 76,
+        "connect_rounds": 3,
+        "connectivity_cost_s": 1286.172,
+        "forced_edges": 117,
+        "stranded_nodes": 1674,
+        "total_cost_s": 226830.751
+      },
+      "gpx_path": "RUN-CUSTOMER-NET/reports/03-tour-A.gpx",
+      "gpx_points": 49595,
+      "invariants": [
+        {
+          "detail": "",
+          "name": "I6",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "I2",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "closed",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "I1",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "lower_bounds",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "matches_flow",
+          "passed": true
+        }
+      ],
+      "km_deadhead_ratio": 1.1769947934588718,
+      "l_nodes": 63627,
+      "l_nodes_tourable": 63474,
+      "l_star_edges": 230603,
+      "l_star_manoeuvres": 103349,
+      "l_star_nodes": 127254,
+      "label": "as built — all `highway=service`",
+      "lower_bound_fallback": {
+        "capture_floor_s": 64866.539121352675,
+        "lower_bound_h": 18.01848308926463,
+        "lower_bound_s": 64866.539121352675,
+        "method": "capture_floor_plus_cheapest_exit",
+        "required_elements": 56075,
+        "runtime_s": 0.0,
+        "status": "exact"
+      },
+      "lower_bound_h": 40.617507926198975,
+      "lower_bound_lp": {
+        "clone_rows": 7,
+        "columns": 230603,
+        "lower_bound_h": 40.617507926198975,
+        "lower_bound_s": 146223.0285343163,
+        "method": "lp_relaxation",
+        "nonzeros": 476104,
+        "pair_rows": 7442,
+        "primal_dual_gap": -Infinity,
+        "rows": 134703,
+        "runtime_s": 8.6,
+        "status": "optimal"
+      },
+      "lower_bound_method": "lp_relaxation",
+      "optimality_gap": 0.5512648218003443,
+      "orientation": {
+        "degenerate_pairs": 0,
+        "flips_greedy": 517,
+        "flips_local_search": 39,
+        "forced_pairs": 43,
+        "imbalance_after": 6562,
+        "imbalance_after_greedy": 6640,
+        "imbalance_naive": 6948,
+        "imbalance_reduction": 386,
+        "local_search_passes": 3,
+        "pair_count": 7442,
+        "unreachable_pairs": 0
+      },
+      "required_km_absent_from_l": 5.315863101615776,
+      "required_km_in_scope": 440.0498488534703,
+      "required_km_out_of_scope": 5.422788384670184,
+      "required_km_total": 445.47263723814046,
+      "required_km_trapped_in_l": 0.10692528305440874,
+      "runtime_s": 21.3,
+      "total_h": 63.00851119510913,
+      "tour_path": "RUN-CUSTOMER-NET/data/derived/03-tour-A.npz",
+      "tour_sha256": "0b6a50f0c70c8c5a67d8fee04233414841647dc871d15a33529083163b3f1bdd",
+      "turn_h": 24.139166666666668,
+      "variant": "A"
+    },
+    {
+      "arc_traversals": 21234,
+      "capture_h": 14.938532941007779,
+      "days": 4.86906106897724,
+      "days_extended_shift": 4.342676088547268,
+      "deadhead_h": 14.61122087805445,
+      "deadhead_pct_of_capture": 97.80894105033016,
+      "deadhead_pct_of_total": 36.37368788434251,
+      "driven_km": 809.486383589463,
+      "flow": {
+        "balance_cost_s": 143513.9,
+        "components_initial": 60,
+        "connect_rounds": 3,
+        "connectivity_cost_s": 1097.271,
+        "forced_edges": 93,
+        "stranded_nodes": 1200,
+        "total_cost_s": 144611.171
+      },
+      "invariants": [
+        {
+          "detail": "",
+          "name": "I6",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "I2",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "closed",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "I1",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "lower_bounds",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "matches_flow",
+          "passed": true
+        }
+      ],
+      "km_deadhead_ratio": 0.9561755646627902,
+      "l_nodes": 45472,
+      "l_nodes_tourable": 45276,
+      "l_star_edges": 162779,
+      "l_star_manoeuvres": 71835,
+      "l_star_nodes": 90944,
+      "label": "through only — service whose component links two or more streets",
+      "lower_bound_fallback": {
+        "capture_floor_s": 57387.53159595672,
+        "lower_bound_h": 15.940980998876867,
+        "lower_bound_s": 57387.53159595672,
+        "method": "capture_floor_plus_cheapest_exit",
+        "required_elements": 40227,
+        "runtime_s": 0.0,
+        "status": "exact"
+      },
+      "lower_bound_h": 29.442008451800273,
+      "lower_bound_lp": {
+        "clone_rows": 7,
+        "columns": 162779,
+        "lower_bound_h": 29.442008451800273,
+        "lower_bound_s": 105991.23042648098,
+        "method": "lp_relaxation",
+        "nonzeros": 335836,
+        "pair_rows": 5132,
+        "primal_dual_gap": -Infinity,
+        "rows": 96083,
+        "runtime_s": 4.9,
+        "status": "optimal"
+      },
+      "lower_bound_method": "lp_relaxation",
+      "optimality_gap": 0.36436866679202357,
+      "orientation": {
+        "degenerate_pairs": 0,
+        "flips_greedy": 390,
+        "flips_local_search": 20,
+        "forced_pairs": 83,
+        "imbalance_after": 3528,
+        "imbalance_after_greedy": 3568,
+        "imbalance_naive": 3772,
+        "imbalance_reduction": 244,
+        "local_search_passes": 2,
+        "pair_count": 5132,
+        "unreachable_pairs": 0
+      },
+      "required_km_absent_from_l": 3.6471103516433914,
+      "required_km_in_scope": 413.810701969894,
+      "required_km_out_of_scope": 3.763667926392486,
+      "required_km_total": 417.5743698962865,
+      "required_km_trapped_in_l": 0.11655757474909478,
+      "runtime_s": 11.9,
+      "total_h": 40.16975381906223,
+      "tour_path": "RUN-CUSTOMER-NET/data/derived/03-tour-D.npz",
+      "tour_sha256": "156b376231099abcd18fb0fc500970aa772ec0b2b2ad7827a2f10c465762dfa3",
+      "turn_h": 10.62,
+      "variant": "D"
+    },
+    {
+      "arc_traversals": 17660,
+      "capture_h": 13.761217960941389,
+      "days": 3.865900213138338,
+      "days_extended_shift": 3.4479650549612204,
+      "deadhead_h": 10.463014353005452,
+      "deadhead_pct_of_capture": 76.032618498615,
+      "deadhead_pct_of_total": 32.80592084840959,
+      "driven_km": 710.0833934149322,
+      "flow": {
+        "balance_cost_s": 114426.167,
+        "components_initial": 28,
+        "connect_rounds": 2,
+        "connectivity_cost_s": 391.083,
+        "forced_edges": 40,
+        "stranded_nodes": 906,
+        "total_cost_s": 114817.25
+      },
+      "invariants": [
+        {
+          "detail": "",
+          "name": "I6",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "I2",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "closed",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "I1",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "lower_bounds",
+          "passed": true
+        },
+        {
+          "detail": "",
+          "name": "matches_flow",
+          "passed": true
+        }
+      ],
+      "km_deadhead_ratio": 0.8004014776532442,
+      "l_nodes": 29951,
+      "l_nodes_tourable": 29753,
+      "l_star_edges": 103106,
+      "l_star_manoeuvres": 43204,
+      "l_star_nodes": 59902,
+      "label": "none — no `highway=service`",
+      "lower_bound_fallback": {
+        "capture_floor_s": 52432.86372061027,
+        "lower_bound_h": 14.564684366836186,
+        "lower_bound_s": 52432.86372061027,
+        "method": "capture_floor_plus_cheapest_exit",
+        "required_elements": 25615,
+        "runtime_s": 0.0,
+        "status": "exact"
+      },
+      "lower_bound_h": 23.923503806594784,
+      "lower_bound_lp": {
+        "clone_rows": 5,
+        "columns": 103106,
+        "lower_bound_h": 23.923503806594784,
+        "lower_bound_s": 86124.61370374123,
+        "method": "lp_relaxation",
+        "nonzeros": 214682,
+        "pair_rows": 4230,
+        "primal_dual_gap": -Infinity,
+        "rows": 64137,
+        "runtime_s": 2.3,
+        "status": "optimal"
+      },
+      "lower_bound_method": "lp_relaxation",
+      "optimality_gap": 0.3331524101247842,
+      "orientation": {
+        "degenerate_pairs": 0,
+        "flips_greedy": 319,
+        "flips_local_search": 18,
+        "forced_pairs": 92,
+        "imbalance_after": 2262,
+        "imbalance_after_greedy": 2298,
+        "imbalance_naive": 2408,
+        "imbalance_reduction": 146,
+        "local_search_passes": 2,
+        "pair_count": 4230,
+        "unreachable_pairs": 0
+      },
+      "required_km_absent_from_l": 4.36407864779693,
+      "required_km_in_scope": 394.4028052790199,
+      "required_km_out_of_scope": 4.61878328095122,
+      "required_km_total": 399.0215885599711,
+      "required_km_trapped_in_l": 0.25470463315429015,
+      "runtime_s": 6.2,
+      "total_h": 31.893676758391287,
+      "tour_path": "RUN-CUSTOMER-NET/data/derived/03-tour-C.npz",
+      "tour_sha256": "ec30baf669b9e434401e1faa882c418a6b661dff3aebfac9b23eaa8ab9cb744a",
+      "turn_h": 7.669444444444444,
+      "variant": "C"
+    }
+  ]
+}
