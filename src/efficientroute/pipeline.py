@@ -1511,8 +1511,15 @@ def run_stage7() -> dict:
     C.PLAYBACK_INDEX.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(C.PLAYBACK_TEMPLATE, C.PLAYBACK_INDEX)
     _log(f"wrote {C.PLAYBACK_INDEX}")
+    # The file people actually open. `index.html` fetches its data, and a browser
+    # refuses fetch on file:// — so on its own it fails for anyone who double-clicks
+    # it. This one carries the data inside it and needs no server; `index.html`
+    # redirects here when opened from disk.
+    dashboard.bundle_all()
+    _log(f"wrote {C.PLAYBACK_STANDALONE} "
+         f"({C.PLAYBACK_STANDALONE.stat().st_size / 1e6:.1f} MB, opens with no server)")
     total = sum(p.stat().st_size for p in C.PLAYBACK_DATA_DIR.glob("*.json"))
-    _log(f"playback total {total / 1e6:.1f} MB — open {C.PLAYBACK_INDEX}")
+    _log(f"playback total {total / 1e6:.1f} MB — open {C.PLAYBACK_STANDALONE}")
     _log(f"done in {time.time() - started:.0f}s")
     return {"days": summaries, "network": network,
             "bytes": total, "meta": {"runtime_s": round(time.time() - started, 1)}}

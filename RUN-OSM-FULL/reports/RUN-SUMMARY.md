@@ -158,4 +158,5 @@ substitutes for it and nothing was invented in its place.
 | `data/derived/04-zones.json`, `04-zones.gpkg` | the 9 sized zones |
 | `data/derived/05-routes.json`, `05-routes.gpkg` | 21 solved days, every manoeuvre |
 | `reports/05-routes/day-NN.gpx` / `.md` | one GPX track and one turn sheet per day |
-| `reports/07-playback/index.html` | animated playback, 21 days, 11.1 MB |
+| `reports/07-playback/index.html` | animated playback, 21 days — double-click it; opened from disk it hands off to the self-contained build |
+| `reports/07-playback/playback-standalone.html` | the same playback with all 21 days inlined, 11.1 MB — no server, no network |

@@ -186,6 +186,61 @@ class TestSelfContained:
             assert f'"{key}"' in html, f"embed is missing {key}"
 
 
+class TestOpensFromDisk:
+    """The failure everyone actually hits: double-clicking `index.html`.
+
+    The page loads its data with `fetch`, and a browser refuses `fetch` on a file://
+    URL — the page has an opaque origin, so every load comes back a CORS failure and
+    the playback shows an error and nothing else. Every campaign in this repository
+    shipped that way. These assert the two halves of the fix: the page knows to go
+    somewhere else when it is opened from disk, and the somewhere else exists and is
+    complete.
+    """
+
+    def test_the_page_handles_being_opened_from_disk(self):
+        html = C.PLAYBACK_TEMPLATE.read_text()
+        assert 'location.protocol==="file:"' in html, (
+            "the renderer has no file:// branch — opened from disk it will fetch, "
+            "fail on CORS, and show an error"
+        )
+        assert 'location.replace("playback-standalone.html")' in html
+        assert "window.PLAYBACK_EMBED" in html
+
+    def test_the_standalone_answers_every_load_the_page_makes(self, tmp_path):
+        from efficientroute import dashboard
+
+        if not sorted(C.PLAYBACK_DATA_DIR.glob("day-*.json")):
+            pytest.skip("run `make stage7`")
+        out = dashboard.bundle_all(out_path=tmp_path / "standalone.html")
+        html = out.read_text()
+        assert not _fetchable_urls(html), f"standalone references {_fetchable_urls(html)[:5]}"
+        for path in sorted(C.PLAYBACK_DATA_DIR.glob("*.json")):
+            assert f'"data/{path.name}"' in html, f"standalone is missing {path.name}"
+
+    def test_the_standalone_cannot_redirect_to_itself(self, tmp_path):
+        """The embed must be set before the redirect check, or the page loops."""
+        from efficientroute import dashboard
+
+        if not sorted(C.PLAYBACK_DATA_DIR.glob("day-*.json")):
+            pytest.skip("run `make stage7`")
+        html = dashboard.bundle_all(out_path=tmp_path / "standalone.html").read_text()
+        embed = html.find("window.PLAYBACK_EMBED=")
+        redirect = html.find('location.replace("playback-standalone.html")')
+        assert 0 <= embed < redirect
+
+    def test_the_caption_names_this_campaign(self):
+        """It used to say "Tbilisi" whatever it was showing."""
+        from efficientroute import dashboard
+
+        label = dashboard._scope_label(7)
+        assert label.endswith("7 days")
+        if C.MANIFEST_PATH.exists():
+            tags = json.loads(C.MANIFEST_PATH.read_text()).get("boundary_tags", {})
+            name = tags.get("name:en") or tags.get("name")
+            if name:
+                assert label.startswith(name)
+
+
 class TestDeterminism:
     def test_building_twice_produces_identical_files(self, tmp_path, manoeuvres):
         import geopandas as gpd

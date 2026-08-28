@@ -77,6 +77,12 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("custom-report",
                    help="render the reconciliation and campaign summary")
     sub.add_parser("stage7", help="build the animated route playback")
+    standalone = sub.add_parser(
+        "stage7-standalone",
+        help="rebuild playback-standalone.html from the existing playback data — "
+             "the file that opens without a web server",
+    )
+    standalone.add_argument("--out", default=None)
     embed = sub.add_parser("stage7-embed", help="one day as a single self-contained file")
     embed.add_argument("--day", type=int, required=True)
     embed.add_argument("--out", default=None)
@@ -116,6 +122,37 @@ def main(argv: list[str] | None = None) -> int:
         summary = pipeline.run(force_extract=args.force_extract)
         headline = summary["headline"]["required_traversal_km"]
         print(f"\nRequired traversal: {headline:,.1f} km")
+        return 0
+    if args.command == "stage7-standalone":
+        import shutil
+
+        from . import config as _C
+        from . import dashboard
+
+        # Refresh `index.html` from the template as well. A campaign whose playback
+        # was built before the file:// fix still carries the old renderer, and that
+        # renderer is precisely the bug — it fetches, fails, and says nothing useful.
+        # One command has to fix a campaign, or the ones already on disk stay broken.
+        _C.PLAYBACK_INDEX.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(_C.PLAYBACK_TEMPLATE, _C.PLAYBACK_INDEX)
+        print(f"refreshed {_C.PLAYBACK_INDEX}")
+        # The caption is written by Stage 7 and used to be hard-coded to Tbilisi, so
+        # a Zone B playback announced itself as a city-wide one. Re-derive it here
+        # too, or repairing a campaign leaves the wrong title on the page.
+        index_json = _C.PLAYBACK_DATA_DIR / "index.json"
+        if index_json.exists():
+            import json as _json
+
+            payload = _json.loads(index_json.read_text())
+            label = dashboard._scope_label(len(payload.get("days", [])))
+            if payload.get("scope") != label:
+                payload["scope"] = label
+                index_json.write_text(
+                    _json.dumps(payload, separators=(",", ":")))
+                print(f"  caption is now: {label}")
+        path = dashboard.bundle_all(out_path=args.out)
+        print(f"wrote {path} ({path.stat().st_size / 1e6:.1f} MB)")
+        print("Open it directly — no server, no network, nothing external.")
         return 0
     if args.command == "stamp-reports":
         from . import caveat

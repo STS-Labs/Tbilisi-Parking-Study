@@ -267,4 +267,5 @@ task**: the 80 unverified streets in `surveys/unverified-streets.md`.
 | `data/derived/05-routes.json`, `05-routes.gpkg` | 13 solved days, every manoeuvre |
 | `reports/05-routes/day-NN.md` | turn sheets, with `[UNVERIFIED]` flags |
 | `surveys/unverified-streets.md` | the driver's work order |
-| `reports/07-playback/index.html` | animated playback, 13 days, 9.5 MB |
+| `reports/07-playback/index.html` | animated playback, 13 days — double-click it; opened from disk it hands off to the self-contained build |
+| `reports/07-playback/playback-standalone.html` | the same playback with all 13 days inlined, 9.6 MB — no server, no network |

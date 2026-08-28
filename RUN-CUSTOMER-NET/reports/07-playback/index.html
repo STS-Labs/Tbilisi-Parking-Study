@@ -360,9 +360,24 @@ function boot(index){
     .then(()=>loadDay(days[0].day))
     .then(()=>{ $("load").remove(); requestAnimationFrame(frame); });
 }
-fetchJSON("data/index.json").then(boot).catch(e=>{
-  document.getElementById("load").textContent="could not load playback data: "+e;
-});
+// Opened straight off the disk, a browser refuses `fetch` on a file:// URL: the
+// page has an opaque origin, so every data file comes back as a CORS failure and
+// the playback shows "could not load playback data" and nothing else. That is by
+// far the most common way this page gets opened — somebody double-clicks it — so
+// the page has to handle it rather than report it.
+//
+// Stage 7 writes `playback-standalone.html` beside this file: the same renderer
+// with every day already inlined under PLAYBACK_EMBED, needing no fetch and no
+// server. Go there. Served over http(s) this branch never runs and nothing changes,
+// and inside the standalone PLAYBACK_EMBED is already set, so it cannot loop.
+if(!window.PLAYBACK_EMBED && location.protocol==="file:"){
+  document.getElementById("load").textContent="opening the self-contained playback\u2026";
+  location.replace("playback-standalone.html");
+} else {
+  fetchJSON("data/index.json").then(boot).catch(e=>{
+    document.getElementById("load").textContent="could not load playback data: "+e;
+  });
+}
 })();
 </script>
 </body>

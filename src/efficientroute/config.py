@@ -772,6 +772,15 @@ PLAYBACK_DIR = REPORTS / "07-playback"
 PLAYBACK_DATA_DIR = PLAYBACK_DIR / "data"
 PLAYBACK_INDEX = PLAYBACK_DIR / "index.html"
 
+#: The same renderer with every day's data already inside it.
+#:
+#: `index.html` loads its data with `fetch`, and a browser refuses `fetch` on a
+#: file:// URL — so double-clicking `index.html` fails on every campaign, which is
+#: exactly how the playback is usually opened. Stage 7 therefore writes this beside
+#: it and `index.html` redirects here when it is opened from disk. Larger, but it is
+#: the file that actually works without a web server.
+PLAYBACK_STANDALONE = PLAYBACK_DIR / "playback-standalone.html"
+
 #: The renderer itself is source, not output. It used to sit in `reports/`, which
 #: worked only because the Tbilisi campaign wrote there — a second campaign got a
 #: data directory with nothing to open it. Shipping it in the package and copying it

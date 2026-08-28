@@ -208,13 +208,35 @@ def build_network(arcs, out_dir: Path | None = None) -> dict:
             "bytes": path.stat().st_size}
 
 
+def _scope_label(days: int) -> str:
+    """What this playback is of — read from the campaign, not hard-coded.
+
+    This said "Tbilisi camera-car campaign" whatever it was showing, so a Zone B
+    plan announced itself as a city-wide one. The campaign's own name is in Stage 0's
+    manifest, put there by whichever boundary it was clipped to, so use that. Where
+    the required set is a customer's street layer rather than an area, say so: the
+    two differ by roughly a factor of two in Zone B and the page should not imply
+    they are the same job.
+    """
+    name = "Tbilisi"
+    if C.MANIFEST_PATH.exists():
+        try:
+            tags = json.loads(C.MANIFEST_PATH.read_text()).get("boundary_tags", {})
+            name = tags.get("name:en") or tags.get("name") or name
+        except (OSError, ValueError):
+            pass
+    required = ("the customer's street layer"
+                if C.REQUIRED_NETWORK_PATH is not None
+                else f"variant {C.SCOPE_VARIANT}")
+    return f"{name} camera-car campaign — {required}, {days} days"
+
+
 def build_index(summaries: list[dict], network: dict,
                 out_dir: Path | None = None) -> Path:
     """The manifest the page loads first: which days exist, and how big they are."""
     out_dir = out_dir or C.PLAYBACK_DATA_DIR
     payload = {
-        "scope": f"Tbilisi camera-car campaign — variant {C.SCOPE_VARIANT}, "
-                 f"{len(summaries)} days",
+        "scope": _scope_label(len(summaries)),
         "variant": C.SCOPE_VARIANT,
         "network": network,
         "days": [
@@ -251,9 +273,16 @@ def embed(day: int, out_path: Path, data_dir: Path | None = None,
         "data/network.json": json.loads((data_dir / "network.json").read_text()),
         f"data/{name}": json.loads((data_dir / name).read_text()),
     }
-    html = template.read_text()
-    # `</script>` inside a string would close the tag it is written in.
+    return _inline(bundle, template, out_path)
+
+
+def _inline(bundle: dict, template: Path, out_path: Path) -> Path:
+    """Write the renderer with `bundle` answering every data load."""
+    html = Path(template).read_text()
+    # `</script>` inside a string would close the tag it is written in, and the two
+    # Unicode line terminators are newlines to a JS parser but not to JSON.
     blob = json.dumps(bundle, separators=(",", ":")).replace("</", "<\\/")
+    blob = blob.replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     injected = f"<script>window.PLAYBACK_EMBED={blob};</script>\n"
     marker = "<script>\n(function(){"
     if marker not in html:
@@ -263,3 +292,25 @@ def embed(day: int, out_path: Path, data_dir: Path | None = None,
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(html)
     return out_path
+
+
+def bundle_all(out_path: Path | None = None, data_dir: Path | None = None,
+               template: Path | None = None) -> Path:
+    """The whole campaign as one file that opens with no server and no network.
+
+    `embed` makes a single day small enough to send someone. This makes the file a
+    person actually opens: every day, the network context and the index, inlined, so
+    that double-clicking it works. It reads the **template** rather than the
+    campaign's `index.html` on purpose — the standalone is the fallback `index.html`
+    redirects to, so it must be built from the current renderer and never from a
+    copy that may itself be stale.
+    """
+    data_dir = Path(data_dir or C.PLAYBACK_DATA_DIR)
+    out_path = Path(out_path or C.PLAYBACK_STANDALONE)
+    template = Path(template or C.PLAYBACK_TEMPLATE)
+    files = sorted(data_dir.glob("*.json"))
+    if not files:
+        raise FileNotFoundError(
+            f"{data_dir} has no day files — run `make stage7` first")
+    bundle = {f"data/{p.name}": json.loads(p.read_text()) for p in files}
+    return _inline(bundle, template, out_path)
