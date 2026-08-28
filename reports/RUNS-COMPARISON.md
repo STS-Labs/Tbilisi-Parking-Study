@@ -182,12 +182,14 @@ Variant C films those same connecting streets and gets paid for them.
 
 **Variant C, priced by the day, with the residual handled by hand.**
 
-1. **The 10.4 km of the customer's layer variant C does not film.** Do not solve it
-   with a second campaign at 5.5 h/km. It is 80 short pieces, every one listed with a
-   location and a reason in `RUN-CUSTOMER-NET/surveys/unverified-streets.md`, and
-   §5 shows most of them are building sites and gated roads that a driver may not be
-   able to enter in the first place. A morning of survey settles what is real; only
-   then is it worth routing.
+1. **The 10.4 km of the customer's layer variant C does not film.** Do not buy it as
+   a second campaign at 5.5 h/km. Run 2 recovers 6.5 km of it and still leaves 3.8 km,
+   so even paying twice does not clear the list — because most of what remains is not
+   a routing problem. `RUN-CUSTOMER-NET/surveys/unverified-streets.md` itemises 80
+   pieces, 5.4 km, each with a location and what OSM says about it, and §5 shows the
+   majority are building sites and gated roads a driver may not be able to enter at
+   all. Survey the list first. What survives is a short set of streets to append to a
+   driving day, not a campaign to run.
 2. **`highway=service`, if asked for at all, quoted separately** at roughly 0.25 h
    per kilometre — nearly three times the street rate — with 22 km of it declared
    undeliverable up front.
