@@ -122,39 +122,31 @@ def solve_zone(
     zone: int,
     position: int,
     date: str,
-    optional_capture: np.ndarray | None = None,
-    deadhead_override: np.ndarray | None = None,
 ) -> DayRoute:
     """Balance, connect, Euler, rotate — a legal closed day route.
 
-    `optional_capture` and `deadhead_override` are Stage 8's only entry points into
-    the day solver, and both default to `None` so Stage 5 routes exactly as before.
+    Stage 8 uses this unchanged. It was briefly given knobs to make filming an
+    out-of-zone arc *permitted* rather than required, so that a day's own flow could
+    choose to film what it was passing. They are gone, for two reasons that are worth
+    recording because they look like they should have worked.
 
-    `optional_capture` raises the *upper* bound on a capture edge without raising its
-    lower bound, which makes filming that arc permitted rather than required — the
-    solver may take it if the routing works out and skip it otherwise. Stage 5 has no
-    use for that: every arc it films is one it was told to film.
+    They could not help: `lstar.build` enforces `capture >= deadhead`, since the
+    capture cap can only slow the car down (SPEC §6), so a capture edge is never
+    cheaper than the deadhead edge over the same arc and a min-cost flow will not take
+    one voluntarily. The whole reason to film an arc early is a saving on a *later*
+    day, which a single day's objective cannot see.
 
-    `deadhead_override` re-prices deadheading an arc the campaign still owes, so that
-    passing one without filming it carries the cost of the return trip some later day
-    would have to make. Without it the day solver has no way to see that a pass it is
-    making anyway is worth something to a day it knows nothing about.
+    And they did harm: the spare capacity changed which degenerate optimum the flow
+    landed on, and `dcpp._force_entries` then failed to force a connecting path
+    through an edge it had already saturated. Capacity that cannot be used for gain
+    can still be used for harm.
     """
     lower = zone_lower_bounds(
         star_template.n_arc_nodes, star_template.n_edges, zone_nodes, depot_node,
         oriented_lower,
     )
     n = star_template.n_arc_nodes
-    star = lstar.build(
-        graph, capture_s,
-        deadhead_s if deadhead_override is None else deadhead_override,
-        lower[:n], keep=keep,
-    )
-    if optional_capture is not None:
-        extra = np.asarray(optional_capture, dtype="int64")
-        upper = star.upper.copy()
-        upper[:n] = np.maximum(upper[:n], lower[:n] + extra)
-        star = dataclasses.replace(star, upper=upper)
+    star = lstar.build(graph, capture_s, deadhead_s, lower[:n], keep=keep)
     # `lstar.build` takes per-node *capture* lower bounds; the depot anchor sits on
     # a deadhead edge, which it has no way to express, so it is applied here. The
     # capture block is identical either way, so the equal lower/upper bound that

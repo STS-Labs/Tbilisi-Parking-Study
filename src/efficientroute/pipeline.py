@@ -1583,23 +1583,12 @@ def _stage8_pass(ctx, priority: dict, tier: int, log: bool = True) -> dict:
                 _log(f"  zone {zone}: nothing left to film — day dropped")
             continue
 
-        optional = None
-        if tier >= 2:
-            # Filming an arc this day does not owe is *permitted* rather than
-            # required, so the solver may take it when the routing already goes
-            # there. It is never made cheaper than passing: `lstar` enforces
-            # capture >= deadhead, so a per-day flow can only ever be indifferent.
-            # The credit is taken after the route is known, where the future value
-            # of having filmed it is actually knowable.
-            optional = np.zeros(n, dtype="int64")
-            outside = remaining.copy()
-            outside[owed] = 0
-            optional[outside > 0] = outside[outside > 0]
-
+        # Every tier solves the day identically. Tiers differ only in the order the
+        # days are solved in, which is what decides where credit lands — the solve
+        # itself has no way to act on credit at all (see `routes.solve_zone`).
         route = routes.solve_zone(
             ctx.graph, star, ctx.capture_s, ctx.deadhead_s, owed, ctx.depot_node,
             remaining, ctx.keep, zone, len(days), "",
-            optional_capture=optional,
         )
         # I4 still binds. A zone that will not fit has to be split before anything is
         # credited to it: crediting into a day that already overruns banks a saving
