@@ -1,0 +1,27 @@
+{
+  "arcs_sha256": "d9fed6c305218cef185988874ad8a029a735a795742d0ca183484df649919ce3",
+  "boundary_area_km2": 24.08,
+  "boundary_relation_id": -1,
+  "boundary_tags": {
+    "boundary": "customer-supplied",
+    "name": "Zone B",
+    "source": "data/custom/B Zone_Streets/AB_zones.shp"
+  },
+  "clip_area_km2": 99.5,
+  "clip_bounds": [
+    44.677153,
+    41.656796,
+    44.858026,
+    41.761608
+  ],
+  "clip_buffer_m": 2000.0,
+  "dem_note": "Copernicus GLO-30 has no tiles over N41/E044 and N41/E045; SRTM 1-arcsec is the stage brief's alternative at the same 30 m resolution.",
+  "dem_source": "SRTM 1-arcsec (elevation-tiles-prod skadi)",
+  "dem_tiles": [
+    "N41E044"
+  ],
+  "pbf_bytes": 101424826,
+  "pbf_sha256": "13268d77164b1aed5377d19bc751dd1aed9c5edf354dcc48daf0761bf23b5483",
+  "pbf_url": "https://download.geofabrik.de/europe/georgia-latest.osm.pbf",
+  "runtime_s": 9.1
+}
