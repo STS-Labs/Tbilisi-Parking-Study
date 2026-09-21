@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EfficientRoute — route playback</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect width=%2716%27 height=%2716%27 fill=%27%230b0e14%27/%3E%3Cpath d=%27M8 2 L12 13 L8 10.5 L4 13 Z%27 fill=%27%233fb950%27/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#141922; --line:#232a36; --ink:#e6edf3; --dim:#7d8896;
+    --capture:#3fb950; --deadhead:#d29922; --leg:#6e7bd8; --net:#222833;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font:13px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  #app{display:flex;height:100%}
+  #stage{position:relative;flex:1;min-width:0}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
+  canvas.dragging{cursor:grabbing}
+  #side{width:290px;flex:none;background:var(--panel);border-left:1px solid var(--line);
+    padding:16px;overflow-y:auto}
+  h1{font-size:14px;margin:0 0 2px;letter-spacing:.2px}
+  .sub{color:var(--dim);font-size:11px;margin-bottom:16px}
+  .grp{margin-bottom:18px}
+  .lab{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--dim);
+    margin-bottom:7px}
+  select,button{background:#1c2230;color:var(--ink);border:1px solid var(--line);
+    border-radius:6px;padding:6px 9px;font:inherit;font-size:12px;cursor:pointer}
+  select{width:100%}
+  button:hover{border-color:#3a4456}
+  button.on{background:#243044;border-color:#3f5675;color:#fff}
+  .row{display:flex;gap:6px;flex-wrap:wrap}
+  .row button{flex:1;min-width:0}
+  #scrub{width:100%;accent-color:var(--capture);margin:9px 0 3px}
+  .clock{font:600 26px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.5px}
+  .clocksub{color:var(--dim);font-size:11px;margin-top:3px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td{padding:3px 0}
+  td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+  .key{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;
+    vertical-align:baseline}
+  .street{font-size:12px;color:var(--ink);min-height:17px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar{height:5px;background:#1c2230;border-radius:3px;overflow:hidden;margin-top:6px}
+  .bar>i{display:block;height:100%;background:var(--capture)}
+  .hint{color:var(--dim);font-size:11px;margin-top:14px;line-height:1.5}
+  #load{position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);
+    background:var(--bg);z-index:5}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <canvas id="view"></canvas>
+    <div id="load">loading the network…</div>
+  </div>
+  <aside id="side">
+    <h1>Route playback</h1>
+    <div class="sub" id="scope">Tbilisi camera-car campaign</div>
+
+    <div class="grp">
+      <div class="clock" id="clock">09:00:00</div>
+      <div class="clocksub" id="dayline">day 1 · zone —</div>
+      <input type="range" id="scrub" min="0" max="1000" value="0">
+      <div class="clocksub" id="elapsed">0.00 h of 0.00 h driving</div>
+    </div>
+
+    <div class="grp">
+      <div class="lab">Day</div>
+      <select id="day"></select>
+    </div>
+
+    <div class="grp">
+      <div class="lab">Playback</div>
+      <div class="row" style="margin-bottom:6px">
+        <button id="play" class="on">▶ Play</button>
+        <button id="restart">↺</button>
+      </div>
+      <div class="row" id="speeds"></div>
+    </div>
+
+    <div class="grp">
+      <div class="lab">Today</div>
+      <table>
+        <tr><td><i class="key" style="background:var(--capture)"></i>capturing</td>
+            <td id="m-capture">0.0 km</td></tr>
+        <tr><td><i class="key" style="background:var(--deadhead)"></i>deadhead</td>
+            <td id="m-deadhead">0.0 km</td></tr>
+        <tr><td><i class="key" style="background:var(--leg)"></i>depot legs</td>
+            <td id="m-leg">0.0 km</td></tr>
+      </table>
+      <div class="bar"><i id="progress" style="width:0"></i></div>
+      <div class="clocksub" id="pct">0% of today driven</div>
+    </div>
+
+    <div class="grp">
+      <div class="lab">Now on</div>
+      <div class="street" id="street">—</div>
+    </div>
+
+    <div class="grp">
+      <div class="lab">Layers</div>
+      <div class="row">
+        <button data-layer="capture" class="on">capture</button>
+        <button data-layer="deadhead" class="on">deadhead</button>
+        <button data-layer="leg" class="on">legs</button>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <button data-layer="network" class="on">network</button>
+        <button data-layer="cumulative">cumulative</button>
+      </div>
+    </div>
+
+    <div class="hint">Drag to pan, scroll to zoom.
+      <b>Cumulative</b> keeps earlier days on screen so the city fills in.</div>
+  </aside>
+</div>
+<script>
+(function(){
+"use strict";
+const MODES=["capture","deadhead","leg"];
+const COLOR=["#3fb950","#d29922","#6e7bd8"];
+const SPEEDS=[1,60,300,1000];
+
+const view=document.getElementById("view"), ctx=view.getContext("2d");
+const netCv=document.createElement("canvas"), netCtx=netCv.getContext("2d");
+const trailCv=document.createElement("canvas"), trailCtx=trailCv.getContext("2d");
+
+let dpr=1,W=0,H=0;
+let network=null, day=null, days=[], dayIndex=1;
+let cam={x:0,y:0,scale:1};
+let playing=true, speed=300, clock=0, last=0;
+let cursor=0;                       // index of the segment currently being driven
+let shown={capture:true,deadhead:true,leg:true,network:true,cumulative:false};
+let history=[];                     // day numbers already drawn into the trail
+
+// --- Web Mercator ----------------------------------------------------------
+const R=6378137;
+function mx(lon){return R*lon*Math.PI/180}
+function my(lat){const s=Math.sin(lat*Math.PI/180);return R*0.5*Math.log((1+s)/(1-s))}
+function sx(lon){return (mx(lon)-cam.x)*cam.scale+W/2}
+function sy(lat){return H/2-(my(lat)-cam.y)*cam.scale}
+
+function fit(bbox,pad){
+  const x0=mx(bbox[0]),x1=mx(bbox[2]),y0=my(bbox[1]),y1=my(bbox[3]);
+  cam.x=(x0+x1)/2; cam.y=(y0+y1)/2;
+  cam.scale=Math.min(W/(x1-x0||1),H/(y1-y0||1))*(pad||0.92);
+}
+
+function resize(){
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  const r=view.getBoundingClientRect();
+  W=Math.max(1,Math.round(r.width)); H=Math.max(1,Math.round(r.height));
+  for(const c of [view,netCv,trailCv]){c.width=W*dpr;c.height=H*dpr;}
+  for(const c of [ctx,netCtx,trailCtx]){c.setTransform(dpr,0,0,dpr,0,0);}
+  drawNetwork(); redrawTrail();
+}
+
+// --- layer 1: the network, drawn once --------------------------------------
+function drawNetwork(){
+  netCtx.setTransform(dpr,0,0,dpr,0,0);
+  netCtx.clearRect(0,0,W,H);
+  if(!network||!shown.network) return;
+  netCtx.strokeStyle="#222833"; netCtx.lineWidth=1; netCtx.beginPath();
+  for(const line of network.lines){
+    netCtx.moveTo(sx(line[0][0]),sy(line[0][1]));
+    for(let i=1;i<line.length;i++) netCtx.lineTo(sx(line[i][0]),sy(line[i][1]));
+  }
+  netCtx.stroke();
+}
+
+// --- layer 2: the trail, appended to --------------------------------------
+function strokeSegment(c,seg,alpha,width){
+  if(!shown[MODES[seg.m]]) return;
+  const pts=seg.c;
+  c.globalAlpha=alpha; c.strokeStyle=COLOR[seg.m]; c.lineWidth=width;
+  c.lineCap="round"; c.lineJoin="round";
+  c.beginPath(); c.moveTo(sx(pts[0][0]),sy(pts[0][1]));
+  for(let i=1;i<pts.length;i++) c.lineTo(sx(pts[i][0]),sy(pts[i][1]));
+  c.stroke(); c.globalAlpha=1;
+}
+
+function redrawTrail(){
+  trailCtx.setTransform(dpr,0,0,dpr,0,0);
+  trailCtx.clearRect(0,0,W,H);
+  for(const past of history){
+    if(past.day===dayIndex) continue;
+    for(const seg of past.segments) strokeSegment(trailCtx,seg,0.28,1.1);
+  }
+  if(!day) return;
+  for(let i=0;i<cursor && i<day.segments.length;i++)
+    strokeSegment(trailCtx,day.segments[i],0.95,2);
+}
+
+// --- per frame -------------------------------------------------------------
+function positionAt(seg,t){
+  const f=Math.max(0,Math.min(1,seg.tv>0?(t-seg.t0)/seg.tv:1));
+  const pts=seg.c;
+  let total=0; const d=[];
+  for(let i=1;i<pts.length;i++){
+    const dx=pts[i][0]-pts[i-1][0], dy=pts[i][1]-pts[i-1][1];
+    const len=Math.hypot(dx,dy); d.push(len); total+=len;
+  }
+  let want=total*f;
+  for(let i=0;i<d.length;i++){
+    if(want<=d[i]||i===d.length-1){
+      const k=d[i]?want/d[i]:0;
+      const a=pts[i],b=pts[i+1];
+      return {lon:a[0]+(b[0]-a[0])*k, lat:a[1]+(b[1]-a[1])*k,
+              head:Math.atan2(b[0]-a[0],b[1]-a[1])};
+    }
+    want-=d[i];
+  }
+  const a=pts[pts.length-2],b=pts[pts.length-1];
+  return {lon:b[0],lat:b[1],head:Math.atan2(b[0]-a[0],b[1]-a[1])};
+}
+
+function frame(now){
+  requestAnimationFrame(frame);
+  if(!day) return;
+  const dt=last?(now-last)/1000:0; last=now;
+  if(playing){
+    clock=Math.min(day.duration_s,clock+dt*speed);
+    if(clock>=day.duration_s) playing=false, syncPlay();
+  }
+  // advance the cursor, painting each completed segment into the trail once
+  while(cursor<day.segments.length && day.segments[cursor].t1<=clock){
+    strokeSegment(trailCtx,day.segments[cursor],0.95,2);
+    cursor++;
+  }
+  ctx.clearRect(0,0,W,H);
+  ctx.drawImage(netCv,0,0,W,H);
+  ctx.drawImage(trailCv,0,0,W,H);
+
+  const seg=day.segments[Math.min(cursor,day.segments.length-1)];
+  if(seg && cursor<day.segments.length){
+    const pts=seg.c, f=Math.max(0,Math.min(1,seg.tv>0?(clock-seg.t0)/seg.tv:1));
+    if(shown[MODES[seg.m]]){
+      ctx.strokeStyle=COLOR[seg.m]; ctx.lineWidth=2.4;
+      ctx.lineCap="round"; ctx.lineJoin="round";
+      ctx.beginPath(); ctx.moveTo(sx(pts[0][0]),sy(pts[0][1]));
+      let total=0; const d=[];
+      for(let i=1;i<pts.length;i++){
+        const len=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);
+        d.push(len); total+=len;
+      }
+      let want=total*f;
+      for(let i=0;i<d.length;i++){
+        if(want>=d[i]){ ctx.lineTo(sx(pts[i+1][0]),sy(pts[i+1][1])); want-=d[i]; }
+        else{ const k=d[i]?want/d[i]:0,a=pts[i],b=pts[i+1];
+              ctx.lineTo(sx(a[0]+(b[0]-a[0])*k),sy(a[1]+(b[1]-a[1])*k)); break; }
+      }
+      ctx.stroke();
+    }
+  }
+  const p=positionAt(seg||day.segments[day.segments.length-1],clock);
+  drawCar(sx(p.lon),sy(p.lat),p.head,seg?COLOR[seg.m]:"#fff");
+  readouts(seg);
+}
+
+function drawCar(x,y,head,colour){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(head);
+  ctx.fillStyle="#fff"; ctx.strokeStyle=colour; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(0,-7); ctx.lineTo(5,6); ctx.lineTo(0,3.2);
+  ctx.lineTo(-5,6); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+
+// --- readouts --------------------------------------------------------------
+const $=id=>document.getElementById(id);
+function hhmmss(s){
+  s=Math.floor(s); const h=Math.floor(s/3600),m=Math.floor(s%3600/60);
+  return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"
+    +String(s%60).padStart(2,"0");
+}
+function readouts(seg){
+  $("clock").textContent=hhmmss(day.start_s+clock);
+  const done={capture:0,deadhead:0,leg:0};
+  for(let i=0;i<cursor;i++) done[MODES[day.segments[i].m]]+=day.segments[i].km;
+  for(const m of MODES) $("m-"+m).textContent=done[m].toFixed(1)+" km";
+  const f=day.duration_s?clock/day.duration_s:0;
+  $("progress").style.width=(f*100).toFixed(1)+"%";
+  $("pct").textContent=(f*100).toFixed(0)+"% of today driven";
+  $("elapsed").textContent=(clock/3600).toFixed(2)+" h of "
+    +(day.duration_s/3600).toFixed(2)+" h driving";
+  $("street").textContent=seg&&seg.s?seg.s:"—";
+  if(!dragScrub) $("scrub").value=Math.round(f*1000);
+}
+
+// --- controls --------------------------------------------------------------
+let dragScrub=false;
+function syncPlay(){ $("play").textContent=playing?"❚❚ Pause":"▶ Play";
+  $("play").classList.toggle("on",playing); }
+
+function loadDay(n){
+  return fetchJSON("data/day-"+String(n).padStart(2,"0")+".json").then(d=>{
+    if(shown.cumulative && day && !history.some(h=>h.day===day.day)) history.push(day);
+    day=d; dayIndex=n; clock=0; cursor=0; last=0;
+    $("dayline").textContent="day "+d.day+" · "+d.date+" · zone "+d.zone;
+    fit(network?network.bbox:d.bbox,0.92);
+    drawNetwork(); redrawTrail(); playing=true; syncPlay();
+  });
+}
+function fetchJSON(path){
+  if(window.PLAYBACK_EMBED) return Promise.resolve(window.PLAYBACK_EMBED[path]);
+  return fetch(path).then(r=>r.json());
+}
+
+$("play").onclick=()=>{ if(clock>=day.duration_s){clock=0;cursor=0;redrawTrail();}
+  playing=!playing; last=0; syncPlay(); };
+$("restart").onclick=()=>{ clock=0;cursor=0;redrawTrail();playing=true;last=0;syncPlay(); };
+$("scrub").oninput=e=>{ dragScrub=true; clock=day.duration_s*e.target.value/1000;
+  cursor=0; redrawTrail();
+  while(cursor<day.segments.length&&day.segments[cursor].t1<=clock){
+    strokeSegment(trailCtx,day.segments[cursor],0.95,2); cursor++; } };
+$("scrub").onchange=()=>{dragScrub=false};
+SPEEDS.forEach(v=>{ const b=document.createElement("button");
+  b.textContent=v+"×"; b.className=v===speed?"on":"";
+  b.onclick=()=>{speed=v;[...$("speeds").children].forEach(c=>
+    c.classList.toggle("on",c===b));}; $("speeds").appendChild(b); });
+// Blur after choosing: a focused <select> changes on the scroll wheel, and on a
+// map that people zoom by scrolling that means the day silently jumps under them.
+$("day").onchange=e=>{ const n=+e.target.value; e.target.blur(); loadDay(n); };
+document.querySelectorAll("[data-layer]").forEach(b=>{
+  b.onclick=()=>{ const k=b.dataset.layer; shown[k]=!shown[k];
+    b.classList.toggle("on",shown[k]);
+    if(k==="cumulative"&&!shown[k]) history=[];
+    drawNetwork(); redrawTrail(); };
+});
+
+// pan / zoom
+let drag=null;
+view.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY};
+  view.classList.add("dragging");view.setPointerCapture(e.pointerId)});
+view.addEventListener("pointermove",e=>{ if(!drag)return;
+  cam.x-=(e.clientX-drag.x)/cam.scale; cam.y+=(e.clientY-drag.y)/cam.scale;
+  drag={x:e.clientX,y:e.clientY}; drawNetwork(); redrawTrail(); });
+view.addEventListener("pointerup",e=>{drag=null;view.classList.remove("dragging")});
+let zoomTimer=null;
+view.addEventListener("wheel",e=>{ e.preventDefault();
+  const k=Math.exp(-e.deltaY*0.0016);
+  const r=view.getBoundingClientRect();
+  const px=e.clientX-r.left-W/2, py=e.clientY-r.top-H/2;
+  cam.x+=px/cam.scale-px/(cam.scale*k);
+  cam.y-=py/cam.scale-py/(cam.scale*k);
+  cam.scale*=k;
+  clearTimeout(zoomTimer); zoomTimer=setTimeout(()=>{drawNetwork();redrawTrail();},90);
+},{passive:false});
+window.addEventListener("resize",resize);
+
+// --- boot ------------------------------------------------------------------
+function boot(index){
+  days=index.days;
+  const sel=$("day");
+  for(const d of days){ const o=document.createElement("option");
+    o.value=d.day; o.textContent="Day "+d.day+" — "+d.date+" (zone "+d.zone+")";
+    sel.appendChild(o); }
+  $("scope").textContent=index.scope||"Tbilisi camera-car campaign";
+  return fetchJSON("data/network.json").then(n=>{ network=n; resize(); })
+    .then(()=>loadDay(days[0].day))
+    .then(()=>{ $("load").remove(); requestAnimationFrame(frame); });
+}
+// Opened straight off the disk, a browser refuses `fetch` on a file:// URL: the
+// page has an opaque origin, so every data file comes back as a CORS failure and
+// the playback shows "could not load playback data" and nothing else. That is by
+// far the most common way this page gets opened — somebody double-clicks it — so
+// the page has to handle it rather than report it.
+//
+// Stage 7 writes `playback-standalone.html` beside this file: the same renderer
+// with every day already inlined under PLAYBACK_EMBED, needing no fetch and no
+// server. Go there. Served over http(s) this branch never runs and nothing changes,
+// and inside the standalone PLAYBACK_EMBED is already set, so it cannot loop.
+if(!window.PLAYBACK_EMBED && location.protocol==="file:"){
+  document.getElementById("load").textContent="opening the self-contained playback\u2026";
+  location.replace("playback-standalone.html");
+} else {
+  fetchJSON("data/index.json").then(boot).catch(e=>{
+    document.getElementById("load").textContent="could not load playback data: "+e;
+  });
+}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+{
+  "adopted": "2",
+  "attempts": [
+    {
+      "days": 12,
+      "order": "far-zones-first (Stage 4's order)",
+      "route_h": 67.94518634477343
+    },
+    {
+      "days": 13,
+      "order": "near-zones-first",
+      "route_h": 69.0657643612956
+    },
+    {
+      "days": 13,
+      "order": "largest-zone-first",
+      "route_h": 68.8219619917526
+    },
+    {
+      "days": 12,
+      "order": "smallest-zone-first",
+      "route_h": 67.81336331200775
+    },
+    {
+      "days": 13,
+      "order": "seeded shuffle 20260825",
+      "route_h": 68.78310184492975
+    },
+    {
+      "days": 12,
+      "order": "seeded shuffle 20260826",
+      "route_h": 68.40066127843487
+    },
+    {
+      "days": 13,
+      "order": "seeded shuffle 20260827",
+      "route_h": 68.73981215196918
+    },
+    {
+      "days": 13,
+      "order": "seeded shuffle 20260828",
+      "route_h": 68.79725237264789
+    }
+  ],
+  "baseline": {
+    "capture_h": 16.608978327436088,
+    "days": 13,
+    "deadhead_h": 28.949406657306973,
+    "finish_date": "2026-09-10",
+    "route_h": 71.43894054029862,
+    "start_date": "2026-08-29",
+    "turn_h": 25.880555555555556
+  },
+  "baseline_splits": 8,
+  "credit_rule": {
+    "pair_either_direction": true,
+    "reduced_exempt": true,
+    "shared_with": "coverage.qualifies — the Stage 6 rule",
+    "speed_max_kmh": 40.0
+  },
+  "days": [
+    {
+      "arc_traversals": 2899,
+      "bonus_km": 10.050988048347644,
+      "bonus_offered": 304,
+      "bonus_passes": 304,
+      "break_h": 0.75,
+      "capture_h": 2.048851836261521,
+      "date": "2026-08-29",
+      "day": 1,
+      "day_h": 7.116934604929274,
+      "deadhead_h": 2.0058605464455312,
+      "over_window": false,
+      "route_h": 6.366934604929274,
+      "slowing_h": 0.02328213678149014,
+      "turn_h": 2.312222222222222,
+      "zone": 1
+    },
+    {
+      "arc_traversals": 2963,
+      "bonus_km": 15.849182545186075,
+      "bonus_offered": 257,
+      "bonus_passes": 257,
+      "break_h": 0.75,
+      "capture_h": 1.8747074315158592,
+      "date": "2026-08-30",
+      "day": 2,
+      "day_h": 7.128826533157131,
+      "deadhead_h": 2.172452434974605,
+      "over_window": false,
+      "route_h": 6.378826533157131,
+      "slowing_h": 0.05141795961141373,
+      "turn_h": 2.3316666666666666,
+      "zone": 5
+    },
+    {
+      "arc_traversals": 3410,
+      "bonus_km": 4.109539056116446,
+      "bonus_offered": 115,
+      "bonus_passes": 115,
+      "break_h": 0.75,
+      "capture_h": 1.7942738118237125,
+      "date": "2026-08-31",
+      "day": 3,
+      "day_h": 8.555630084938038,
+      "deadhead_h": 2.804967384225437,
+      "over_window": false,
+      "route_h": 7.805630084938039,
+      "slowing_h": 0.005293324774438036,
+      "turn_h": 3.2063888888888887,
+      "zone": 4
+    },
+    {
+      "arc_traversals": 2083,
+      "bonus_km": 4.764808015448694,
+      "bonus_offered": 134,
+      "bonus_passes": 134,
+      "break_h": 0.75,
+      "capture_h": 1.0182501565714548,
+      "date": "2026-09-01",
+      "day": 4,
+      "day_h": 4.833774256735412,
+      "deadhead_h": 1.5208018779417347,
+      "over_window": false,
+      "route_h": 4.083774256735412,
+      "slowing_h": 0.012004404365177294,
+      "turn_h": 1.5447222222222223,
+      "zone": 6
+    },
+    {
+      "arc_traversals": 1633,
+      "bonus_km": 2.5128248568843015,
+      "bonus_offered": 63,
+      "bonus_passes": 63,
+      "break_h": 0.75,
+      "capture_h": 0.7511724564645444,
+      "date": "2026-09-02",
+      "day": 5,
+      "day_h": 4.373588987337335,
+      "deadhead_h": 1.6232498642061246,
+      "over_window": false,
+      "route_h": 3.6235889873373353,
+      "slowing_h": 0.003044655245690337,
+      "turn_h": 1.2491666666666668,
+      "zone": 7
+    },
+    {
+      "arc_traversals": 2108,
+      "bonus_km": 14.651155333464697,
+      "bonus_offered": 317,
+      "bonus_passes": 317,
+      "break_h": 0.75,
+      "capture_h": 1.1709069300525152,
+      "date": "2026-09-03",
+      "day": 6,
+      "day_h": 4.529326838627475,
+      "deadhead_h": 1.5856421307971822,
+      "over_window": false,
+      "route_h": 3.779326838627475,
+      "slowing_h": 0.033759664745658745,
+      "turn_h": 1.0227777777777778,
+      "zone": 2
+    },
+    {
+      "arc_traversals": 2304,
+      "bonus_km": 4.430995159922477,
+      "bonus_offered": 96,
+      "bonus_passes": 96,
+      "break_h": 0.75,
+      "capture_h": 1.0400428346550457,
+      "date": "2026-09-04",
+      "day": 7,
+      "day_h": 5.527976471656932,
+      "deadhead_h": 2.012100303668553,
+      "over_window": false,
+      "route_h": 4.777976471656932,
+      "slowing_h": 0.01671768961212933,
+      "turn_h": 1.7258333333333333,
+      "zone": 8
+    },
+    {
+      "arc_traversals": 3042,
+      "bonus_km": 4.5147362212866335,
+      "bonus_offered": 115,
+      "bonus_passes": 115,
+      "break_h": 0.75,
+      "capture_h": 1.2469654741482625,
+      "date": "2026-09-05",
+      "day": 8,
+      "day_h": 6.562567478582333,
+      "deadhead_h": 2.4031020044340705,
+      "over_window": false,
+      "route_h": 5.812567478582333,
+      "slowing_h": 0.0140888850217823,
+      "turn_h": 2.1625,
+      "zone": 9
+    },
+    {
+      "arc_traversals": 3877,
+      "bonus_km": 0.4963032265431176,
+      "bonus_offered": 17,
+      "bonus_passes": 17,
+      "break_h": 0.75,
+      "capture_h": 1.547501462712528,
+      "date": "2026-09-06",
+      "day": 9,
+      "day_h": 8.544973914547743,
+      "deadhead_h": 3.222194674057436,
+      "over_window": false,
+      "route_h": 7.794973914547742,
+      "slowing_h": 0.0008188026366081041,
+      "turn_h": 3.0252777777777777,
+      "zone": 3
+    },
+    {
+      "arc_traversals": 3596,
+      "bonus_km": 0.0,
+      "bonus_offered": 0,
+      "bonus_passes": 0,
+      "break_h": 0.75,
+      "capture_h": 1.1794526401318088,
+      "date": "2026-09-07",
+      "day": 10,
+      "day_h": 7.711538870987548,
+      "deadhead_h": 2.811808453077961,
+      "over_window": false,
+      "route_h": 6.961538870987548,
+      "slowing_h": 0.0,
+      "turn_h": 2.9702777777777776,
+      "zone": 10
+    },
+    {
+      "arc_traversals": 2188,
+      "bonus_km": 0.8118418308346693,
+      "bonus_offered": 21,
+      "bonus_passes": 21,
+      "break_h": 0.75,
+      "capture_h": 1.4761466346467544,
+      "date": "2026-09-08",
+      "day": 11,
+      "day_h": 5.423908420924708,
+      "deadhead_h": 1.7647062307223986,
+      "over_window": false,
+      "route_h": 4.673908420924708,
+      "slowing_h": 0.004480299905121698,
+      "turn_h": 1.4330555555555555,
+      "zone": 0
+    },
+    {
+      "arc_traversals": 2907,
+      "bonus_km": 0.0,
+      "bonus_offered": 0,
+      "bonus_passes": 0,
+      "break_h": 0.75,
+      "capture_h": 1.4553310836027118,
+      "date": "2026-09-09",
+      "day": 12,
+      "day_h": 6.504316849583825,
+      "deadhead_h": 2.030930210425558,
+      "over_window": false,
+      "route_h": 5.754316849583825,
+      "slowing_h": 0.0,
+      "turn_h": 2.2680555555555557,
+      "zone": 11
+    }
+  ],
+  "meta": {
+    "arcs_sha256": "67267c507b198ce8ef4c5984e66a77ace0ab03ff7655d5035026d2a787d3d692",
+    "runtime_s": 836.1
+  },
+  "route_documents": {
+    "days": 12,
+    "dir": "/Users/mat/Desktop/EfficientRoute/.claude/worktrees/stage08-sequential-credit/RUN-CUSTOMER-NET/reports/08-routes",
+    "hold_arcs": 1367
+  },
+  "tiers": {
+    "0": {
+      "capture_h": 16.608978327436088,
+      "days": 13,
+      "deadhead_h": 28.949406657306973,
+      "finish_date": "2026-09-10",
+      "route_h": 71.43894054029862,
+      "start_date": "2026-08-29",
+      "turn_h": 25.880555555555556
+    },
+    "1": {
+      "bonus_km": 62.92017943810646,
+      "bonus_passes": 1460,
+      "capture_h": 16.60447494959851,
+      "days": 12,
+      "days_dropped": [],
+      "days_over_window": 0,
+      "deadhead_h": 26.102933617397145,
+      "i10_ok": true,
+      "i9_failures": [],
+      "order": "far-zones-first (Stage 4's order)",
+      "route_h": 67.94518634477343,
+      "slowing_h": 0.16121177959143565,
+      "splits": [
+        {
+          "into": [
+            1,
+            5
+          ],
+          "zone": 1
+        },
+        {
+          "into": [
+            0,
+            6
+          ],
+          "zone": 0
+        },
+        {
+          "into": [
+            2,
+            7
+          ],
+          "zone": 2
+        },
+        {
+          "into": [
+            2,
+            8
+          ],
+          "zone": 2
+        },
+        {
+          "into": [
+            4,
+            9
+          ],
+          "zone": 4
+        },
+        {
+          "into": [
+            4,
+            10
+          ],
+          "zone": 4
+        },
+        {
+          "into": [
+            3,
+            11
+          ],
+          "zone": 3
+        }
+      ],
+      "tier": 1,
+      "turn_h": 25.23777777777778,
+      "undischarged_passes": 0,
+      "vs_baseline": {
+        "days": -1,
+        "route_h": -3.4937541955251845,
+        "route_pct": -4.8905459250957986
+      }
+    },
+    "2": {
+      "bonus_km": 62.19237429403476,
+      "bonus_passes": 1439,
+      "capture_h": 16.603602752586717,
+      "days": 12,
+      "days_dropped": [],
+      "days_over_window": 0,
+      "deadhead_h": 25.95781611497659,
+      "finish_date": "2026-09-09",
+      "i10_ok": true,
+      "i9_failures": [],
+      "order": "smallest-zone-first",
+      "route_h": 67.81336331200775,
+      "slowing_h": 0.1649078226995097,
+      "splits": [
+        {
+          "into": [
+            1,
+            5
+          ],
+          "zone": 1
+        },
+        {
+          "into": [
+            4,
+            6
+          ],
+          "zone": 4
+        },
+        {
+          "into": [
+            4,
+            7
+          ],
+          "zone": 4
+        },
+        {
+          "into": [
+            2,
+            8
+          ],
+          "zone": 2
+        },
+        {
+          "into": [
+            2,
+            9
+          ],
+          "zone": 2
+        },
+        {
+          "into": [
+            3,
+            10
+          ],
+          "zone": 3
+        },
+        {
+          "into": [
+            0,
+            11
+          ],
+          "zone": 0
+        }
+      ],
+      "start_date": "2026-08-29",
+      "tier": 2,
+      "turn_h": 25.251944444444444,
+      "undischarged_passes": 0,
+      "vs_baseline": {
+        "days": -1,
+        "route_h": -3.625577228290865,
+        "route_pct": -5.075071383856374
+      }
+    }
+  }
+}
