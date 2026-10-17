@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tbilisi parking survey - routes</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="viewer.css">
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="viewer.js" defer></script>
+</head>
+<body>
+  <aside id="panel">
+    <h1>Tbilisi parking survey - plan v3</h1>
+    <div id="generated" class="muted"></div>
+
+    <section>
+      <label class="row">Route set
+        <select id="set-select" disabled></select>
+      </label>
+    </section>
+
+    <section id="playback">
+      <h2>Playback <span class="muted small">(space = play / pause, arrow keys = step)</span></h2>
+      <div class="pb-row">
+        <select id="pb-day" disabled><option value="">choose a day...</option></select>
+        <button type="button" id="pb-play" disabled title="Play / pause">&#9654; Play</button>
+        <button type="button" id="pb-restart" disabled title="Back to the start">&#10226;</button>
+        <button type="button" id="pb-stop" disabled title="Leave playback">&#10005;</button>
+      </div>
+      <input type="range" id="pb-pos" min="0" max="1000" step="1" value="0" disabled>
+      <div id="pb-readout" class="small muted">Pick a day to watch the car drive it in order.</div>
+      <div class="pb-row small">
+        <label class="inline">Speed
+          <select id="pb-speed">
+            <option value="0.1">0.1 km/s</option>
+            <option value="0.25">0.25 km/s</option>
+            <option value="0.5" selected>0.5 km/s</option>
+            <option value="1">1 km/s</option>
+            <option value="2">2 km/s</option>
+            <option value="4">4 km/s</option>
+          </select>
+        </label>
+        <label class="inline"><input type="checkbox" id="pb-follow" checked> follow the car</label>
+      </div>
+      <div class="pb-ramp small"><span>start of day</span><div class="bar"></div><span>end</span></div>
+      <p class="muted small">The driven part is coloured by time (dark purple first, orange last), so a street driven twice
+        shows which pass came first. Grey = still to drive.</p>
+    </section>
+
+    <section>
+      <h2>Basemap</h2>
+      <label><input type="radio" name="basemap" value="osm" checked> Street map</label>
+      <label><input type="radio" name="basemap" value="esri"> Satellite</label>
+    </section>
+
+    <section>
+      <h2>Layers</h2>
+      <label><input type="checkbox" id="show-cityhall" checked> City Hall lots</label>
+      <label><input type="checkbox" id="show-proposed" checked> Proposed lots</label>
+      <label><input type="checkbox" id="show-filmed" checked>
+        <span class="swatch line" style="background:#00e5ff"></span> Filmed streets (14 Oct)</label>
+    </section>
+
+    <section>
+      <h2>Lot status <span class="muted" id="legend-set"></span></h2>
+      <table id="legend"><tbody></tbody></table>
+    </section>
+
+    <section>
+      <h2>Days
+        <button type="button" id="days-all">all</button>
+        <button type="button" id="days-none">none</button>
+      </h2>
+      <table id="days">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="name">Day</th>
+            <th title="Total km">km</th>
+            <th title="Productive km">prod km</th>
+            <th title="Connector (empty) km">conn km</th>
+            <th title="Re-driven km">re-dr km</th>
+            <th title="U-turns">U-turns</th>
+            <th title="Left turns">lefts</th>
+            <th title="New lots">new lots</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+      </table>
+      <p class="muted small">Solid line = productive, dashed = connector (empty driving).
+        Arrows show driving direction. <b>U</b> = turnaround, <b>H</b> = hairpin. Click a day name to zoom.</p>
+    </section>
+  </aside>
+
+  <main id="map-wrap">
+    <div id="map"></div>
+    <div id="message" hidden></div>
+  </main>
+</body>
+</html>
