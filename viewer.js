@@ -9,6 +9,7 @@
     ['filmed', '#1f77b4', 'filmed (14 Oct)'],
     ['unreachable', '#7f7f7f', 'unreachable'],
     ['not_needed', '#bcbd22', 'not needed'],
+    ['other_day', '#bdbdbd', 'other days'],
   ];
   const STATUS_COLOR = Object.fromEntries(STATUS.map(([k, c]) => [k, c]));
   const UNKNOWN_COLOR = '#cccccc';
@@ -50,6 +51,7 @@
     container: 'map',
     center: [44.79, 41.715],
     zoom: 13,
+    hash: true,                  // the view is in the address (#zoom/lat/lon): links open the same spot
     style: {
       version: 8,
       sources: {
