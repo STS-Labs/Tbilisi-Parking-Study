@@ -14,22 +14,22 @@
      "n": 1,
      "name": "Day 1",
      "file": "day_01.gpx",
-     "km": 77.95,
-     "productive_km": 37.59,
-     "connector_km": 40.36,
-     "redriven_km": 17.15,
-     "uturns": 30,
+     "km": 81.74,
+     "productive_km": 37.82,
+     "connector_km": 43.92,
+     "redriven_km": 20.73,
+     "uturns": 33,
      "uturns_dead_end": 4,
-     "lefts": 86,
-     "new_lots": 454,
+     "lefts": 90,
+     "new_lots": 456,
      "bbox": [
-      44.724556,
+      44.717848,
       41.701034,
       44.786599,
       41.719766
      ],
      "off_network_m": 0,
-     "revisits": 159,
+     "revisits": 165,
      "color": "#e6194b"
     }
    ]
@@ -264,9 +264,9 @@
  ],
  "status_counts": {
   "clean": {
-   "other_day": 3219,
+   "other_day": 3217,
    "filmed": 258,
-   "covered": 454,
+   "covered": 456,
    "unreachable": 31
   },
   "v3rest": {
