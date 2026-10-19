@@ -7,7 +7,7 @@
  "sets": [
   {
    "id": "review",
-   "label": "Day 1 (driven) + new day 2 for review",
+   "label": "Day 1 (driven), Day 2 (on STS NAV) + new day 3 for review",
    "routes": "routes_review.geojson",
    "days": [
     {
@@ -34,7 +34,7 @@
     },
     {
      "n": 2,
-     "name": "Day 2 (new, for review)",
+     "name": "Day 2 (on STS NAV)",
      "file": "day_02.gpx",
      "km": 106.64,
      "productive_km": 49.52,
@@ -53,14 +53,36 @@
      "off_network_m": 0,
      "revisits": 203,
      "color": "#3cb44b"
+    },
+    {
+     "n": 3,
+     "name": "Day 3 (new, for review)",
+     "file": "day_03.gpx",
+     "km": 106.45,
+     "productive_km": 47.02,
+     "connector_km": 59.43,
+     "redriven_km": 28.47,
+     "uturns": 21,
+     "uturns_dead_end": 2,
+     "lefts": 91,
+     "new_lots": 490,
+     "bbox": [
+      44.734859,
+      41.701144,
+      44.809302,
+      41.787462
+     ],
+     "off_network_m": 0,
+     "revisits": 176,
+     "color": "#4363d8"
     }
    ]
   }
  ],
  "status_counts": {
   "review": {
-   "covered": 1016,
-   "other_day": 2640,
+   "covered": 1506,
+   "other_day": 2150,
    "filmed": 275,
    "unreachable": 31
   }
