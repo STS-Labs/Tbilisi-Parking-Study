@@ -7,7 +7,7 @@
  "sets": [
   {
    "id": "review",
-   "label": "Day 1 on STS NAV + new days 2-12 for review",
+   "label": "Day 1 on STS NAV + new days 2-10 for review",
    "routes": "routes_review.geojson",
    "days": [
     {
@@ -58,36 +58,14 @@
      "n": 3,
      "name": "Day 3 (new, for review)",
      "file": "day_03.gpx",
-     "km": 33.33,
-     "productive_km": 5.94,
-     "connector_km": 27.39,
-     "redriven_km": 6.3,
-     "uturns": 2,
-     "uturns_dead_end": 0,
-     "lefts": 35,
-     "new_lots": 76,
-     "bbox": [
-      44.772101,
-      41.672505,
-      44.862043,
-      41.707248
-     ],
-     "off_network_m": 0,
-     "revisits": 42,
-     "color": "#4363d8"
-    },
-    {
-     "n": 4,
-     "name": "Day 4 (new, for review)",
-     "file": "day_04.gpx",
      "km": 110.96,
-     "productive_km": 41.46,
-     "connector_km": 69.5,
-     "redriven_km": 27.51,
+     "productive_km": 41.7,
+     "connector_km": 69.26,
+     "redriven_km": 24.57,
      "uturns": 20,
      "uturns_dead_end": 3,
      "lefts": 162,
-     "new_lots": 593,
+     "new_lots": 596,
      "bbox": [
       44.772101,
       41.672014,
@@ -96,20 +74,20 @@
      ],
      "off_network_m": 0,
      "revisits": 184,
-     "color": "#f58231"
+     "color": "#4363d8"
     },
     {
-     "n": 5,
-     "name": "Day 5 (new, for review)",
-     "file": "day_05.gpx",
+     "n": 4,
+     "name": "Day 4 (new, for review)",
+     "file": "day_04.gpx",
      "km": 113.91,
-     "productive_km": 39.27,
-     "connector_km": 74.63,
-     "redriven_km": 22.05,
+     "productive_km": 39.88,
+     "connector_km": 74.03,
+     "redriven_km": 19.67,
      "uturns": 17,
      "uturns_dead_end": 5,
      "lefts": 132,
-     "new_lots": 318,
+     "new_lots": 325,
      "bbox": [
       44.772101,
       41.672353,
@@ -118,20 +96,20 @@
      ],
      "off_network_m": 0,
      "revisits": 181,
-     "color": "#911eb4"
+     "color": "#f58231"
     },
     {
-     "n": 6,
-     "name": "Day 6 (new, for review)",
-     "file": "day_06.gpx",
+     "n": 5,
+     "name": "Day 5 (new, for review)",
+     "file": "day_05.gpx",
      "km": 106.29,
-     "productive_km": 25.37,
-     "connector_km": 80.92,
-     "redriven_km": 23.38,
+     "productive_km": 25.64,
+     "connector_km": 80.65,
+     "redriven_km": 16.83,
      "uturns": 4,
      "uturns_dead_end": 0,
      "lefts": 51,
-     "new_lots": 209,
+     "new_lots": 217,
      "bbox": [
       44.772101,
       41.66333,
@@ -140,34 +118,12 @@
      ],
      "off_network_m": 0,
      "revisits": 133,
-     "color": "#42d4f4"
+     "color": "#911eb4"
     },
     {
-     "n": 7,
-     "name": "Day 7 (new, for review)",
-     "file": "day_07.gpx",
-     "km": 35.26,
-     "productive_km": 0.23,
-     "connector_km": 35.04,
-     "redriven_km": 16.27,
-     "uturns": 0,
-     "uturns_dead_end": 0,
-     "lefts": 7,
-     "new_lots": 1,
-     "bbox": [
-      44.772101,
-      41.638852,
-      44.925624,
-      41.713773
-     ],
-     "off_network_m": 0,
-     "revisits": 41,
-     "color": "#f032e6"
-    },
-    {
-     "n": 8,
-     "name": "Day 8 (new, for review)",
-     "file": "day_08.gpx",
+     "n": 6,
+     "name": "Day 6 (new, for review)",
+     "file": "day_06.gpx",
      "km": 104.36,
      "productive_km": 49.55,
      "connector_km": 54.81,
@@ -184,12 +140,12 @@
      ],
      "off_network_m": 0,
      "revisits": 171,
-     "color": "#9a6324"
+     "color": "#42d4f4"
     },
     {
-     "n": 9,
-     "name": "Day 9 (new, for review)",
-     "file": "day_09.gpx",
+     "n": 7,
+     "name": "Day 7 (new, for review)",
+     "file": "day_07.gpx",
      "km": 116.65,
      "productive_km": 45.08,
      "connector_km": 71.57,
@@ -206,12 +162,12 @@
      ],
      "off_network_m": 0,
      "revisits": 174,
-     "color": "#469990"
+     "color": "#f032e6"
     },
     {
-     "n": 10,
-     "name": "Day 10 (new, for review)",
-     "file": "day_10.gpx",
+     "n": 8,
+     "name": "Day 8 (new, for review)",
+     "file": "day_08.gpx",
      "km": 116.99,
      "productive_km": 31.68,
      "connector_km": 85.32,
@@ -228,12 +184,12 @@
      ],
      "off_network_m": 0,
      "revisits": 121,
-     "color": "#800000"
+     "color": "#9a6324"
     },
     {
-     "n": 11,
-     "name": "Day 11 (new, for review)",
-     "file": "day_11.gpx",
+     "n": 9,
+     "name": "Day 9 (new, for review)",
+     "file": "day_09.gpx",
      "km": 109.86,
      "productive_km": 52.79,
      "connector_km": 57.07,
@@ -250,29 +206,29 @@
      ],
      "off_network_m": 0,
      "revisits": 185,
-     "color": "#808000"
+     "color": "#469990"
     },
     {
-     "n": 12,
-     "name": "Day 12 (new, for review)",
-     "file": "day_12.gpx",
-     "km": 21.77,
-     "productive_km": 4.83,
-     "connector_km": 16.94,
-     "redriven_km": 13.57,
-     "uturns": 0,
+     "n": 10,
+     "name": "Day 10 (new, for review)",
+     "file": "day_10.gpx",
+     "km": 71.99,
+     "productive_km": 9.88,
+     "connector_km": 62.11,
+     "redriven_km": 30.2,
+     "uturns": 2,
      "uturns_dead_end": 0,
-     "lefts": 14,
-     "new_lots": 32,
+     "lefts": 54,
+     "new_lots": 91,
      "bbox": [
       44.717038,
-      41.704334,
-      44.781741,
+      41.638852,
+      44.925624,
       41.726047
      ],
      "off_network_m": 0,
-     "revisits": 17,
-     "color": "#000075"
+     "revisits": 81,
+     "color": "#800000"
     }
    ]
   }
