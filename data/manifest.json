@@ -7,7 +7,7 @@
  "sets": [
   {
    "id": "review",
-   "label": "Day 1 (driven), Day 2 (on STS NAV) + new day 3 for review, days 4-10 planned",
+   "label": "Day 1 (driven), Day 2 (on STS NAV), Day 3 (on STS NAV) + new day 4 for review, days 5-10 planned",
    "routes": "routes_review.geojson",
    "days": [
     {
@@ -56,7 +56,7 @@
     },
     {
      "n": 3,
-     "name": "Day 3 (new, for review)",
+     "name": "Day 3 (on STS NAV)",
      "file": "day_03.gpx",
      "km": 106.45,
      "productive_km": 47.02,
@@ -78,7 +78,7 @@
     },
     {
      "n": 4,
-     "name": "Day 4 (planned, not yet reviewed)",
+     "name": "Day 4 (new, for review)",
      "file": "day_04.gpx",
      "km": 106.65,
      "productive_km": 35.79,
