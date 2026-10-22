@@ -44,7 +44,9 @@
   const fmtKm = (v) => (isNum(v) ? v.toFixed(1) : '-');
   const fmtInt = (v) => (isNum(v) ? Math.round(v).toLocaleString('en-US') : '-');
 
-  const state = { manifest: null, set: null, visibleDays: new Set(), routes: null };
+  // selectedDay: the day drawn solid, the others faded; hiddenStatus: lot statuses filtered out
+  const state = { manifest: null, set: null, visibleDays: new Set(), routes: null,
+    selectedDay: null, hiddenStatus: new Set(), lots: EMPTY };
 
   // ---------------------------------------------------------------- map + basemaps
   const map = new maplibregl.Map({
@@ -192,6 +194,18 @@
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: { 'line-color': ['get', '_color'], 'line-width': 4 },
     });
+    // the selected day: its whole drive solid and bold on a white edge (the camera films connectors too)
+    const NONE = ['==', ['get', 'day'], -1];
+    map.addLayer({
+      id: 'route-selected-casing', type: 'line', source: 'routes', filter: NONE,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: { 'line-color': '#ffffff', 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 6, 14, 9, 17, 13] },
+    });
+    map.addLayer({
+      id: 'route-selected', type: 'line', source: 'routes', filter: NONE,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: { 'line-color': ['get', '_color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 4, 14, 6, 17, 9] },
+    });
     map.addLayer({
       id: 'route-arrows', type: 'symbol', source: 'routes', layout: ARROW_LAYOUT,
       paint: { 'icon-color': ['get', '_color'], 'icon-halo-color': '#ffffff', 'icon-halo-width': 1 },
@@ -230,6 +244,18 @@
       id: 'pt-hairpin-lbl', type: 'symbol', source: 'routes',
       layout: { 'icon-image': 'lbl-H', 'icon-allow-overlap': true, 'icon-ignore-placement': true },
     });
+    // on top: the lots of a filtered status as dots, so a few small lots stand out at city zoom
+    // (fading out close up, where the lot itself shows)
+    map.addSource('lot-dots', { type: 'geojson', data: EMPTY });
+    const fadeOut = ['interpolate', ['linear'], ['zoom'], 15, 1, 17, 0];
+    map.addLayer({
+      id: 'lots-dot', type: 'circle', source: 'lot-dots', layout: { visibility: 'none' },
+      paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 6, 15, 9],
+        'circle-color': UNKNOWN_COLOR, 'circle-opacity': fadeOut,
+        'circle-stroke-color': '#111111', 'circle-stroke-width': 2.5, 'circle-stroke-opacity': fadeOut,
+      },
+    });
   }
 
   // ---------------------------------------------------------------- filters
@@ -248,13 +274,149 @@
     for (const id of ROUTE_LAYERS) map.setFilter(id, ['all', filters[id], days]);
   }
 
+  // Playback dims every day; a selected day is drawn by route-selected and the other days fade
+  function applyRouteStyle() {
+    const sel = state.selectedDay;
+    const lines = ['in', ['get', 'kind'], ['literal', ['productive', 'connector']]];
+    for (const id of ['route-selected-casing', 'route-selected']) {
+      map.setFilter(id, ['all', lines, ['==', ['get', 'day'], sel === null ? -1 : sel]]);
+    }
+    const opacity = (mine) => (pb.day !== null ? 0.18 : sel === null ? 1
+      : ['case', ['==', ['get', 'day'], sel], mine, 0.25]);
+    map.setPaintProperty('route-connector', 'line-opacity', opacity(0));
+    map.setPaintProperty('route-productive', 'line-opacity', opacity(0));
+    map.setPaintProperty('route-arrows', 'icon-opacity', opacity(1));
+    for (const id of ['pt-turnaround', 'pt-hairpin']) {
+      map.setPaintProperty(id, 'circle-opacity', opacity(1));
+      map.setPaintProperty(id, 'circle-stroke-opacity', opacity(1));
+    }
+    for (const id of ['pt-turnaround-lbl', 'pt-hairpin-lbl']) map.setPaintProperty(id, 'icon-opacity', opacity(1));
+    for (const tr of $('days').tBodies[0].rows) tr.classList.toggle('sel', Number(tr.dataset.day) === sel);
+  }
+
+  function selectDay(n) {
+    if (pb.day !== null) playbackStop();
+    state.selectedDay = state.selectedDay === n ? null : n;
+    if (n !== null && state.selectedDay === n && !state.visibleDays.has(n)) {
+      state.visibleDays.add(n);
+      const cb = $('days').querySelector(`input[data-day="${n}"]`);
+      if (cb) cb.checked = true;
+      applyDayFilter();
+    }
+    applyRouteStyle();
+  }
+
+  const statusKey = () => `st_${state.set ? state.set.id : ''}`;
+
   function applyLotFilter() {
     const hidden = [];
     if (!$('show-cityhall').checked) hidden.push('city_hall');
     if (!$('show-proposed').checked) hidden.push('proposed');
-    const f = ['!', ['in', ['to-string', ['get', 'layer']], ['literal', hidden]]];
+    const parts = [['!', ['in', ['to-string', ['get', 'layer']], ['literal', hidden]]]];
+    const filtering = state.hiddenStatus.size > 0 && state.set;
+    if (filtering) {
+      const shown = STATUS.map(([k]) => k).filter((k) => !state.hiddenStatus.has(k));
+      parts.push(['in', ['to-string', ['get', statusKey()]], ['literal', shown]]);
+    }
+    const f = ['all', ...parts];
     map.setFilter('lots-fill', f);
     map.setFilter('lots-line', f);
+    map.setFilter('lots-dot', f);
+    map.setLayoutProperty('lots-dot', 'visibility', filtering ? 'visible' : 'none');
+    $('status-all').hidden = !filtering;
+    buildLotList(hidden, filtering);
+  }
+
+  // ---------------------------------------------------------------- lot list (a filtered status)
+  const LIST_MAX = 80;
+
+  function lotRings(g) {
+    if (!g) return [];
+    if (g.type === 'Polygon') return [g.coordinates[0]];
+    if (g.type === 'MultiPolygon') return g.coordinates.map((p) => p[0]);
+    return [];
+  }
+  function lotBbox(g) {
+    const pts = lotRings(g).flat();
+    if (!pts.length) return null;
+    const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+    return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+  }
+  function lotCentre(g) {
+    const ring = lotRings(g)[0] || [];
+    const pts = ring.length > 1 ? ring.slice(0, -1) : ring;   // the last vertex repeats the first
+    if (!pts.length) return null;
+    return [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
+  }
+
+  function lotDots(lots) {
+    const features = [];
+    for (const f of lots.features || []) {
+      const c = lotCentre(f.geometry);
+      if (c) features.push({ type: 'Feature', properties: f.properties, geometry: { type: 'Point', coordinates: c } });
+    }
+    return { type: 'FeatureCollection', features };
+  }
+
+  function shownLots(hiddenLayers) {
+    const key = statusKey();
+    return (state.lots.features || []).filter((f) => {
+      const p = f.properties || {};
+      return !hiddenLayers.includes(String(p.layer)) && !state.hiddenStatus.has(String(p[key]));
+    });
+  }
+
+  function buildLotList(hiddenLayers, filtering) {
+    const box = $('lot-list');
+    if (!filtering) { box.hidden = true; box.innerHTML = ''; state.listed = []; return; }
+    const lots = shownLots(hiddenLayers);
+    state.listed = lots;
+    let html = `<div class="small">${fmtInt(lots.length)} lots shown - <a href="#" data-lots-zoom>zoom to them</a></div>`;
+    if (lots.length <= LIST_MAX) {
+      const groups = new Map();
+      lots.forEach((f, i) => {
+        const r = f.properties.reason || 'no reason given';
+        if (!groups.has(r)) groups.set(r, []);
+        groups.get(r).push(i);
+      });
+      for (const [reason, idx] of [...groups].sort((a, b) => b[1].length - a[1].length)) {
+        html += `<h3>${esc(reason)} (${idx.length})</h3><ul>${idx.map((i) => {
+          const p = lots[i].properties;
+          return `<li><a href="#" data-lot="${i}">${esc(p.id)}</a> ${esc(p.address || '')}`
+            + (isNum(p.spaces) ? ` <span class="muted">(${p.spaces} spaces)</span>` : '') + '</li>';
+        }).join('')}</ul>`;
+      }
+    } else {
+      html += `<div class="muted small">The list shows up to ${LIST_MAX} lots; narrow the filter to list them.</div>`;
+    }
+    box.innerHTML = html;
+    box.hidden = false;
+  }
+
+  function zoomToLots(lots) {
+    const boxes = lots.map((f) => lotBbox(f.geometry)).filter(Boolean);
+    if (!boxes.length) return;
+    map.fitBounds([Math.min(...boxes.map((b) => b[0])), Math.min(...boxes.map((b) => b[1])),
+      Math.max(...boxes.map((b) => b[2])), Math.max(...boxes.map((b) => b[3]))], { padding: 50, maxZoom: 17 });
+  }
+
+  function showLot(f) {
+    const b = lotBbox(f.geometry), c = lotCentre(f.geometry);
+    if (b) map.fitBounds(b, { padding: 80, maxZoom: 18 });
+    if (c) new maplibregl.Popup().setLngLat(c).setHTML(lotPopupHtml(f.properties)).addTo(map);
+  }
+
+  function setStatusShown(k, on) {
+    if (on) state.hiddenStatus.delete(k); else state.hiddenStatus.add(k);
+    for (const cb of $('legend').querySelectorAll('input[data-status]')) cb.checked = !state.hiddenStatus.has(cb.dataset.status);
+    applyLotFilter();
+  }
+
+  function soloStatus(k) {
+    const all = STATUS.map(([s]) => s);
+    const onlyThis = all.every((s) => (s === k) !== state.hiddenStatus.has(s));
+    state.hiddenStatus = new Set(onlyThis ? [] : all.filter((s) => s !== k));
+    setStatusShown(k, true);
   }
 
   function applyFilmedVisibility() {
@@ -282,15 +444,19 @@
     const counts = (state.manifest.status_counts || {})[set.id] || {};
     $('legend-set').textContent = `(${set.label || set.id})`;
     $('legend').tBodies[0].innerHTML = STATUS.map(([k, c, label]) => `
-      <tr><td><span class="swatch" style="background:${c}"></span></td>
-          <td>${esc(label)}</td><td class="num">${fmtInt(counts[k])}</td></tr>`).join('');
+      <tr class="${counts[k] ? '' : 'empty'}">
+          <td><input type="checkbox" data-status="${k}" ${state.hiddenStatus.has(k) ? '' : 'checked'}
+              title="Show or hide these lots"></td>
+          <td><span class="swatch" style="background:${c}"></span></td>
+          <td><a href="#" data-solo="${k}" title="Show only these lots (click again for all)">${esc(label)}</a></td>
+          <td class="num">${fmtInt(counts[k])}</td></tr>`).join('');
   }
 
   function buildDays() {
     const days = state.set.days || [];
     const tbody = $('days').tBodies[0];
     tbody.innerHTML = days.map((d) => `
-      <tr>
+      <tr data-day="${esc(d.n)}">
         <td class="vis"><input type="checkbox" data-day="${esc(d.n)}" checked
             ><span class="swatch" style="background:${esc(d.color || NO_DAY_COLOR)}"></span></td>
         <td class="name"><a href="#" data-zoom="${esc(d.n)}">${esc(d.name || `Day ${d.n}`)}</a></td>
@@ -309,7 +475,9 @@
   function setAllDays(on) {
     state.visibleDays = new Set(on ? (state.set.days || []).map((d) => Number(d.n)) : []);
     for (const cb of $('days').querySelectorAll('input[data-day]')) cb.checked = on;
+    if (!on) state.selectedDay = null;
     applyDayFilter();
+    applyRouteStyle();
   }
 
   async function fetchJson(url) {
@@ -324,12 +492,16 @@
     state.routes = null;
     state.set = set;
     state.visibleDays = new Set((set.days || []).map((d) => Number(d.n)));
+    state.selectedDay = null;
     buildDays();
     buildLegend();
     const colour = statusColorExpr(set.id);
     map.setPaintProperty('lots-fill', 'fill-color', colour);
     map.setPaintProperty('lots-line', 'line-color', colour);
+    map.setPaintProperty('lots-dot', 'circle-color', colour);
     applyDayFilter();
+    applyRouteStyle();
+    applyLotFilter();
     map.getSource('routes').setData(EMPTY);
     hideMessage();
 
@@ -399,13 +571,6 @@
     return el;
   }
 
-  function setPlanDimmed(dim) {
-    const o = dim ? 0.18 : 1;
-    map.setPaintProperty('route-connector', 'line-opacity', o);
-    map.setPaintProperty('route-productive', 'line-opacity', o);
-    map.setPaintProperty('route-arrows', 'icon-opacity', o);
-  }
-
   function setButtons(active) {
     for (const id of ['pb-play', 'pb-restart', 'pb-stop', 'pb-pos']) $(id).disabled = !active;
     $('pb-play').innerHTML = pb.playing ? '&#10073;&#10073; Pause' : '&#9654; Play';
@@ -420,9 +585,10 @@
       type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: path.coords } });
     // show only this day, dimmed, under the playback lines
     state.visibleDays = new Set([n]);
+    state.selectedDay = null;
     for (const cb of $('days').querySelectorAll('input[data-day]')) cb.checked = Number(cb.dataset.day) === n;
     applyDayFilter();
-    setPlanDimmed(true);
+    applyRouteStyle();
     pb.marker = new maplibregl.Marker({ element: carElement(), rotationAlignment: 'map' })
       .setLngLat(path.coords[0]).addTo(map);
     const d = (state.set.days || []).find((x) => Number(x.n) === n);
@@ -439,7 +605,7 @@
     if (map.getSource('play')) {
       map.getSource('play').setData(EMPTY);
       map.setPaintProperty('play-driven', 'line-gradient', CLEAR_GRADIENT);
-      setPlanDimmed(false);
+      applyRouteStyle();
     }
     if ($('pb-day').options.length) $('pb-day').value = '';
     $('pb-pos').value = 0;
@@ -566,10 +732,11 @@
         new maplibregl.Popup().setLngLat(pt.geometry.coordinates).setHTML(pointPopupHtml(pt.properties)).addTo(map);
         return;
       }
-      const lot = map.queryRenderedFeatures(e.point, { layers: ['lots-fill'] })[0];
+      const lot = map.queryRenderedFeatures(box, { layers: ['lots-dot'] })[0]
+        || map.queryRenderedFeatures(e.point, { layers: ['lots-fill'] })[0];
       if (lot) new maplibregl.Popup().setLngLat(e.lngLat).setHTML(lotPopupHtml(lot.properties)).addTo(map);
     });
-    for (const id of [...pointLayers, 'lots-fill']) {
+    for (const id of [...pointLayers, 'lots-fill', 'lots-dot']) {
       map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
       map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
     }
@@ -590,14 +757,43 @@
       if (!cb) return;
       const n = Number(cb.dataset.day);
       if (cb.checked) state.visibleDays.add(n); else state.visibleDays.delete(n);
+      if (!cb.checked && state.selectedDay === n) state.selectedDay = null;
       applyDayFilter();
+      applyRouteStyle();
     });
     days.addEventListener('click', (e) => {
       const a = e.target.closest('a[data-zoom]');
       if (!a) return;
       e.preventDefault();
-      const d = (state.set.days || []).find((x) => String(x.n) === a.dataset.zoom);
-      if (d && Array.isArray(d.bbox) && d.bbox.length === 4) map.fitBounds(d.bbox, { padding: 40, maxZoom: 17 });
+      const n = Number(a.dataset.zoom);
+      selectDay(n);
+      const d = (state.set.days || []).find((x) => Number(x.n) === n);
+      if (state.selectedDay === n && d && Array.isArray(d.bbox) && d.bbox.length === 4) {
+        map.fitBounds(d.bbox, { padding: 40, maxZoom: 17 });
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Escape' && state.selectedDay !== null) selectDay(state.selectedDay);
+    });
+
+    const legend = $('legend');
+    legend.addEventListener('change', (e) => {
+      const cb = e.target.closest('input[data-status]');
+      if (cb) setStatusShown(cb.dataset.status, cb.checked);
+    });
+    legend.addEventListener('click', (e) => {
+      const a = e.target.closest('a[data-solo]');
+      if (!a) return;
+      e.preventDefault();
+      soloStatus(a.dataset.solo);
+    });
+    $('status-all').addEventListener('click', () => { state.hiddenStatus.clear(); setStatusShown('', true); });
+    $('lot-list').addEventListener('click', (e) => {
+      const a = e.target.closest('a[data-lot], a[data-lots-zoom]');
+      if (!a) return;
+      e.preventDefault();
+      if (a.hasAttribute('data-lots-zoom')) zoomToLots(state.listed || []);
+      else if ((state.listed || [])[Number(a.dataset.lot)]) showLot(state.listed[Number(a.dataset.lot)]);
     });
   }
 
@@ -628,7 +824,9 @@
     const [lots, filmed] = await Promise.all([optional('lots.geojson'), optional('filmed.geojson'), mapLoaded]);
 
     addLayers();
+    state.lots = lots;
     map.getSource('lots').setData(lots);
+    map.getSource('lot-dots').setData(lotDots(lots));
     map.getSource('filmed').setData(filmed);
     if (Array.isArray(manifest.depot) && manifest.depot.length === 2) {
       new maplibregl.Marker({ color: '#111111' })
