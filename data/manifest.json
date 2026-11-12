@@ -7,12 +7,12 @@
  "sets": [
   {
    "id": "extra",
-   "label": "Extra days 11-13 for review: the 734 remaining City Hall lots, from the STS office",
+   "label": "Extra days 11-13 on STS NAV: the 734 remaining City Hall lots, from the STS office",
    "routes": "routes_extra.geojson",
    "days": [
     {
      "n": 1,
-     "name": "Extra day 11 (for review)",
+     "name": "Extra day 11 (on STS NAV)",
      "file": "day_11.gpx",
      "km": 31.33,
      "productive_km": 4.54,
@@ -34,7 +34,7 @@
     },
     {
      "n": 2,
-     "name": "Extra day 12 (for review)",
+     "name": "Extra day 12 (on STS NAV)",
      "file": "day_12.gpx",
      "km": 117.15,
      "productive_km": 33.97,
@@ -56,7 +56,7 @@
     },
     {
      "n": 3,
-     "name": "Extra day 13 (for review)",
+     "name": "Extra day 13 (on STS NAV)",
      "file": "day_13.gpx",
      "km": 113.17,
      "productive_km": 34.1,
