@@ -8,6 +8,7 @@
     ['not_covered', '#d62728', 'not covered'],
     ['filmed', '#1f77b4', 'filmed (14 Oct)'],
     ['unreachable', '#7f7f7f', 'unreachable'],
+    ['closed', '#9467bd', 'closed area'],
     ['not_needed', '#bcbd22', 'not needed'],
     ['other_day', '#bdbdbd', 'other days'],
   ];

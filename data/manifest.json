@@ -1,10 +1,83 @@
 {
  "depot": [
-  44.773793,
-  41.7057
+  44.715122,
+  41.720148
  ],
  "D": 20.0,
  "sets": [
+  {
+   "id": "extra",
+   "label": "Extra days 11-13 for review: the 734 remaining City Hall lots, from the STS office",
+   "routes": "routes_extra.geojson",
+   "days": [
+    {
+     "n": 1,
+     "name": "Extra day 11 (for review)",
+     "file": "day_11.gpx",
+     "km": 31.33,
+     "productive_km": 4.54,
+     "connector_km": 26.79,
+     "redriven_km": 0.18,
+     "uturns": 1,
+     "uturns_dead_end": 0,
+     "lefts": 12,
+     "new_lots": 40,
+     "bbox": [
+      44.715122,
+      41.719982,
+      44.770357,
+      41.796693
+     ],
+     "off_network_m": 0,
+     "revisits": 21,
+     "color": "#e6194b"
+    },
+    {
+     "n": 2,
+     "name": "Extra day 12 (for review)",
+     "file": "day_12.gpx",
+     "km": 117.15,
+     "productive_km": 33.97,
+     "connector_km": 83.18,
+     "redriven_km": 3.46,
+     "uturns": 14,
+     "uturns_dead_end": 0,
+     "lefts": 87,
+     "new_lots": 350,
+     "bbox": [
+      44.715122,
+      41.66543,
+      44.973228,
+      41.749578
+     ],
+     "off_network_m": 0,
+     "revisits": 147,
+     "color": "#3cb44b"
+    },
+    {
+     "n": 3,
+     "name": "Extra day 13 (for review)",
+     "file": "day_13.gpx",
+     "km": 113.17,
+     "productive_km": 34.1,
+     "connector_km": 79.07,
+     "redriven_km": 23.66,
+     "uturns": 9,
+     "uturns_dead_end": 1,
+     "lefts": 93,
+     "new_lots": 334,
+     "bbox": [
+      44.715122,
+      41.669045,
+      44.888905,
+      41.720457
+     ],
+     "off_network_m": 0,
+     "revisits": 143,
+     "color": "#4363d8"
+    }
+   ]
+  },
   {
    "id": "review",
    "label": "Survey days 1-10, all on STS NAV (day 1 driven)",
@@ -234,6 +307,11 @@
   }
  ],
  "status_counts": {
+  "extra": {
+   "covered": 724,
+   "unreachable": 4,
+   "closed": 6
+  },
   "review": {
    "covered": 3656,
    "filmed": 275,
