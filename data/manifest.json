@@ -6,6 +6,35 @@
  "D": 20.0,
  "sets": [
   {
+   "id": "extra2",
+   "label": "Extra day 14 for review: the 148 lots still to film on 19 Nov (127 City Hall + 21 proposed), from the STS office",
+   "routes": "routes_extra2.geojson",
+   "days": [
+    {
+     "n": 1,
+     "name": "Extra day 14 (for review)",
+     "file": "day_14.gpx",
+     "km": 77.99,
+     "productive_km": 11.96,
+     "connector_km": 66.03,
+     "redriven_km": 3.59,
+     "uturns": 8,
+     "uturns_dead_end": 2,
+     "lefts": 80,
+     "new_lots": 139,
+     "bbox": [
+      44.715122,
+      41.679627,
+      44.87078,
+      41.739254
+     ],
+     "off_network_m": 0,
+     "revisits": 104,
+     "color": "#e6194b"
+    }
+   ]
+  },
+  {
    "id": "extra",
    "label": "Extra days 11-13 on STS NAV: the 734 remaining City Hall lots, from the STS office",
    "routes": "routes_extra.geojson",
@@ -307,6 +336,11 @@
   }
  ],
  "status_counts": {
+  "extra2": {
+   "covered": 139,
+   "unreachable": 2,
+   "closed": 7
+  },
   "extra": {
    "covered": 724,
    "unreachable": 4,
