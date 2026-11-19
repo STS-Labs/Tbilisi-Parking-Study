@@ -7,12 +7,12 @@
  "sets": [
   {
    "id": "extra2",
-   "label": "Extra day 14 for review: the 148 lots still to film on 19 Nov (127 City Hall + 21 proposed), from the STS office",
+   "label": "Extra day 14 on STS NAV: the 148 lots still to film on 19 Nov (127 City Hall + 21 proposed), from the STS office",
    "routes": "routes_extra2.geojson",
    "days": [
     {
      "n": 1,
-     "name": "Extra day 14 (for review)",
+     "name": "Extra day 14 (on STS NAV)",
      "file": "day_14.gpx",
      "km": 77.99,
      "productive_km": 11.96,
