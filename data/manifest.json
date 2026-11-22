@@ -14,14 +14,14 @@
      "n": 1,
      "name": "Extra day 15 (for review)",
      "file": "day_15.gpx",
-     "km": 45.73,
-     "productive_km": 3.13,
-     "connector_km": 42.6,
+     "km": 40.79,
+     "productive_km": 2.6,
+     "connector_km": 38.19,
      "redriven_km": 0.0,
-     "uturns": 6,
-     "uturns_dead_end": 2,
-     "lefts": 34,
-     "new_lots": 38,
+     "uturns": 2,
+     "uturns_dead_end": 1,
+     "lefts": 26,
+     "new_lots": 33,
      "bbox": [
       44.715122,
       41.680726,
@@ -29,7 +29,7 @@
       41.729232
      ],
      "off_network_m": 0,
-     "revisits": 43,
+     "revisits": 38,
      "color": "#e6194b"
     }
    ]
@@ -366,7 +366,8 @@
  ],
  "status_counts": {
   "extra3": {
-   "covered": 38,
+   "covered": 33,
+   "not_needed": 5,
    "closed": 1
   },
   "extra2": {
