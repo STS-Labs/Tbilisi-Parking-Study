@@ -14,10 +14,10 @@
      "n": 1,
      "name": "Extra day 15 (for review)",
      "file": "day_15.gpx",
-     "km": 46.74,
+     "km": 45.73,
      "productive_km": 3.13,
-     "connector_km": 43.61,
-     "redriven_km": 0.24,
+     "connector_km": 42.6,
+     "redriven_km": 0.0,
      "uturns": 6,
      "uturns_dead_end": 2,
      "lefts": 34,
@@ -29,7 +29,7 @@
       41.729232
      ],
      "off_network_m": 0,
-     "revisits": 45,
+     "revisits": 43,
      "color": "#e6194b"
     }
    ]
