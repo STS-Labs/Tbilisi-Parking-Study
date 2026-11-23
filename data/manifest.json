@@ -7,29 +7,29 @@
  "sets": [
   {
    "id": "extra3b",
-   "label": "Extra day 15 for review: the 39 lots still to film on 22 Nov (33 City Hall + 6 proposed), without P-468 (a private courtyard), from the STS office",
+   "label": "Extra day 15 for review: the 39 lots still to film on 22 Nov (33 City Hall + 6 proposed), without P-468 (a private courtyard) and CH-2378, from the STS office",
    "routes": "routes_extra3b.geojson",
    "days": [
     {
      "n": 1,
      "name": "Extra day 15 (for review)",
      "file": "day_15.gpx",
-     "km": 38.86,
-     "productive_km": 2.47,
-     "connector_km": 36.39,
+     "km": 32.88,
+     "productive_km": 2.09,
+     "connector_km": 30.8,
      "redriven_km": 0.23,
-     "uturns": 1,
+     "uturns": 2,
      "uturns_dead_end": 0,
-     "lefts": 28,
-     "new_lots": 32,
+     "lefts": 26,
+     "new_lots": 31,
      "bbox": [
       44.715122,
-      41.680726,
-      44.854298,
+      41.684181,
+      44.827624,
       41.729232
      ],
      "off_network_m": 0,
-     "revisits": 35,
+     "revisits": 31,
      "color": "#e6194b"
     }
    ]
@@ -395,8 +395,8 @@
  ],
  "status_counts": {
   "extra3b": {
-   "covered": 32,
-   "not_needed": 6,
+   "covered": 31,
+   "not_needed": 7,
    "closed": 1
   },
   "extra3": {
