@@ -102,6 +102,23 @@
   <main id="map-wrap">
     <div id="map"></div>
     <div id="message" hidden></div>
+    <button type="button" id="lp-show" hidden title="Show the list of lots">Lots &#9664;</button>
   </main>
+
+  <aside id="lots-panel">
+    <div class="lp-head">
+      <h2>Lots on this route <span class="muted small" id="lp-count"></span></h2>
+      <button type="button" id="lp-hide" title="Hide the list">&#9654;</button>
+    </div>
+    <div class="lp-filters">
+      <label class="inline"><input type="radio" name="lp-layer" value="" checked> all</label>
+      <label class="inline"><input type="radio" name="lp-layer" value="proposed"> proposed (P)</label>
+      <label class="inline"><input type="radio" name="lp-layer" value="city_hall"> City Hall (CH)</label>
+      <input type="search" id="lp-search" placeholder="find a lot or street, e.g. P-468">
+    </div>
+    <p class="muted small">Click a lot to zoom to it. The number is the order the route films it in;
+      the km is how far into the day.</p>
+    <div id="lp-list"></div>
+  </aside>
 </body>
 </html>

@@ -105,3 +105,39 @@ body { display: flex; }
 }
 .pb-car { width: 30px; height: 30px; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)); }
 .pb-car svg { width: 100%; height: 100%; display: block; }
+
+/* lots on this route (right of the map) */
+#lots-panel {
+  flex: 0 0 340px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 12px 12px 24px;
+  border-left: 1px solid #ccc;
+  background: #fafafa;
+}
+#lots-panel h2 { font-size: 13px; margin: 0; }
+#lots-panel p { margin: 6px 0; }
+#lots-panel label.inline { display: inline-flex; align-items: center; gap: 3px; margin-right: 8px; cursor: pointer; }
+.lp-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lp-head button, #lp-show { font: inherit; font-size: 12px; padding: 1px 8px; cursor: pointer; }
+#lp-show { position: absolute; top: 10px; right: 50px; z-index: 4; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); }
+.lp-filters { margin-top: 8px; }
+#lp-search { width: 100%; box-sizing: border-box; margin-top: 6px; font: inherit; padding: 3px 6px; }
+#lp-list h3 { font-size: 12px; margin: 12px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #ddd; }
+#lp-list h4 { font-size: 12px; margin: 8px 0 2px; color: #444; }
+#lp-list ol { list-style: none; margin: 0; padding: 0; }
+.lp-row { display: grid; grid-template-columns: 26px 14px 1fr auto; column-gap: 6px; align-items: baseline;
+  padding: 3px 4px; border-radius: 4px; cursor: pointer; }
+.lp-row:hover { background: #eef3ff; }
+.lp-row.sel { background: #fff1b8; }
+.lp-n { text-align: right; color: #777; font-variant-numeric: tabular-nums; font-size: 11px; }
+.lp-row .swatch { align-self: center; }
+.lp-id { font-weight: 600; }
+.lp-km { color: #555; font-variant-numeric: tabular-nums; font-size: 11px; }
+.lp-sub { grid-column: 3 / 5; color: #666; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lp-why { grid-column: 3 / 5; color: #8a6d00; font-size: 11px; }
+.lp-tag { display: inline-block; margin-left: 4px; padding: 0 4px; border-radius: 3px; font-size: 10px; font-weight: 600;
+  background: #f3e1ff; color: #6a1b9a; vertical-align: 1px; }
+.lp-empty { color: #888; font-style: italic; margin: 8px 0; }
+@media (max-width: 1300px) { #panel { flex-basis: 420px; } #lots-panel { flex-basis: 280px; } }

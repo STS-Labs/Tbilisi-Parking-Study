@@ -47,7 +47,7 @@
 
   // selectedDay: the day drawn solid, the others faded; hiddenStatus: lot statuses filtered out
   const state = { manifest: null, set: null, visibleDays: new Set(), routes: null,
-    selectedDay: null, hiddenStatus: new Set(), lots: EMPTY };
+    selectedDay: null, hiddenStatus: new Set(), lots: EMPTY, lotById: new Map(), selectedLot: null };
 
   // ---------------------------------------------------------------- map + basemaps
   const map = new maplibregl.Map({
@@ -257,6 +257,16 @@
         'circle-stroke-color': '#111111', 'circle-stroke-width': 2.5, 'circle-stroke-opacity': fadeOut,
       },
     });
+    // the lot picked in the list (or on the map): a bold outline over everything
+    const NO_LOT = ['==', ['get', 'id'], ''];
+    map.addLayer({
+      id: 'lot-sel-casing', type: 'line', source: 'lots', filter: NO_LOT,
+      paint: { 'line-color': '#ffffff', 'line-width': 8 },
+    });
+    map.addLayer({
+      id: 'lot-sel', type: 'line', source: 'lots', filter: NO_LOT,
+      paint: { 'line-color': '#111111', 'line-width': 3.5 },
+    });
   }
 
   // ---------------------------------------------------------------- filters
@@ -305,6 +315,7 @@
       applyDayFilter();
     }
     applyRouteStyle();
+    buildLotPanel();
   }
 
   const statusKey = () => `st_${state.set ? state.set.id : ''}`;
@@ -407,6 +418,95 @@
     if (c) new maplibregl.Popup().setLngLat(c).setHTML(lotPopupHtml(f.properties)).addTo(map);
   }
 
+  // ---------------------------------------------------------------- lots on this route (right of the map)
+  // The set's lots: the ones its route films, per day in driving order (day_<set>, km_<set> from the
+  // plan), then the ones it does not, by why. Click one to zoom to it.
+  const OFF_ROUTE = ['not_needed', 'closed', 'unreachable', 'not_covered', 'wrong_side', 'filmed', 'other_day'];
+  const lotReason = (p) => (p[`rs_${state.set.id}`] ?? p.reason) || '';
+  const isCourtyard = (p) => /courtyard/i.test(lotReason(p));
+
+  function lotRowHtml(p, n, st, withWhy) {
+    const sub = [isNum(p.spaces) ? `${p.spaces} space${p.spaces === 1 ? '' : 's'}` : '', p.ptype, p.address].filter(Boolean).join(' · ');
+    const km = p[`km_${state.set.id}`];
+    return `<li class="lp-row${state.selectedLot === p.id ? ' sel' : ''}" data-lot="${esc(p.id)}">`
+      + `<span class="lp-n">${n ?? ''}</span>`
+      + `<span class="swatch" style="background:${STATUS_COLOR[st] || UNKNOWN_COLOR}"></span>`
+      + `<span><span class="lp-id">${esc(p.id)}</span>${isCourtyard(p) ? '<span class="lp-tag">courtyard</span>' : ''}</span>`
+      + `<span class="lp-km">${isNum(km) ? `${km.toFixed(1)} km` : ''}</span>`
+      + (sub ? `<span class="lp-sub" title="${esc(sub)}">${esc(sub)}</span>` : '')
+      + (withWhy && lotReason(p) ? `<span class="lp-why">${esc(lotReason(p))}</span>` : '')
+      + '</li>';
+  }
+
+  function buildLotPanel() {
+    const box = $('lp-list');
+    if (!state.set) { box.innerHTML = ''; return; }
+    const sid = state.set.id, key = `st_${sid}`;
+    const layer = (document.querySelector('input[name="lp-layer"]:checked') || {}).value || '';
+    const q = $('lp-search').value.trim().toLowerCase();
+    const mine = (state.lots.features || []).map((f) => f.properties || {}).filter((p) => p[key] !== undefined);
+    const shown = mine.filter((p) => (!layer || p.layer === layer)
+      && (!q || `${p.id} ${p.address || ''}`.toLowerCase().includes(q)));
+    const onRoute = shown.filter((p) => isNum(p[`day_${sid}`]));
+    const off = shown.filter((p) => !isNum(p[`day_${sid}`]));
+    const allOn = mine.filter((p) => isNum(p[`day_${sid}`])).length;
+    $('lp-count').textContent = `(${fmtInt(allOn)} filmed, ${fmtInt(mine.length - allOn)} not on the route)`;
+
+    const days = state.set.days || [];
+    const dayName = (n) => (days.find((d) => Number(d.n) === n) || {}).name || `Day ${n}`;
+    const sel = state.selectedDay;
+    let html = `<h3>Filmed on the route (${fmtInt(onRoute.length)})</h3>`;
+    const byDay = new Map();
+    for (const p of onRoute) {
+      const d = p[`day_${sid}`];
+      if (!byDay.has(d)) byDay.set(d, []);
+      byDay.get(d).push(p);
+    }
+    if (!byDay.size) html += '<div class="lp-empty">none</div>';
+    for (const d of [...byDay.keys()].sort((a, b) => a - b)) {
+      if (sel !== null && d !== sel) continue;
+      const lots = byDay.get(d).sort((a, b) => a[`km_${sid}`] - b[`km_${sid}`]);
+      // the number is the lot's place in its day's whole order (filters do not renumber)
+      const rank = new Map((mine.filter((p) => p[`day_${sid}`] === d)
+        .sort((a, b) => a[`km_${sid}`] - b[`km_${sid}`])).map((p, i) => [p.id, i + 1]));
+      if (byDay.size > 1 || days.length > 1) html += `<h4>${esc(dayName(d))} (${lots.length})</h4>`;
+      html += `<ol>${lots.map((p) => lotRowHtml(p, rank.get(p.id), p[key], false)).join('')}</ol>`;
+    }
+    if (sel !== null && !byDay.has(sel)) html += `<div class="lp-empty">${esc(dayName(sel))}: none here</div>`;
+    if (off.length) {
+      html += `<h3>Not on the route (${fmtInt(off.length)})</h3>`;
+      for (const st of [...OFF_ROUTE, ...new Set(off.map((p) => p[key]))].filter((v, i, a) => a.indexOf(v) === i)) {
+        const lots = off.filter((p) => p[key] === st).sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true }));
+        if (!lots.length) continue;
+        const label = (STATUS.find(([k]) => k === st) || [st, '', st])[2];
+        html += `<h4>${esc(label)} (${lots.length})</h4><ol>${lots.map((p) => lotRowHtml(p, '', st, true)).join('')}</ol>`;
+      }
+    }
+    box.innerHTML = html;
+  }
+
+  // mark a lot (list row + bold outline); zoom: also fly to it and open its popup
+  function selectLot(id, zoom) {
+    state.selectedLot = id;
+    const f = ['==', ['get', 'id'], id || ''];
+    map.setFilter('lot-sel-casing', f);
+    map.setFilter('lot-sel', f);
+    let row = null;
+    for (const li of $('lp-list').querySelectorAll('.lp-row')) {
+      li.classList.toggle('sel', li.dataset.lot === id);
+      if (li.dataset.lot === id) row = li;
+    }
+    if (row && !zoom) row.scrollIntoView({ block: 'nearest' });
+    const feat = state.lotById.get(id);
+    if (zoom && feat) showLot(feat);
+  }
+
+  function setLotPanel(open) {
+    $('lots-panel').hidden = !open;
+    $('lp-show').hidden = open;
+    map.resize();
+  }
+
   function setStatusShown(k, on) {
     if (on) state.hiddenStatus.delete(k); else state.hiddenStatus.add(k);
     for (const cb of $('legend').querySelectorAll('input[data-status]')) cb.checked = !state.hiddenStatus.has(cb.dataset.status);
@@ -503,6 +603,8 @@
     applyDayFilter();
     applyRouteStyle();
     applyLotFilter();
+    selectLot(null, false);
+    buildLotPanel();
     map.getSource('routes').setData(EMPTY);
     hideMessage();
 
@@ -735,7 +837,10 @@
       }
       const lot = map.queryRenderedFeatures(box, { layers: ['lots-dot'] })[0]
         || map.queryRenderedFeatures(e.point, { layers: ['lots-fill'] })[0];
-      if (lot) new maplibregl.Popup().setLngLat(e.lngLat).setHTML(lotPopupHtml(lot.properties)).addTo(map);
+      if (lot) {
+        new maplibregl.Popup().setLngLat(e.lngLat).setHTML(lotPopupHtml(lot.properties)).addTo(map);
+        if (lot.properties[`st_${state.set.id}`] !== undefined) selectLot(lot.properties.id, false);
+      }
     });
     for (const id of [...pointLayers, 'lots-fill', 'lots-dot']) {
       map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
@@ -789,6 +894,14 @@
       soloStatus(a.dataset.solo);
     });
     $('status-all').addEventListener('click', () => { state.hiddenStatus.clear(); setStatusShown('', true); });
+    $('lp-list').addEventListener('click', (e) => {
+      const li = e.target.closest('.lp-row');
+      if (li) selectLot(li.dataset.lot, true);
+    });
+    for (const r of document.querySelectorAll('input[name="lp-layer"]')) r.addEventListener('change', buildLotPanel);
+    $('lp-search').addEventListener('input', buildLotPanel);
+    $('lp-hide').addEventListener('click', () => setLotPanel(false));
+    $('lp-show').addEventListener('click', () => setLotPanel(true));
     $('lot-list').addEventListener('click', (e) => {
       const a = e.target.closest('a[data-lot], a[data-lots-zoom]');
       if (!a) return;
@@ -826,6 +939,7 @@
 
     addLayers();
     state.lots = lots;
+    state.lotById = new Map((lots.features || []).map((f) => [String((f.properties || {}).id), f]));
     map.getSource('lots').setData(lots);
     map.getSource('lot-dots').setData(lotDots(lots));
     map.getSource('filmed').setData(filmed);
