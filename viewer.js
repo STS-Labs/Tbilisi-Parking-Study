@@ -16,7 +16,7 @@
   const UNKNOWN_COLOR = '#cccccc';
   const FILMED_COLOR = '#00e5ff';
   const NO_DAY_COLOR = '#888888';
-  const LAYER_NAMES = { city_hall: 'City Hall', proposed: 'Proposed' };
+  const LAYER_NAMES = { city_hall: 'City Hall', proposed: 'Proposed', street_line: 'Street line to film (27 Nov map)' };
   const EMPTY = { type: 'FeatureCollection', features: [] };
   // Time colours for the driven trail: start of the day -> end of the day
   // (plasma, stopping short of its pale yellow; no cyan to mix up with the filmed streets)
@@ -395,7 +395,7 @@
         html += `<h3>${esc(reason)} (${idx.length})</h3><ul>${idx.map((i) => {
           const p = lots[i].properties;
           return `<li><a href="#" data-lot="${i}">${esc(p.id)}</a> ${esc(p.address || '')}`
-            + (isNum(p.spaces) ? ` <span class="muted">(${p.spaces} spaces)</span>` : '') + '</li>';
+            + (isNum(p.spaces) && p.layer !== 'street_line' ? ` <span class="muted">(${p.spaces} spaces)</span>` : '') + '</li>';
         }).join('')}</ul>`;
       }
     } else {
@@ -426,7 +426,7 @@
   const isCourtyard = (p) => /courtyard/i.test(lotReason(p));
 
   function lotRowHtml(p, n, st, withWhy) {
-    const sub = [isNum(p.spaces) ? `${p.spaces} space${p.spaces === 1 ? '' : 's'}` : '', p.ptype, p.address].filter(Boolean).join(' · ');
+    const sub = [isNum(p.spaces) && p.layer !== 'street_line' ? `${p.spaces} space${p.spaces === 1 ? '' : 's'}` : '', p.ptype, p.address].filter(Boolean).join(' · ');
     const km = p[`km_${state.set.id}`];
     return `<li class="lp-row${state.selectedLot === p.id ? ' sel' : ''}" data-lot="${esc(p.id)}">`
       + `<span class="lp-n">${n ?? ''}</span>`
