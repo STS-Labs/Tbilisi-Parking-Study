@@ -7,12 +7,12 @@
  "sets": [
   {
    "id": "extra4b",
-   "label": "Extra day 16 for review: \"16 (no gs)\": the street lines of 27 Nov without Beri Gabriel Salosi Ave (the blue kerb on the right; both sides where no kerb was filmed), from the STS office",
+   "label": "Extra day 16 on STS NAV: \"16 (no gs)\": the street lines of 27 Nov without Beri Gabriel Salosi Ave (the blue kerb on the right; both sides where no kerb was filmed), from the STS office",
    "routes": "routes_extra4b.geojson",
    "days": [
     {
      "n": 1,
-     "name": "Extra day 16 (for review)",
+     "name": "Extra day 16 (on STS NAV)",
      "file": "day_16.gpx",
      "km": 84.22,
      "productive_km": 30.58,
