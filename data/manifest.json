@@ -6,13 +6,42 @@
  "D": 20.0,
  "sets": [
   {
-   "id": "extra4",
-   "label": "Extra day 16 for review: the 56 street lines still to film on 27 Nov (the blue kerb on the right; both sides where no kerb was filmed), from the STS office",
-   "routes": "routes_extra4.geojson",
+   "id": "extra4b",
+   "label": "Extra day 16 for review: \"16 (no gs)\": the street lines of 27 Nov without Beri Gabriel Salosi Ave (the blue kerb on the right; both sides where no kerb was filmed), from the STS office",
+   "routes": "routes_extra4b.geojson",
    "days": [
     {
      "n": 1,
      "name": "Extra day 16 (for review)",
+     "file": "day_16.gpx",
+     "km": 84.22,
+     "productive_km": 30.58,
+     "connector_km": 53.64,
+     "redriven_km": 16.52,
+     "uturns": 21,
+     "uturns_dead_end": 5,
+     "lefts": 74,
+     "new_lots": 55,
+     "bbox": [
+      44.715122,
+      41.711848,
+      44.791964,
+      41.744944
+     ],
+     "off_network_m": 0,
+     "revisits": 137,
+     "color": "#e6194b"
+    }
+   ]
+  },
+  {
+   "id": "extra4",
+   "label": "Extra day 16 on STS NAV: the 56 street lines still to film on 27 Nov (the blue kerb on the right; both sides where no kerb was filmed), from the STS office",
+   "routes": "routes_extra4.geojson",
+   "days": [
+    {
+     "n": 1,
+     "name": "Extra day 16 (on STS NAV)",
      "file": "day_16.gpx",
      "km": 101.54,
      "productive_km": 32.64,
@@ -423,6 +452,10 @@
   }
  ],
  "status_counts": {
+  "extra4b": {
+   "covered": 55,
+   "not_needed": 1
+  },
   "extra4": {
    "covered": 56
   },
